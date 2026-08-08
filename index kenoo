@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KENO — Demo v2</title>
+<style>
+:root{--bg:#070205;--panel:#15050a;--panel2:#1d070d;--red:#d3132b;--red2:#ff2946;--line:#4d0d18;--text:#fff7f8;--muted:#b99da3;--gold:#f3c56b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0%,#3b0813 0,transparent 27%),radial-gradient(circle at 90% 18%,#280711 0,transparent 25%),linear-gradient(145deg,var(--bg),#100207 60%,#060104);color:var(--text);font:14px Arial,Helvetica,sans-serif;min-height:100vh}
+button,input,select{font:inherit}.hidden{display:none!important}.app{max-width:980px;margin:auto;padding:0 12px}
+header{height:62px;background:#0b0306e8;backdrop-filter:blur(12px);border-bottom:1px solid #631221;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;padding:0 15px;box-shadow:0 8px 30px #0008}
+.brand{font-size:23px;font-weight:1000;letter-spacing:3px}.brand:before{content:"◆";color:var(--red2);font-size:11px;margin-right:6px;vertical-align:4px}
+nav{display:flex;gap:4px}nav button,.linkbtn{background:transparent;border:0;color:#cdb7bb;cursor:pointer;padding:8px 9px;border-radius:7px}nav button:hover{background:#3a0b14;color:#fff}
+.userbox{display:flex;align-items:center;gap:7px}.balance{background:linear-gradient(135deg,#360b15,#19050a);border:1px solid #8e1a2d;padding:7px 10px;border-radius:9px;font-weight:900}
+.btn{border:0;border-radius:8px;padding:9px 13px;font-weight:900;cursor:pointer;transition:.18s}.red{background:linear-gradient(135deg,#b80d26,#ff2946);color:#fff}.dark{background:#21080e;border:1px solid #671426;color:#f6dfe2}
+main{padding:20px 0 42px}.hero{min-height:385px;display:flex;justify-content:space-between;gap:22px;align-items:center;padding:34px 24px;background:linear-gradient(135deg,#250711aa,#100207 52%,#330a14aa);border:1px solid #6d1626;border-radius:18px;box-shadow:0 20px 55px #0009;position:relative;overflow:hidden}
+h1{font-size:clamp(38px,7vw,68px);line-height:.95;margin:8px 0 14px;letter-spacing:-2px}.redtext{color:var(--red2)}h2{margin:5px 0 15px;font-size:25px}.eyebrow{font-size:10px;letter-spacing:2px;font-weight:1000;color:#ff5268}.muted{color:var(--muted);line-height:1.5}
+.timer{min-width:205px;text-align:center;background:linear-gradient(145deg,#2a0911,#120408);border:1px solid #851a2d;border-radius:16px;padding:22px}.timer strong{display:block;color:#ff3c55;font-size:38px;margin:8px 0}
+.panel{margin-top:14px;background:linear-gradient(145deg,#18060b,#100307);border:1px solid #4e101b;border-radius:15px;padding:19px;box-shadow:0 13px 35px #0008}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.numbers{display:grid;grid-template-columns:repeat(10,minmax(25px,37px));justify-content:center;gap:6px;padding:5px 0}.num{aspect-ratio:1;border-radius:9px;background:linear-gradient(145deg,#2b0a12,#16050a);color:#fff;border:1px solid #641524;font-weight:900;font-size:11px;cursor:pointer;width:100%;padding:0}.num.active{background:radial-gradient(circle at 35% 25%,#ff6070,#d4112d 55%,#8e091d);border-color:#ff7b88}
+.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:15px}.controls .stake{margin-right:auto}.notice{padding:10px 12px;border-radius:9px;background:#2b0a12;border:1px solid #671424;color:#ffc0c8;margin:8px 0}
+.results{display:flex;justify-content:center;gap:10px;flex-wrap:nowrap;padding:6px 0}.ball{width:51px;height:51px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 32% 24%,#ff8b98 0,#ff304d 22%,#c20e29 58%,#760717 100%);border:2px solid #ff6d7c;font-weight:1000}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:linear-gradient(145deg,#250a11,#130408);border:1px solid #5d1421;border-radius:11px;padding:14px}.stat b{font-size:21px;color:#ffe6e9}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{padding:8px 12px;border-radius:8px;border:1px solid #5d1722;background:#21080e;color:#fff;cursor:pointer}.tabs button.on{background:linear-gradient(135deg,#b80d26,#ff2946)}
+.form{max-width:430px;margin:auto}.form input,.form select{width:100%;padding:11px;margin:6px 0;background:#0b0306;border:1px solid #61202b;color:#fff;border-radius:8px;outline:none}.form label{font-size:12px;color:#cbb3b7}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:9px;border-bottom:1px solid #401019}th{color:#ffb9c1}.badge{padding:4px 8px;border-radius:12px;background:#321016;border:1px solid #5e1722;color:#ffd7dc}.ok{color:#6ee7a0}.pending{color:#ffd27a}.danger{color:#ff7180}
+.modal{position:fixed;inset:0;background:#000d;display:grid;place-items:center;padding:15px;z-index:50}.modalbox{width:min(430px,100%);background:linear-gradient(145deg,#210810,#0f0307);border:1px solid #76182a;border-radius:15px;padding:20px;box-shadow:0 25px 70px #000}
+footer{border-top:1px solid #351016;padding:22px 0;color:#866d72;font-size:12px}@media(max-width:720px){nav{display:none}.hero{flex-direction:column;align-items:stretch;padding:28px 17px}.timer{min-width:0}.numbers{grid-template-columns:repeat(5,minmax(28px,37px));gap:5px}.cards{grid-template-columns:1fr}.results{gap:6px}.ball{width:43px;height:43px}.topline{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">KENO</div>
+<nav><button onclick="go('home')">Home</button><button onclick="go('play')">Play</button><button onclick="go('wallet')">Wallet</button><button onclick="go('history')">History</button></nav>
+<div class="userbox" id="userbox"></div>
+</header>
+<div class="app"><main>
+<section id="home" class="hero"><div><div class="eyebrow">DEMO ONLY</div><h1>Play <span class="redtext">KENO</span></h1><p class="muted">Demo rounds, demo wallet and admin deposit workflow. No real-money payments.</p><button class="btn red" onclick="go('play')">Play KENO</button></div><div class="timer"><span class="muted">NEXT DRAW</span><strong id="timer">02:00</strong><span class="muted">Demo round</span></div></section>
+
+<section id="play" class="panel"><div class="topline"><div><div class="eyebrow">ROUND <span id="roundNo">0001</span></div><h2>Select 5 numbers</h2></div><div class="muted">Selected: <b id="count">0</b>/5</div></div><div class="numbers" id="numbers"></div><div class="controls"><div class="stake">Demo stake: <b>10 ETB</b></div><button class="btn dark" onclick="clearPick()">Clear</button><button class="btn red" onclick="placeBet()">Confirm</button></div><div id="playMsg"></div></section>
+
+<section class="panel"><div class="topline"><div><div class="eyebrow">LATEST RESULT</div><h2>Winning Numbers</h2></div><span class="badge">DEMO</span></div><div class="results" id="results"></div></section>
+
+<section id="wallet" class="panel"><div class="eyebrow">WALLET</div><h2>Demo Wallet</h2><div class="cards"><div class="stat"><span class="muted">Balance</span><br><b id="walletBal">0.00 ETB</b></div><div class="stat"><span class="muted">Pending deposits</span><br><b id="pendingCount">0</b></div><div class="stat"><span class="muted">Demo bets</span><br><b id="betCount">0</b></div></div><div style="margin-top:12px"><button class="btn red" onclick="openDeposit()">Add Demo Deposit</button></div></section>
+
+<section id="history" class="panel"><div class="eyebrow">ACCOUNT</div><h2>Bet History</h2><div id="historyBox" class="muted">Login to view history.</div></section>
+
+<section id="admin" class="panel hidden"><div class="topline"><div><div class="eyebrow">ADMIN ONLY</div><h2>Admin Panel</h2></div><button class="btn dark" onclick="logout()">Logout</button></div><div class="tabs"><button class="on" onclick="adminTab('deposits',this)">Deposits</button><button onclick="adminTab('users',this)">Users</button><button onclick="adminTab('settings',this)">Settings</button></div><div id="adminContent"></div></section>
+</main><footer>KENO Demo v2 • GitHub Pages compatible • No real-money payments or withdrawals.</footer></div>
+
+<div class="modal hidden" id="modal"><div class="modalbox" id="modalbox"></div></div>
+
+<script>
+const KEY='keno_demo_v2';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{users:[],deposits:[],bets:[],round:1,settings:{rtp:90}};
+let currentUser=null,pick=new Set(),seconds=120,result=draw(),displayedResult=[],drawing=false;
+const $=id=>document.getElementById(id);
+const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function go(id){$(id)?.scrollIntoView({behavior:'smooth'})}
+
+function openAuth(mode){
+ $('modal').classList.remove('hidden');
+ $('modalbox').innerHTML=mode==='login'
+ ?`<h2>Login</h2><div class="form"><label>Phone</label><input id="aPhone" inputmode="tel"><label>Password</label><input id="aPass" type="password"><button class="btn red" onclick="login()">Login</button> <button class="btn dark" onclick="openAuth('register')">Register</button><div class="notice">Demo admin: 0900000000 / admin123</div></div>`
+ :`<h2>Register</h2><div class="form"><label>Name</label><input id="aName"><label>Phone</label><input id="aPhone" inputmode="tel"><label>Password</label><input id="aPass" type="password"><button class="btn red" onclick="register()">Register</button> <button class="btn dark" onclick="openAuth('login')">Login</button></div>`;
+}
+function closeModal(){$('modal').classList.add('hidden')}
+function register(){
+ const name=$('aName').value.trim(),phone=$('aPhone').value.trim(),pass=$('aPass').value;
+ if(!name||!phone||pass.length<6)return alert('Enter valid details. Password must be at least 6 characters.');
+ if(db.users.some(u=>u.phone===phone))return alert('Phone already registered.');
+ const u={id:Date.now(),name,phone,pass,balance:0,admin:false};
+ db.users.push(u);save();currentUser=u;closeModal();refresh();
+}
+function login(){
+ const phone=$('aPhone').value.trim(),pass=$('aPass').value;
+ const u=db.users.find(x=>x.phone===phone&&x.pass===pass);
+ if(!u)return alert('Incorrect phone or password.');
+ currentUser=u;closeModal();refresh();if(u.admin)openAdmin();
+}
+function logout(){currentUser=null;$('admin').classList.add('hidden');refresh()}
+function refresh(){
+ $('userbox').innerHTML=currentUser?`<span class="balance">${Number(currentUser.balance).toFixed(2)} ETB</span><button class="btn dark" onclick="logout()">Logout</button>`:`<button class="btn red" onclick="openAuth('login')">Login</button>`;
+ $('walletBal').textContent=(currentUser?Number(currentUser.balance):0).toFixed(2)+' ETB';
+ const deps=currentUser?db.deposits.filter(d=>d.userId===currentUser.id):[];
+ $('pendingCount').textContent=deps.filter(d=>d.status==='pending').length;
+ $('betCount').textContent=currentUser?db.bets.filter(b=>b.userId===currentUser.id).length:0;
+ $('historyBox').innerHTML=currentUser?renderHistory():'Login to view history.';
+}
+function renderHistory(){
+ const bs=db.bets.filter(b=>b.userId===currentUser.id).slice().reverse();
+ if(!bs.length)return '<span class="muted">No demo bets yet.</span>';
+ return '<table><tr><th>Round</th><th>Numbers</th><th>Result</th><th>Stake</th></tr>'+bs.map(b=>`<tr><td>#${b.round}</td><td>${b.pick.join(', ')}</td><td>${b.result.join(', ')}</td><td>${b.stake} ETB</td></tr>`).join('')+'</table>';
+}
+function buildNumbers(){
+ $('numbers').innerHTML='';
+ for(let i=1;i<=40;i++){const b=document.createElement('button');b.className='num';b.textContent=String(i).padStart(2,'0');b.onclick=()=>toggle(i,b);$('numbers').appendChild(b)}
+}
+function toggle(n,b){
+ if(pick.has(n)){pick.delete(n);b.classList.remove('active')}
+ else if(pick.size<5){pick.add(n);b.classList.add('active')}
+ else return alert('Select only 5 numbers.');
+ $('count').textContent=pick.size;
+}
+function clearPick(){pick.clear();document.querySelectorAll('.num').forEach(x=>x.classList.remove('active'));$('count').textContent=0}
+function draw(){const a=[...Array(40)].map((_,i)=>i+1),r=[];while(r.length<5){const i=Math.floor(Math.random()*a.length);r.push(a.splice(i,1)[0])}return r.sort((a,b)=>a-b)}
+function renderResult(){$('results').innerHTML=displayedResult.map(n=>`<span class="ball">${String(n).padStart(2,'0')}</span>`).join('');$('roundNo').textContent=String(db.round).padStart(4,'0')}
+function animateDraw(){
+ if(drawing)return; drawing=true;displayedResult=[];renderResult();result=draw();let i=0;
+ const step=()=>{if(i<result.length){displayedResult.push(result[i++]);renderResult();setTimeout(step,500)}else{drawing=false;save()}};step();
+}
+function placeBet(){
+ if(!currentUser)return openAuth('login');
+ if(pick.size!==5)return alert('Select exactly 5 numbers.');
+ if(Number(currentUser.balance)<10)return alert('Insufficient demo balance. Add a demo deposit first.');
+ currentUser.balance=Number(currentUser.balance)-10;
+ db.bets.push({id:Date.now(),userId:currentUser.id,round:db.round,pick:[...pick].sort((a,b)=>a-b).map(n=>String(n).padStart(2,'0')),result:result.map(n=>String(n).padStart(2,'0')),stake:10});
+ save();refresh();clearPick();$('playMsg').innerHTML='<div class="notice">Demo bet saved.</div>';
+}
+function openDeposit(){
+ if(!currentUser)return openAuth('login');
+ $('modal').classList.remove('hidden');
+ $('modalbox').innerHTML=`<h2>Demo Deposit</h2><div class="form"><label>Payment Method</label><select id="depMethod"><option>Telebirr (demo)</option></select><div class="notice">Demo only. No real payment is processed.</div><label>Amount (ETB)</label><input id="depAmt" type="number" min="1" value="100"><button class="btn red" onclick="submitDeposit()">Submit Pending Deposit</button> <button class="btn dark" onclick="closeModal()">Cancel</button></div>`;
+}
+function submitDeposit(){
+ const amount=Number($('depAmt').value);
+ if(!Number.isFinite(amount)||amount<=0)return alert('Enter a valid amount.');
+ db.deposits.push({id:Date.now(),userId:currentUser.id,amount,method:'Telebirr (demo)',status:'pending',created:new Date().toISOString()});
+ save();closeModal();refresh();alert('Deposit submitted as Pending. Admin must approve it.');
+}
+function ensureAdmin(){
+ let a=db.users.find(u=>u.phone==='0900000000');
+ if(!a){db.users.push({id:1,name:'Admin',phone:'0900000000',pass:'admin123',balance:0,admin:true});save()}
+ else if(!a.admin){a.admin=true;save()}
+}
+function isAdmin(){return !!currentUser&&currentUser.admin===true}
+function openAdmin(){
+ if(!isAdmin()){alert('Admin access required.');return}
+ $('admin').classList.remove('hidden');go('admin');adminTab('deposits',document.querySelector('.tabs button'));
+}
+function adminTab(tab,btn){
+ if(!isAdmin()){alert('Admin access required.');return}
+ document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));if(btn)btn.classList.add('on');
+ if(tab==='deposits')adminDeposits();else if(tab==='users')adminUsers();else adminSettings();
+}
+function adminDeposits(){
+ if(!isAdmin())return;
+ const rows=db.deposits.slice().reverse().map(d=>{
+   const u=db.users.find(x=>x.id===d.userId);
+   const action=d.status==='pending'?`<button class="btn red" onclick="approve(${d.id})">Approve</button> <button class="btn dark" onclick="reject(${d.id})">Reject</button>`:'—';
+   return `<tr><td>${esc(u?.name||'?')}</td><td>${esc(u?.phone||'?')}</td><td>${d.amount} ETB</td><td>${esc(d.method)}</td><td class="${d.status==='approved'?'ok':d.status==='pending'?'pending':'danger'}">${d.status}</td><td>${action}</td></tr>`;
+ }).join('');
+ $('adminContent').innerHTML='<table><tr><th>Name</th><th>Phone</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr>'+rows+'</table>';
+}
+function approve(id){
+ if(!isAdmin())return alert('Admin access required.');
+ const d=db.deposits.find(x=>x.id===id);
+ if(!d||d.status!=='pending')return alert('This deposit is not pending.');
+ const u=db.users.find(x=>x.id===d.userId);
+ if(!u)return alert('User not found.');
+ u.balance=Number(u.balance||0)+Number(d.amount);
+ d.status='approved';d.approvedAt=new Date().toISOString();d.approvedBy=currentUser.id;
+ save();adminDeposits();refresh();alert('Demo deposit approved.');
+}
+function reject(id){
+ if(!isAdmin())return alert('Admin access required.');
+ const d=db.deposits.find(x=>x.id===id);
+ if(!d||d.status!=='pending')return alert('This deposit is not pending.');
+ d.status='rejected';d.rejectedAt=new Date().toISOString();d.rejectedBy=currentUser.id;
+ save();adminDeposits();refresh();alert('Demo deposit rejected.');
+}
+function adminUsers(){
+ if(!isAdmin())return;
+ $('adminContent').innerHTML='<table><tr><th>Name</th><th>Phone</th><th>Balance</th><th>Role</th></tr>'+db.users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.phone)}</td><td>${Number(u.balance).toFixed(2)} ETB</td><td>${u.admin?'Admin':'User'}</td></tr>`).join('')+'</table>';
+}
+function adminSettings(){
+ if(!isAdmin())return;
+ $('adminContent').innerHTML=`<div class="form"><label>Demo RTP (%)</label><input id="rtp" type="number" min="0" max="100" value="${db.settings.rtp}"><button class="btn red" onclick="saveRtp()">Save</button><p class="muted">Demo interface setting only.</p></div>`;
+}
+function saveRtp(){if(!isAdmin())return alert('Admin access required.');db.settings.rtp=Math.max(0,Math.min(100,Number($('rtp').value)));save();alert('Saved.')}
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+buildNumbers();ensureAdmin();refresh();animateDraw();
+setInterval(()=>{seconds--;if(seconds<0){seconds=120;db.round++;animateDraw()}$('timer').textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0')},1000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
