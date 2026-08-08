@@ -245,8 +245,56 @@ function adminDeposits(){
  let rows=db.deposits.slice().reverse().map(d=>{let u=db.users.find(x=>x.id===d.userId);return `<tr><td>${esc(u?.phone||'?')}</td><td>${d.method||'Telebirr'}</td><td>${d.amount} ETB</td><td class="${d.status==='approved'?'ok':d.status==='pending'?'pending':'danger'}">${d.status}</td><td>${d.status==='pending'?`<button class="btn red" onclick="approve(${d.id})">Approve</button> <button class="btn dark" onclick="reject(${d.id})">Reject</button>`:'—'}</td></tr>`}).join('');
  $('adminContent').innerHTML='<table><tr><th>User</th><th>Amount</th><th>Status</th><th>Action</th></tr>'+rows+'</table>';
 }
-function approve(id){let d=db.deposits.find(x=>x.id===id);if(!d||d.status!=='pending')return;let u=db.users.find(x=>x.id===d.userId);u.balance+=d.amount;d.status='approved';save();adminDeposits();if(currentUser?.id===u.id)refresh()}
-function reject(id){let d=db.deposits.find(x=>x.id===id);if(d){d.status='rejected';save();adminDeposits();refresh()}}
+function approve(id){
+  if(!currentUser || !currentUser.admin){
+    return alert('Admin access required.');
+  }
+
+  const d=db.deposits.find(x=>x.id===id);
+
+  if(!d || d.status!=='pending'){
+    return alert('This deposit is no longer pending.');
+  }
+
+  const u=db.users.find(x=>x.id===d.userId);
+
+  if(!u){
+    return alert('User not found.');
+  }
+
+  u.balance += Number(d.amount);
+  d.status='approved';
+  d.approvedAt=new Date().toISOString();
+  d.approvedBy=currentUser.id;
+
+  save();
+  adminDeposits();
+  refresh();
+
+  alert('Deposit approved successfully.');
+}
+
+function reject(id){
+  if(!currentUser || !currentUser.admin){
+    return alert('Admin access required.');
+  }
+
+  const d=db.deposits.find(x=>x.id===id);
+
+  if(!d || d.status!=='pending'){
+    return alert('This deposit is no longer pending.');
+  }
+
+  d.status='rejected';
+  d.rejectedAt=new Date().toISOString();
+  d.rejectedBy=currentUser.id;
+
+  save();
+  adminDeposits();
+  refresh();
+
+  alert('Deposit rejected.');
+}
 function adminUsers(){
  $('adminContent').innerHTML='<table><tr><th>Name</th><th>Phone</th><th>Balance</th><th>Role</th></tr>'+db.users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${u.balance.toFixed(2)} ETB</td><td>${u.admin?'Admin':'User'}</td></tr>`).join('')+'</table>';
 }
