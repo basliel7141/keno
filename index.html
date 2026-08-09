@@ -3,2052 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>KENO Gaming</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#070b12;
-  color:white;
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:#070b12;
+ color:white;
 }
 
 .container{
-  max-width:1000px;
-  margin:auto;
-  padding:15px;
+ max-width:1000px;
+ margin:auto;
+ padding:15px;
 }
 
 header{
-  display:flex;
-  justify-content:flex-end;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid #263044;
+ display:flex;
+ justify-content:flex-end;
+ align-items:center;
+ padding:10px 0;
+ border-bottom:1px solid #263044;
 }
 
 .card{
-  background:#111827;
-  border:1px solid #263044;
-  border-radius:16px;
-  padding:18px;
-  margin-top:18px;
+ background:#111827;
+ border:1px solid #263044;
+ border-radius:16px;
+ padding:18px;
+ margin-top:18px;
 }
 
-.hidden{
-  display:none!important;
+.hidden{display:none!important}
+
+input,select,button{
+ width:100%;
+ padding:13px;
+ margin:6px 0;
+ border-radius:9px;
+ border:1px solid #344054;
+ font-size:15px;
 }
 
-input,
-select,
-button{
-  width:100%;
-  padding:13px;
-  margin:6px 0;
-  border-radius:9px;
-  border:1px solid #344054;
-  font-size:15px;
-}
-
-input,
-select{
-  background:#0b1220;
-  color:white;
+input,select{
+ background:#0b1220;
+ color:white;
 }
 
 button{
-  background:#20c878;
-  color:#04120b;
-  font-weight:bold;
-  border:0;
-  cursor:pointer;
+ background:#20c878;
+ color:#04120b;
+ font-weight:bold;
+ border:0;
+ cursor:pointer;
 }
 
-button:hover{
-  opacity:.9;
-}
+button:hover{opacity:.9}
 
 button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+ opacity:.5;
+ cursor:not-allowed;
 }
 
 .secondary{
-  background:#263044;
-  color:white;
+ background:#263044;
+ color:white;
 }
 
 .danger{
-  background:#dc3545;
-  color:white;
+ background:#dc3545;
+ color:white;
 }
 
 .row{
-  display:flex;
-  gap:10px;
+ display:flex;
+ gap:10px;
 }
 
-.row>*{
-  flex:1;
-}
+.row>*{flex:1}
 
 .status{
-  background:#182235;
-  padding:10px;
-  border-radius:8px;
-  margin-top:8px;
-  min-height:20px;
+ background:#182235;
+ padding:10px;
+ border-radius:8px;
+ margin-top:8px;
+ min-height:20px;
 }
 
-.success{
-  color:#36e38b;
-}
-
-.error{
-  color:#ff6b6b;
-}
-
+.success{color:#36e38b}
+.error{color:#ff6b6b}
 .small{
-  color:#9ca3af;
-  font-size:13px;
+ color:#9ca3af;
+ font-size:13px;
 }
 
 .balance-card{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
 }
 
 .balance{
-  font-size:30px;
-  font-weight:bold;
-  color:#36e38b;
-}
-
-.top-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.deposit-top{
-  width:auto!important;
-  margin:0!important;
-  padding:9px 15px!important;
-  white-space:nowrap;
+ font-size:30px;
+ font-weight:bold;
+ color:#36e38b;
 }
 
 .games-title{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
 }
 
 .games-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;
-  margin-top:15px;
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;
+ margin-top:15px;
 }
 
 .game-card{
-  background:#0b1220;
-  border:1px solid #263044;
-  border-radius:12px;
-  padding:10px;
+ background:#0b1220;
+ border:1px solid #263044;
+ border-radius:12px;
+ padding:10px;
+ min-width:0;
 }
 
 .game-icon{
-  font-size:32px;
-  text-align:center;
+ font-size:32px;
+ margin-bottom:5px;
+ text-align:center;
 }
 
 .game-name{
-  font-size:15px;
-  font-weight:bold;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+ font-size:15px;
+ font-weight:bold;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
 }
 
 .game-description{
-  color:#9ca3af;
-  font-size:11px;
-  margin:5px 0 8px;
-  line-height:1.35;
-  min-height:30px;
+ color:#9ca3af;
+ font-size:11px;
+ margin:5px 0 8px;
+ line-height:1.35;
+ min-height:30px;
 }
 
 .game-card button{
-  font-size:11px;
-  padding:8px 5px;
-}
-
-.free-label{
-  background:#182235;
-  border:1px solid #20c878;
-  border-radius:8px;
-  padding:6px;
-  margin:5px 0;
-  color:#36e38b;
-  text-align:center;
-  font-size:11px;
-  font-weight:bold;
+ font-size:11px;
+ padding:8px 5px;
+ margin:3px 0;
 }
 
 .details-box{
-  background:#0b1220;
-  border-radius:12px;
-  padding:15px;
-  margin-top:10px;
+ background:#0b1220;
+ border-radius:12px;
+ padding:15px;
+ margin-top:10px;
 }
 
 .number-grid{
-  display:grid;
-  grid-template-columns:repeat(10,1fr);
-  gap:6px;
-  margin-top:15px;
+ display:grid;
+ grid-template-columns:repeat(10,1fr);
+ gap:6px;
+ margin-top:15px;
 }
 
 .num{
-  background:#182235;
-  color:white;
-  border:1px solid #344054;
-  padding:10px 0;
-  margin:0;
+ background:#182235;
+ color:white;
+ border:1px solid #344054;
+ padding:10px 0;
+ margin:0;
 }
 
 .num.selected{
-  background:#20c878;
-  color:#06130b;
+ background:#20c878;
+ color:#06130b;
 }
 
 .result-numbers{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:12px;
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px;
 }
 
 .result-ball{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#263044;
-  color:white;
-  font-weight:bold;
+ width:42px;
+ height:42px;
+ border-radius:50%;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ background:#263044;
+ color:white;
+ font-weight:bold;
 }
 
 .result-ball.hit{
-  background:#20c878;
-  color:#06130b;
+ background:#20c878;
+ color:#06130b;
 }
 
 table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
+ width:100%;
+ border-collapse:collapse;
+ margin-top:10px;
 }
 
-th,
-td{
-  padding:9px 5px;
-  border-bottom:1px solid #263044;
-  text-align:left;
-  font-size:13px;
+th,td{
+ padding:9px 5px;
+ border-bottom:1px solid #263044;
+ text-align:left;
+ font-size:13px;
 }
 
-.pending{
-  color:#ffd166;
+.pending{color:#ffd166}
+.approved{color:#36e38b}
+.rejected{color:#ff6b6b}
+
+.top-actions{
+ display:flex;
+ align-items:center;
+ gap:8px;
 }
 
-.approved{
-  color:#36e38b;
+.deposit-top{
+ width:auto!important;
+ margin:0!important;
+ padding:9px 15px!important;
+ border-radius:9px!important;
+ font-size:14px!important;
+ white-space:nowrap;
 }
 
-.rejected{
-  color:#ff6b6b;
-}
-
-
-/* =========================
-   LUDO
-========================= */
+/* LUDO */
 
 .ludo-board-wrap{
-  margin-top:15px;
-  display:flex;
-  justify-content:center;
+ margin-top:15px;
+ display:flex;
+ justify-content:center;
 }
 
 .ludo-board{
-  width:min(92vw,520px);
-  aspect-ratio:1/1;
-  display:grid;
-  grid-template-columns:repeat(15,1fr);
-  grid-template-rows:repeat(15,1fr);
-  background:#f5f5f5;
-  border:5px solid #263044;
-  border-radius:12px;
-  overflow:hidden;
+ width:min(92vw,520px);
+ aspect-ratio:1/1;
+ display:grid;
+ grid-template-columns:repeat(15,1fr);
+ grid-template-rows:repeat(15,1fr);
+ background:#f5f5f5;
+ border:5px solid #263044;
+ border-radius:12px;
+ overflow:hidden;
 }
 
 .ludo-cell{
-  border:1px solid #d5d9df;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+ border:1px solid #d5d9df;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
-.ludo-safe{
-  background:#dbeafe;
-}
+.ludo-safe{background:#dbeafe}
 
 .ludo-center{
-  background:conic-gradient(
-    #ff7676 0 25%,
-    #6ee7a8 0 50%,
-    #ffe66d 0 75%,
-    #74a7ff 0
-  );
+ background:conic-gradient(
+ #ff7676 0 25%,
+ #6ee7a8 0 50%,
+ #ffe66d 0 75%,
+ #74a7ff 0
+ );
 }
 
 .ludo-home{
-  z-index:3;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:1fr 1fr;
-  padding:10px;
-  gap:8px;
-  border:2px solid #111827;
+ z-index:3;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ grid-template-rows:1fr 1fr;
+ padding:10px;
+ gap:8px;
+ border:2px solid #111827;
 }
 
-.ludo-home.red{
-  background:#ff7676;
-}
-
-.ludo-home.green{
-  background:#6ee7a8;
-}
-
-.ludo-home.yellow{
-  background:#ffe66d;
-}
-
-.ludo-home.blue{
-  background:#74a7ff;
-}
+.ludo-home.red{background:#ff7676}
+.ludo-home.green{background:#6ee7a8}
+.ludo-home.yellow{background:#ffe66d}
+.ludo-home.blue{background:#74a7ff}
 
 .ludo-yard{
-  background:rgba(255,255,255,.85);
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+ background:rgba(255,255,255,.85);
+ border-radius:10px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
 
 .ludo-pawn{
-  width:65%;
-  aspect-ratio:1;
-  border-radius:50%;
-  border:2px solid #111827;
-  box-shadow:0 2px 4px #0005;
-  cursor:pointer;
+ width:65%;
+ aspect-ratio:1;
+ border-radius:50%;
+ border:2px solid #111827;
+ box-shadow:0 2px 4px #0005;
+ cursor:pointer;
 }
 
-.ludo-pawn.red{
-  background:#ef4444;
-}
-
-.ludo-pawn.green{
-  background:#22c55e;
-}
-
-.ludo-pawn.yellow{
-  background:#eab308;
-}
-
-.ludo-pawn.blue{
-  background:#3b82f6;
-}
+.ludo-pawn.red{background:#ef4444}
+.ludo-pawn.green{background:#22c55e}
+.ludo-pawn.yellow{background:#eab308}
+.ludo-pawn.blue{background:#3b82f6}
 
 .ludo-controls{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-top:12px;
-}
-
-.ludo-dice{
-  font-size:28px;
-  font-weight:bold;
-  text-align:center;
-  background:#0b1220;
-  border:1px solid #344054;
-  border-radius:12px;
-  padding:8px 18px;
-  min-width:75px;
-}
-
-.ludo-players{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-  margin-top:10px;
-}
-
-.ludo-player{
-  padding:8px;
-  border-radius:8px;
-  background:#182235;
-  font-size:12px;
-}
-
-.ludo-player.active{
-  outline:2px solid #20c878;
-}
-
-.ludo-log{
-  margin-top:10px;
-  max-height:120px;
-  overflow:auto;
-}
-
-@media(max-width:700px){
-
-  .container{
-    padding:10px;
-  }
-
-  .games-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
-  }
-
-  .game-card{
-    padding:6px;
-  }
-
-  .game-icon{
-    font-size:23px;
-  }
-
-  .game-name{
-    font-size:10px;
-  }
-
-  .game-description{
-    font-size:11px;
-    min-height:42px;
-  }
-
-  .game-card button{
-    font-size:10px;
-    padding:7px 3px;
-  }
-
-  .card{
-    padding:12px;
-  }
-
-  .balance-card{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .number-grid{
-    grid-template-columns:repeat(8,1fr);
-  }
-
-  .row{
-    flex-direction:column;
-  }
-
-  .ludo-controls{
-    flex-wrap:wrap;
-  }
-
-  .ludo-players{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<header>
-
-<div class="top-actions">
-
-<button
-id="depositTopBtn"
-class="deposit-top hidden"
-onclick="showDeposit()">
-💰 Deposit
-</button>
-
-<button
-id="logoutBtn"
-class="secondary hidden"
-onclick="logout()">
-Logout
-</button>
-
-</div>
-
-</header>
-
-
-<!-- =========================
-     AUTH
-========================= -->
-
-<div id="authBox" class="card">
-
-<h2>Login</h2>
-
-<input
-id="email"
-type="email"
-autocomplete="email"
-placeholder="Email">
-
-<input
-id="password"
-type="password"
-autocomplete="current-password"
-placeholder="Password">
-
-<div class="row">
-
-<button
-id="loginBtn"
-onclick="login()">
-Login
-</button>
-
-<button
-id="registerBtn"
-class="secondary"
-onclick="register()">
-Register
-</button>
-
-</div>
-
-<div
-id="authMessage"
-class="status">
-</div>
-
-</div>
-
-
-<!-- =========================
-     APP
-========================= -->
-
-<div id="app" class="hidden">
-
-
-<div class="card balance-card">
-
-<div>
-
-<div class="small">
-Your Balance
-</div>
-
-<div
-id="balance"
-class="balance">
-0.00 ETB
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     GAMES
-========================= -->
-
-<div class="card">
-
-<div class="games-title">
-
-<h2>🎮 Games</h2>
-
-<span class="small">
-Choose a game
-</span>
-
-</div>
-
-
-<div class="games-grid">
-
-
-<!-- LUDO -->
-
-<div class="game-card">
-
-<div class="game-icon">🎲</div>
-
-<div class="game-name">
-Ludo
-</div>
-
-<div class="game-description">
-Classic Ludo. Completely free.
-</div>
-
-<div class="free-label">
-FREE
-</div>
-
-<button onclick="openGame('ludo')">
-PLAY
-</button>
-
-</div>
-
-
-<!-- KENO -->
-
-<div class="game-card">
-
-<div class="game-icon">🎱</div>
-
-<div class="game-name">
-Keno
-</div>
-
-<div class="game-description">
-Pick numbers and play for free.
-</div>
-
-<div class="free-label">
-FREE
-</div>
-
-<button onclick="openGame('keno')">
-PLAY
-</button>
-
-</div>
-
-
-<!-- OTHER GAMES -->
-
-<div class="game-card">
-
-<div class="game-icon">🎱</div>
-
-<div class="game-name">
-Bingo
-</div>
-
-<div class="game-description">
-Bingo game.
-</div>
-
-<button onclick="openGame('bingo')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🃏</div>
-
-<div class="game-name">
-Conquer
-</div>
-
-<div class="game-description">
-Fast card battles.
-</div>
-
-<button onclick="openGame('conquer')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">⚡</div>
-
-<div class="game-name">
-Fast Bingo
-</div>
-
-<div class="game-description">
-Quick Bingo rounds.
-</div>
-
-<button onclick="openGame('fastbingo')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">♠️</div>
-
-<div class="game-name">
-Crazy 8
-</div>
-
-<div class="game-description">
-Classic card game.
-</div>
-
-<button onclick="openGame('crazy8')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">⚽</div>
-
-<div class="game-name">
-Trace Soccer
-</div>
-
-<div class="game-description">
-Soccer challenge.
-</div>
-
-<button onclick="openGame('soccer')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🌃</div>
-
-<div class="game-name">
-Night Hunter
-</div>
-
-<div class="game-description">
-Night adventure.
-</div>
-
-<button onclick="openGame('night')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🧠</div>
-
-<div class="game-name">
-Memory Game
-</div>
-
-<div class="game-description">
-Test your memory.
-</div>
-
-<button onclick="openGame('memory')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🎯</div>
-
-<div class="game-name">
-Lat Lat
-</div>
-
-<div class="game-description">
-Quick-play game.
-</div>
-
-<button onclick="openGame('latlat')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">✋</div>
-
-<div class="game-name">
-Rock Paper Scissors
-</div>
-
-<div class="game-description">
-Choose your move.
-</div>
-
-<button onclick="openGame('rps')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🃏</div>
-
-<div class="game-name">
-Uno
-</div>
-
-<div class="game-description">
-Match cards and win.
-</div>
-
-<button onclick="openGame('uno')">
-PLAY
-</button>
-
-</div>
-
-
-<div class="game-card">
-
-<div class="game-icon">🔴</div>
-
-<div class="game-name">
-Connect 4
-</div>
-
-<div class="game-description">
-Connect four.
-</div>
-
-<button onclick="openGame('connect4')">
-PLAY
-</button>
-
-</div>
-
-
-</div>
-</div>
-
-
-<!-- =========================
-     DETAILS
-========================= -->
-
-<div class="card">
-
-<h2>📋 Game Details</h2>
-
-<div class="details-box">
-
-<strong>
-🎮 Free Games
-</strong>
-
-<p class="small">
-Keno and Ludo are free to play.
-No balance or deposit is required.
-</p>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     DEPOSIT
-========================= -->
-
-<div
-id="depositBox"
-class="card hidden">
-
-<h2>💰 Deposit</h2>
-
-<input
-id="depositAmount"
-type="number"
-min="1"
-placeholder="Amount (ETB)">
-
-<select id="depositMethod">
-
-<option value="Telebirr">
-Telebirr
-</option>
-
-<option value="CBE Birr">
-CBE Birr
-</option>
-
-<option value="Bank">
-Bank
-</option>
-
-</select>
-
-<input
-id="depositPhone"
-placeholder="Phone / Bank Account">
-
-<input
-id="depositReference"
-placeholder="Transaction Reference">
-
-<button onclick="makeDeposit()">
-SUBMIT DEPOSIT
-</button>
-
-<button
-class="secondary"
-onclick="hideDeposit()">
-CLOSE
-</button>
-
-<div
-id="depositMessage"
-class="status">
-</div>
-
-</div>
-
-
-<!-- =========================
-     DEPOSIT HISTORY
-========================= -->
-
-<div class="card">
-
-<h2>📜 My Deposits</h2>
-
-<table>
-
-<thead>
-
-<tr>
-<th>Amount</th>
-<th>Method</th>
-<th>Status</th>
-</tr>
-
-</thead>
-
-<tbody id="depositList">
-</tbody>
-
-</table>
-
-</div>
-
-
-<!-- =========================
-     FREE KENO
-========================= -->
-
-<div
-id="kenoGame"
-class="card hidden">
-
-<h2>🎱 KENO — FREE</h2>
-
-<div class="status success">
-FREE PLAY — No balance required.
-</div>
-
-<div class="small">
-Select up to 10 numbers.
-</div>
-
-<div
-id="numberGrid"
-class="number-grid">
-</div>
-
-<button
-id="playBtn"
-onclick="playKeno()">
-🎱 PLAY FREE KENO
-</button>
-
-<div
-id="gameMessage"
-class="status">
-</div>
-
-<div
-id="resultNumbers"
-class="result-numbers">
-</div>
-
-<button
-class="secondary"
-onclick="closeKeno()">
-BACK
-</button>
-
-</div>
-
-
-<!-- =========================
-     FREE LUDO
-========================= -->
-
-<div
-id="ludoGame"
-class="card hidden">
-
-<div class="games-title">
-
-<h2>🎲 LUDO — FREE</h2>
-
-<span class="small">
-FREE PLAY
-</span>
-
-</div>
-
-<div class="status success">
-Ludo is completely free.
-Balance is not required.
-</div>
-
-<div
-id="ludoMessage"
-class="status">
-Roll the dice to start.
-</div>
-
-<div
-id="ludoPlayers"
-class="ludo-players">
-</div>
-
-<div class="ludo-board-wrap">
-
-<div
-id="ludoBoard"
-class="ludo-board">
-</div>
-
-</div>
-
-<div class="ludo-controls">
-
-<button
-id="ludoRollBtn"
-onclick="ludoRoll()">
-🎲 ROLL DICE
-</button>
-
-<div
-id="ludoDice"
-class="ludo-dice">
-—
-</div>
-
-<button
-class="secondary"
-onclick="closeLudo()">
-BACK
-</button>
-
-</div>
-
-<div
-id="ludoLog"
-class="ludo-log status">
-</div>
-
-</div>
-
-
-<!-- =========================
-     OTHER GAMES
-========================= -->
-
-<div
-id="otherGame"
-class="card hidden">
-
-<h2 id="otherGameTitle">
-Game
-</h2>
-
-<div
-id="otherGameMessage"
-class="status">
-</div>
-
-<button
-class="secondary"
-onclick="closeOtherGame()">
-BACK TO GAMES
-</button>
-
-</div>
-
-
-<!-- =========================
-     ADMIN
-========================= -->
-
-<div
-id="adminPanel"
-class="card hidden">
-
-<h2>🔐 Admin Panel</h2>
-
-<table>
-
-<thead>
-
-<tr>
-<th>User</th>
-<th>Amount</th>
-<th>Method</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
-
-</thead>
-
-<tbody id="adminDeposits">
-</tbody>
-
-</table>
-
-</div>
-
-
-</div>
-</div>
-
-
-<script>
-
-/* =========================
-   SUPABASE
-========================= */
-
-const SUPABASE_URL =
-"https://eizpxgwkottliyvvhlar.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* =========================
-   VARIABLES
-========================= */
-
-let currentUser = null;
-
-let selectedNumbers = [];
-
-let isDrawing = false;
-
-let ludoState = null;
-
-
-/* =========================
-   HELPERS
-========================= */
-
-function show(id,message,type=""){
-
-  const el =
-    document.getElementById(id);
-
-  if(!el){
-    return;
-  }
-
-  el.textContent = message;
-
-  el.className =
-    "status " + type;
-}
-
-
-function wait(ms){
-
-  return new Promise(
-    resolve => setTimeout(resolve,ms)
-  );
-
-}
-
-
-/* =========================
-   UI
-========================= */
-
-function setLoggedInUI(loggedIn){
-
-  document
-    .getElementById("authBox")
-    .classList
-    .toggle("hidden",loggedIn);
-
-  document
-    .getElementById("app")
-    .classList
-    .toggle("hidden",!loggedIn);
-
-  document
-    .getElementById("logoutBtn")
-    .classList
-    .toggle("hidden",!loggedIn);
-
-  document
-    .getElementById("depositTopBtn")
-    .classList
-    .toggle("hidden",!loggedIn);
-
-}
-
-
-/* =========================
-   REGISTER
-========================= */
-
-async function register(){
-
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("password")
-      .value;
-
-  if(!email){
-
-    show(
-      "authMessage",
-      "Please enter your email.",
-      "error"
-    );
-
-    return;
-  }
-
-  if(password.length < 6){
-
-    show(
-      "authMessage",
-      "Password must be at least 6 characters.",
-      "error"
-    );
-
-    return;
-  }
-
-  const btn =
-    document.getElementById(
-      "registerBtn"
-    );
-
-  btn.disabled = true;
-
-  show(
-    "authMessage",
-    "Creating account..."
-  );
-
-  try{
-
-    const result =
-      await supabaseClient.auth.signUp({
-        email:email,
-        password:password
-      });
-
-    if(result.error){
-
-      show(
-        "authMessage",
-        result.error.message,
-        "error"
-      );
-
-      return;
-    }
-
-    if(result.data?.session){
-
-      currentUser =
-        result.data.session.user;
-
-      await startApp();
-
-    }else{
-
-      show(
-        "authMessage",
-        "Registration successful. Check your email if confirmation is required, then login.",
-        "success"
-      );
-
-    }
-
-  }catch(err){
-
-    show(
-      "authMessage",
-      err.message || "Registration failed.",
-      "error"
-    );
-
-  }finally{
-
-    btn.disabled = false;
-
-  }
-
-}
-
-
-/* =========================
-   LOGIN
-========================= */
-
-async function login(){
-
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("password")
-      .value;
-
-  if(!email){
-
-    show(
-      "authMessage",
-      "Please enter your email.",
-      "error"
-    );
-
-    return;
-  }
-
-  if(!password){
-
-    show(
-      "authMessage",
-      "Please enter your password.",
-      "error"
-    );
-
-    return;
-  }
-
-  const btn =
-    document.getElementById(
-      "loginBtn"
-    );
-
-  btn.disabled = true;
-
-  show(
-    "authMessage",
-    "Logging in..."
-  );
-
-  try{
-
-    const result =
-      await supabaseClient.auth.signInWithPassword({
-        email:email,
-        password:password
-      });
-
-    if(result.error){
-
-      show(
-        "authMessage",
-        result.error.message,
-        "error"
-      );
-
-      return;
-    }
-
-    if(!result.data?.user){
-
-      show(
-        "authMessage",
-        "Login failed. No user returned.",
-        "error"
-      );
-
-      return;
-    }
-
-    currentUser =
-      result.data.user;
-
-    /*
-      IMPORTANT:
-      Login UI is opened immediately.
-      Database errors will not stop login.
-    */
-
-    setLoggedInUI(true);
-
-    createNumbers();
-
-    show(
-      "authMessage",
-      ""
-    );
-
-    /*
-      Load database data separately.
-      Errors here do not block the app.
-    */
-
-    loadBalance().catch(
-      err => console.log(
-        "Balance:",
-        err
-      )
-    );
-
-    loadDeposits().catch(
-      err => console.log(
-        "Deposits:",
-        err
-      )
-    );
-
-    checkAdmin().catch(
-      err => console.log(
-        "Admin:",
-        err
-      )
-    );
-
-  }catch(err){
-
-    show(
-      "authMessage",
-      err.message ||
-      "Login failed.",
-      "error"
-    );
-
-  }finally{
-
-    btn.disabled = false;
-
-  }
-
-}
-
-
-/* =========================
-   START APP
-========================= */
-
-async function startApp(){
-
-  setLoggedInUI(true);
-
-  createNumbers();
-
-  loadBalance().catch(
-    console.log
-  );
-
-  loadDeposits().catch(
-    console.log
-  );
-
-  checkAdmin().catch(
-    console.log
-  );
-
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-async function logout(){
-
-  try{
-
-    await supabaseClient
-      .auth
-      .signOut();
-
-  }catch(err){
-
-    console.log(err);
-
-  }
-
-  currentUser = null;
-
-  setLoggedInUI(false);
-
-  document
-    .getElementById("depositBox")
-    .classList
-    .add("hidden");
-
-}
-
-
-/* =========================
-   BALANCE
-========================= */
-
-async function loadBalance(){
-
-  if(!currentUser){
-    return;
-  }
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("profiles")
-        .select("balance")
-        .eq("id",currentUser.id)
-        .maybeSingle();
-
-    if(result.error){
-
-      console.log(
-        "Balance error:",
-        result.error
-      );
-
-      return;
-    }
-
-    const balance =
-      Number(
-        result.data?.balance || 0
-      );
-
-    document
-      .getElementById("balance")
-      .textContent =
-        balance.toFixed(2) +
-        " ETB";
-
-  }catch(err){
-
-    console.log(
-      "Balance error:",
-      err
-    );
-
-  }
-
-}
-
-
-/* =========================
-   DEPOSIT
-========================= */
-
-function showDeposit(){
-
-  if(!currentUser){
-
-    return;
-  }
-
-  document
-    .getElementById("depositBox")
-    .classList
-    .remove("hidden");
-
-  document
-    .getElementById("depositBox")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-
-
-function hideDeposit(){
-
-  document
-    .getElementById("depositBox")
-    .classList
-    .add("hidden");
-
-}
-
-
-async function makeDeposit(){
-
-  if(!currentUser){
-
-    show(
-      "depositMessage",
-      "Please login first.",
-      "error"
-    );
-
-    return;
-  }
-
-  const amount =
-    Number(
-      document
-        .getElementById("depositAmount")
-        .value
-    );
-
-  const method =
-    document
-      .getElementById("depositMethod")
-      .value;
-
-  const phone =
-    document
-      .getElementById("depositPhone")
-      .value
-      .trim();
-
-  const reference =
-    document
-      .getElementById("depositReference")
-      .value
-      .trim();
-
-  if(!amount || amount <= 0){
-
-    show(
-      "depositMessage",
-      "Enter a valid amount.",
-      "error"
-    );
-
-    return;
-  }
-
-  if(!phone){
-
-    show(
-      "depositMessage",
-      "Enter phone or bank account.",
-      "error"
-    );
-
-    return;
-  }
-
-  if(!reference){
-
-    show(
-      "depositMessage",
-      "Enter transaction reference.",
-      "error"
-    );
-
-    return;
-  }
-
-  show(
-    "depositMessage",
-    "Submitting..."
-  );
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("deposits")
-        .insert({
-          user_id:currentUser.id,
-          amount:amount,
-          method:method,
-          reference:
-            "Phone/Bank: " +
-            phone +
-            " | Ref: " +
-            reference,
-          status:"pending"
-        });
-
-    if(result.error){
-
-      show(
-        "depositMessage",
-        result.error.message,
-        "error"
-      );
-
-      return;
-    }
-
-    show(
-      "depositMessage",
-      "Deposit submitted. Waiting for admin approval.",
-      "success"
-    );
-
-    document
-      .getElementById("depositAmount")
-      .value = "";
-
-    document
-      .getElementById("depositPhone")
-      .value = "";
-
-    document
-      .getElementById("depositReference")
-      .value = "";
-
-    await loadDeposits();
-
-  }catch(err){
-
-    show(
-      "depositMessage",
-      err.message,
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================
-   DEPOSIT LIST
-========================= */
-
-async function loadDeposits(){
-
-  if(!currentUser){
-    return;
-  }
-
-  try{
-
-    const result =
-      await supabaseClient
-        .from("deposits")
-        .select("*")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        );
-
-    if(result.error){
-
-      console.log(
-        "Deposit list error:",
-        result.error
-      );
-
-      return;
-    }
-
-    const list =
-      document.getElementById(
-        "depositList"
-      );
-
-    list.innerHTML = "";
-
-    (result.data || [])
-      .forEach(item => {
-
-        const tr =
-          document.createElement("tr");
-
-        tr.innerHTML = `
-          <td>
-            ${Number(item.amount || 0).toFixed(2)} ETB
-          </td>
-
-          <td>
-            ${item.method || ""}
-          </td>
-
-          <td class="${item.status || "pending"}">
-            ${item.status || "pending"}
-          </td>
-        `;
-
-        list.appendChild(tr);
-
-      });
-
-  }catch(err){
-
-    console.log(
-      "Deposit error:",
-      err
-    );
-
-  }
-
-}
-
-
-/* =========================
-   OPEN GAME
-========================= */
-
-function openGame(game){
-
-  document
-    .getElementById("kenoGame")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("ludoGame")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("otherGame")
-    .classList
-    .add("hidden");
-
-
-  if(game === "keno"){
-
-    document
-      .getElementById("kenoGame")
-      .classList
-      .remove("hidden");
-
-    document
-      .getElementById("kenoGame")
-      .scrollIntoView({
-        behavior:"smooth"
-      });
-
-    return;
-  }
-
-
-  if(game === "ludo"){
-
-    ludoOpen();
-
-    return;
-  }
-
-
-  const names = {
-
-    bingo:"🎱 BINGO",
-    conquer:"🃏 CONQUER",
-    fastbingo:"⚡ FAST BINGO",
-    crazy8:"♠️ CRAZY 8",
-    soccer:"⚽ TRACE SOCCER",
-    night:"🌃 NIGHT HUNTER",
-    memory:"🧠 MEMORY GAME",
-    latlat:"🎯 LAT LAT",
-    rps:"✋ ROCK PAPER SCISSORS",
-    uno:"🃏 UNO",
-    connect4:"🔴 CONNECT 4"
-
-  };
-
-
-  document
-    .getElementById("otherGameTitle")
-    .textContent =
-      names[game] || "Game";
-
-
-  document
-    .getElementById("otherGameMessage")
-    .textContent =
-      "This game is ready to be built.";
-
-
-  document
-    .getElementById("otherGame")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("otherGame")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-
-
-function closeOtherGame(){
-
-  document
-    .getElementById("otherGame")
-    .classList
-    .add("hidden");
-
-}
-
-
-/* =========================
-   KENO NUMBERS
-========================= */
-
-function createNumbers(){
-
-  const grid =
-    document.getElementById(
-      "numberGrid"
-    );
-
-  if(!grid){
-    return;
-  }
-
-  grid.innerHTML = "";
-
-  selectedNumbers = [];
-
-  for(
-    let i=1;
-    i<=80;
-    i++
-  ){
-
-    const btn =
-      document.createElement("button");
-
-    btn.className = "num";
-
-    btn.textContent = i;
-
-    btn.onclick = () => {
-
-      if(isDrawing){
-        return;
-      }
-
-      if(
-        selectedNumbers.includes(i)
-      ){
-
-        selectedNumbers =
-          selectedNumbers.filter(
-            n => n !== i
-          );
-
-        btn.classList.remove(
-          "selected"
-        );
-
-        return;
-      }
-
-      if(
-        selectedNumbers.length >= 10
-      ){
-
-        show(
-          "gameMessage",
-          "Maximum 10 numbers.",
-          "error"
-        );
-
-        return;
-      }
-
-      selectedNumbers.push(i);
-
-      btn.classList.add(
-        "selected"
-      );
-
-      show(
-        "gameMessage",
-        selectedNumbers.length +
-        " number(s) selected."
-      );
-
-    };
-
-    grid.appendChild(btn);
-
-  }
-
-}
-
-
-/* =========================
-   FREE KENO
-========================= */
-
-async
+ display:flex;
+ gap:10px;
+ align-items:center;
+ margin-top:12
