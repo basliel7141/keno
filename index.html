@@ -1,1 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KENO</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#070b12;
+  color:#fff;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 0;
+  border-bottom:1px solid #263044;
+}
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  color:#36e38b;
+}
+.card{
+  background:#111827;
+  border:1px solid #263044;
+  border-radius:16px;
+  padding:20px;
+  margin-top:20px;
+}
+h2{margin-top:0}
+input,select,button{
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border-radius:9px;
+  border:1px solid #344054;
+  font-size:15px;
+}
+input,select{
+  background:#0b1220;
+  color:white;
+}
+button{
+  background:#20c878;
+  color:#04120b;
+  font-weight:bold;
+  border:0;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
+.danger{background:#dc3545;color:white}
+.secondary{background:#263044;color:white}
+.hidden{display:none!important}
+.balance{
+  font-size:32px;
+  font-weight:bold;
+  color:#36e38b;
+}
+.status{
+  padding:10px;
+  border-radius:8px;
+  background:#182235;
+  margin-top:10px;
+}
+.number-grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:7px;
+  margin-top:15px;
+}
+.num{
+  background:#182235;
+  color:white;
+  border:1px solid #344054;
+  padding:10px 0;
+}
+.num.selected{
+  background:#20c878;
+  color:#06130b;
+}
+.row{
+  display:flex;
+  gap:10px;
+}
+.row>*{flex:1}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+th,td{
+  padding:10px 6px;
+  border-bottom:1px solid #263044;
+  text-align:left;
+  font-size:13px;
+}
+.badge{
+  padding:5px 8px;
+  border-radius:6px;
+  background:#263044;
+}
+.pending{color:#ffd166}
+.approved{color:#36e38b}
+.rejected{color:#ff6b6b}
+.small{
+  color:#9ca3af;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">KENO</div>
+  <button id="logoutBtn" class="secondary hidden" onclick="logout()">Logout</button>
+</header>
+
+<!-- AUTH -->
+<div id="authBox" class="card">
+  <h2>Login / Register</h2>
+
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+
+  <div class="row">
+    <button onclick="login()">Login</button>
+    <button class="secondary" onclick="register()">Register</button>
+  </div>
+
+  <div id="authMessage" class="status"></div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <div class="card">
+    <div class="small">Your Balance</div>
+    <div class="balance" id="balance">0.00 ETB</div>
+  </div>
+
+  <!-- DEPOSIT -->
+  <div class="card">
+    <h2>Deposit</h2>
+
+    <input id="depositAmount" type="number" placeholder="Amount (ETB)">
+
+    <select id="depositMethod">
+      <option value="Telebirr">Telebirr</option>
+      <option value="CBE Birr">CBE Birr</option>
+      <option value="Bank">Bank</option>
+    </select>
+
+    <input id="depositReference" placeholder="Transaction / Reference number">
+
+    <button onclick="makeDeposit()">Submit Deposit</button>
+
+    <div id="depositMessage" class="status"></div>
+  </div>
+
+  <!-- DEPOSIT HISTORY -->
+  <div class="card">
+    <h2>My Deposits</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody id="depositList"></tbody>
+    </table>
+  </div>
+
+  <!-- KENO -->
+  <div class="card">
+    <h2>KENO</h2>
+
+    <div class="small">
+      Select numbers
+    </div>
+
+    <div id="numberGrid" class="number-grid"></div>
+
+    <div class="row" style="margin-top:15px">
+      <input id="betAmount" type="number" placeholder="Bet amount">
+      <button onclick="playKeno()">PLAY</button>
+    </div>
+
+    <div id="gameMessage" class="status"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="adminPanel" class="card hidden">
+    <h2>Admin Panel</h2>
+
+    <p class="small">
+      Pending deposits
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="adminDeposits"></tbody>
+    </table>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   SUPABASE CONFIG
+========================= */
+
+const SUPABASE_URL =
+"https://eizpxgwkottliyvvhlar.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
+
+const supabaseClient =
+supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+/* =========================
+   GLOBAL
+========================= */
+
+let currentUser = null;
+let selectedNumbers = [];
+
+
+/* =========================
+   AUTH
+========================= */
+
+async function register(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if(!email || !password){
+    show("authMessage","Enter email and password.");
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+  if(error){
+    show("authMessage",error.message);
+    return;
+  }
+
+  show(
+    "authMessage",
+    "Registration successful. Check your email if confirmation is required."
+  );
+}
+
+
+async function login(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if(!email || !password){
+    show("authMessage","Enter email and password.");
+    return;
+  }
+
+  const {data,error} =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if(error){
+    show("authMessage",error.message);
+    return;
+  }
+
+  currentUser = data.user;
+
+  await startApp();
+}
+
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authBox")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("logoutBtn")
+    .classList.add("hidden");
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+async function startApp(){
+
+  document
+    .getElementById("authBox")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("logoutBtn")
+    .classList.remove("hidden");
+
+  createNumbers();
+
+  await loadBalance();
+
+  await loadDeposits();
+
+  await checkAdmin();
+}
+
+
+/* =========================
+   BALANCE
+========================= */
+
+async function loadBalance(){
+
+  if(!currentUser) return;
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq("id",currentUser.id)
+      .single();
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  const balance =
+    Number(data?.balance || 0);
+
+  document.getElementById("balance")
+    .textContent =
+    balance.toFixed(2) + " ETB";
+}
+
+
+/* =========================
+   DEPOSIT
+========================= */
+
+async function makeDeposit(){
+
+  if(!currentUser){
+    show("depositMessage","Please login first.");
+    return;
+  }
+
+  const amount =
+    Number(document.getElementById("depositAmount").value);
+
+  const method =
+    document.getElementById("depositMethod").value;
+
+  const reference =
+    document.getElementById("depositReference").value.trim();
+
+  if(!amount || amount <= 0){
+    show("depositMessage","Enter a valid amount.");
+    return;
+  }
+
+  if(!reference){
+    show("depositMessage","Enter transaction reference.");
+    return;
+  }
+
+  const {error} =
+    await supabaseClient
+      .from("deposits")
+      .insert({
+        user_id: currentUser.id,
+        amount: amount,
+        method: method,
+        reference: reference,
+        status: "pending"
+      });
+
+  if(error){
+    show("depositMessage",error.message);
+    return;
+  }
+
+  show(
+    "depositMessage",
+    "Deposit submitted. Waiting for admin approval."
+  );
+
+  document.getElementById("depositAmount").value="";
+  document.getElementById("depositReference").value="";
+
+  await loadDeposits();
+}
+
+
+/* =========================
+   USER DEPOSITS
+========================= */
+
+async function loadDeposits(){
+
+  if(!currentUser) return;
+
+  const {data,error} =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  const list =
+    document.getElementById("depositList");
+
+  list.innerHTML="";
+
+  (data || []).forEach(item=>{
+
+    const tr =
+      document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${Number(item.amount).toFixed(2)} ETB</td>
+      <td>${item.method || ""}</td>
+      <td class="${item.status || ""}">
+        ${item.status || "pending"}
+      </td>
+    `;
+
+    list.appendChild(tr);
+  });
+}
+
+
+/* =========================
+   ADMIN CHECK
+========================= */
+
+async function checkAdmin(){
+
+  if(!currentUser) return;
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id",currentUser.id)
+      .single();
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  if(data && data.role === "admin"){
+
+    document
+      .getElementById("adminPanel")
+      .classList.remove("hidden");
+
+    await loadAdminDeposits();
+  }
+}
+
+
+/* =========================
+   ADMIN DEPOSITS
+========================= */
+
+async function loadAdminDeposits(){
+
+  const {data,error} =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .eq("status","pending")
+      .order("created_at",{ascending:false});
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  const list =
+    document.getElementById("adminDeposits");
+
+  list.innerHTML="";
+
+  (data || []).forEach(item=>{
+
+    const tr =
+      document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${item.user_id}</td>
+      <td>${Number(item.amount).toFixed(2)} ETB</td>
+      <td>${item.method || ""}</td>
+      <td class="pending">pending</td>
+      <td>
+        <button onclick="approveDeposit('${item.id}',${Number(item.amount)},'${item.user_id}')">
+          APPROVE
+        </button>
+
+        <button class="danger"
+          onclick="rejectDeposit('${item.id}')">
+          REJECT
+        </button>
+      </td>
+    `;
+
+    list.appendChild(tr);
+  });
+}
+
+
+/* =========================
+   APPROVE DEPOSIT
+========================= */
+
+async function approveDeposit(
+  depositId,
+  amount,
+  userId
+){
+
+  const {error:updateError} =
+    await supabaseClient
+      .from("deposits")
+      .update({
+        status:"approved"
+      })
+      .eq("id",depositId);
+
+  if(updateError){
+    alert(updateError.message);
+    return;
+  }
+
+  const {data:profile,error:profileError} =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq("id",userId)
+      .single();
+
+  if(profileError){
+    alert(profileError.message);
+    return;
+  }
+
+  const newBalance =
+    Number(profile.balance || 0) +
+    Number(amount);
+
+  const {error:balanceError} =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        balance:newBalance
+      })
+      .eq("id",userId);
+
+  if(balanceError){
+    alert(balanceError.message);
+    return;
+  }
+
+  alert("Deposit approved successfully.");
+
+  await loadAdminDeposits();
+}
+
+
+/* =========================
+   REJECT DEPOSIT
+========================= */
+
+async function rejectDeposit(id){
+
+  const ok =
+    confirm("Reject this deposit?");
+
+  if(!ok) return;
+
+  const {error} =
+    await supabaseClient
+      .from("deposits")
+      .update({
+        status:"rejected"
+      })
+      .eq("id",id);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  alert("Deposit rejected.");
+
+  await loadAdminDeposits();
+}
+
+
+/* =========================
+   KENO NUMBERS
+========================= */
+
+function createNumbers(){
+
+  const grid =
+    document.getElementById("numberGrid");
+
+  grid.innerHTML="";
+
+  for(let i=1;i<=80;i++){
+
+    const button =
+      document.createElement("button");
+
+    button.className="num";
+
+    button.textContent=i;
+
+    button.onclick=()=>{
+
+      if(selectedNumbers.includes(i)){
+
+        selectedNumbers =
+          selectedNumbers.filter(n=>n!==i);
+
+        button.classList.remove("selected");
+
+      }else{
+
+        if(selectedNumbers.length >= 10){
+          alert("Maximum 10 numbers.");
+          return;
+        }
+
+        selectedNumbers.push(i);
+
+        button.classList.add("selected");
+      }
+    };
+
+    grid.appendChild(button);
+  }
+}
+
+
+/* =========================
+   PLAY KENO
+========================= */
+
+async function playKeno(){
+
+  if(!currentUser){
+    show("gameMessage","Please login first.");
+    return;
+  }
+
+  const bet =
+    Number(document.getElementById("betAmount").value);
+
+  if(!bet || bet <= 0){
+    show("gameMessage","Enter bet amount.");
+    return;
+  }
+
+  if(selectedNumbers.length < 1){
+    show("gameMessage","Select at least one number.");
+    return;
+  }
+
+  const {data:profile,error} =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq("id",currentUser.id)
+      .single();
+
+  if(error){
+    show("gameMessage",error.message);
+    return;
+  }
+
+  if(Number(profile.balance) < bet){
+    show("gameMessage","Insufficient balance.");
+    return;
+  }
+
+  const winningNumbers=[];
+
+  while(winningNumbers.length < 10){
+
+    const n =
+      Math.floor(Math.random()*80)+1;
+
+    if(!winningNumbers.includes(n)){
+      winningNumbers.push(n);
+    }
+  }
+
+  const hits =
+    selectedNumbers.filter(
+      n=>winningNumbers.includes(n)
+    ).length;
+
+  await supabaseClient
+    .from("profiles")
+    .update({
+      balance:Number(profile.balance)-bet
+    })
+    .eq("id",currentUser.id);
+
+  show(
+    "gameMessage",
+    "Winning numbers: " +
+    winningNumbers.join(", ") +
+    " | Hits: " + hits
+  );
+
+  await loadBalance();
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function show(id,message){
+
+  document.getElementById(id)
+    .textContent=message;
+}
+
+
+/* =========================
+   AUTO LOGIN
+========================= */
+
+(async function(){
+
+  const {data} =
+    await supabaseClient.auth.getSession();
+
+  if(data.session){
+
+    currentUser =
+      data.session.user;
+
+    await startApp();
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
