@@ -27,7 +27,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .balance-card{display:flex;justify-content:space-between;align-items:center;gap:15px}
 .balance{font-size:30px;font-weight:bold;color:#36e38b}
 .games-title{display:flex;justify-content:space-between;align-items:center}
-.games-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:15px}
+.games-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:15px}
 .game-card{background:#0b1220;border:1px solid #263044;border-radius:12px;padding:10px;min-width:0}
 .game-icon{font-size:32px;margin-bottom:5px;text-align:center}
 .game-name{font-size:15px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -77,10 +77,10 @@ radius:12px;padding:8px 18px;min-width:75px}
 .ludo-log{margin-top:10px;max-height:120px;overflow:auto}
 @media(max-width:700px){
 .container{padding:10px}header{padding:7px 0}
-.games-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.games-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .game-card{padding:6px;border-radius:9px}.game-icon{font-size:23px;margin-bottom:3px}
-.game-name{font-size:10px}.game-description{font-size:8px;line-height:1.2;min-height:28px;margin:3px 0}
-.game-card button{font-size:8px;padding:6px 2px}.card{padding:12px;border-radius:12px}
+.game-name{font-size:10px}.game-description{font-size:11px;line-height:1.25;min-height:42px;margin:5px 0}
+.game-card button{font-size:10px;padding:7px 3px}.card{padding:12px;border-radius:12px}
 .balance-card{flex-direction:column;align-items:stretch}.number-grid{grid-template-columns:repeat(8,1fr)}
 .row{flex-direction:column}.ludo-controls{flex-wrap:wrap}.ludo-players{grid-template-columns:repeat(2,1fr)}
 }
@@ -89,7 +89,7 @@ radius:12px;padding:8px 18px;min-width:75px}
 <body>
 <div class="container">
 <header><div class="top-actions">
-<button class="deposit-top" onclick="showDeposit()"> Deposit</button>
+<button id="depositTopBtn" class="deposit-top hidden" onclick="showDeposit()"> Deposit</button>
 <button id="logoutBtn" class="secondary hidden" onclick="logout()">Logout</button>
 </div></header>
 
@@ -200,6 +200,13 @@ let currentUser=null,selectedNumbers=[],isDrawing=false;
 f u n c t i o n s h o w ( i d , m e s s a g e , t y p e = " " ) { c o n s t
 e=document.getElementById(id);if(!e)return;e.textContent=message;e.className="status "+type}
 
+function setLoggedInUI(loggedIn){
+document.getElementById("authBox").classList.toggle("hidden", loggedIn);
+document.getElementById("app").classList.toggle("hidden", !loggedIn);
+document.getElementById("logoutBtn").classList.toggle("hidden", !loggedIn);
+document.getElementById("depositTopBtn").classList.toggle("hidden", !loggedIn);
+}
+
 async function register(){
 c o n s t
 email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
@@ -236,6 +243,7 @@ async function startApp(){
 document.getElementById("authBox").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
 document.getElementById("logoutBtn").classList.remove("hidden");
+document.getElementById("depositTopBtn").classList.remove("hidden");
 createNumbers();
 try{await loadBalance()}catch(e){console.log(e)}
 try{await loadDeposits()}catch(e){console.log(e)}
@@ -248,6 +256,8 @@ currentUser=null;
 document.getElementById("app").classList.add("hidden");
 document.getElementById("authBox").classList.remove("hidden");
 document.getElementById("logoutBtn").classList.add("hidden");
+document.getElementById("depositTopBtn").classList.add("hidden");
+document.getElementById("depositBox").classList.add("hidden");
 document.getElementById("email").value="";document.getElementById("password").value="";
 closeLudo();
 }
@@ -262,7 +272,6 @@ f u n c t i o n
 showDeposit(){document.getElementById("depositBox").classList.remove("hidden");document.getElementById("de
 positBox").scrollIntoView({behavior:"smooth"})}
 function hideDeposit(){document.getElementById("depositBox").classList.add("hidden")}
-
 async function makeDeposit(){
 if(!currentUser)return show("depositMessage","Please login first.","error");
 const amount=Number(document.getElementById("depositAmount").value);
@@ -467,6 +476,8 @@ function closeLudo(){
 document.getElementById("ludoGame").classList.add("hidden");
 if(ludoState){ludoState=null}
 }
+setLoggedInUI(false);
+
 (async function(){
 try{
 const {data,error}=await supabaseClient.auth.getSession();
