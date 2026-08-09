@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>KENO Gaming</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -33,16 +25,10 @@ body{
 
 header{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   align-items:center;
-  padding:14px 0;
+  padding:10px 0;
   border-bottom:1px solid #263044;
-}
-
-.logo{
-  font-size:30px;
-  font-weight:bold;
-  color:#36e38b;
 }
 
 .card{
@@ -53,13 +39,9 @@ header{
   margin-top:18px;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important}
 
-input,
-select,
-button{
+input,select,button{
   width:100%;
   padding:13px;
   margin:6px 0;
@@ -68,8 +50,7 @@ button{
   font-size:15px;
 }
 
-input,
-select{
+input,select{
   background:#0b1220;
   color:white;
 }
@@ -82,9 +63,7 @@ button{
   cursor:pointer;
 }
 
-button:hover{
-  opacity:.9;
-}
+button:hover{opacity:.9}
 
 button:disabled{
   opacity:.5;
@@ -106,9 +85,7 @@ button:disabled{
   gap:10px;
 }
 
-.row>*{
-  flex:1;
-}
+.row>*{flex:1}
 
 .status{
   background:#182235;
@@ -118,13 +95,8 @@ button:disabled{
   min-height:20px;
 }
 
-.success{
-  color:#36e38b;
-}
-
-.error{
-  color:#ff6b6b;
-}
+.success{color:#36e38b}
+.error{color:#ff6b6b}
 
 .small{
   color:#9ca3af;
@@ -144,10 +116,6 @@ button:disabled{
   color:#36e38b;
 }
 
-.deposit-button{
-  max-width:180px;
-}
-
 .games-title{
   display:flex;
   justify-content:space-between;
@@ -156,33 +124,45 @@ button:disabled{
 
 .games-grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
   margin-top:15px;
 }
 
 .game-card{
   background:#0b1220;
   border:1px solid #263044;
-  border-radius:14px;
-  padding:15px;
+  border-radius:12px;
+  padding:10px;
+  min-width:0;
 }
 
 .game-icon{
-  font-size:42px;
-  margin-bottom:8px;
+  font-size:32px;
+  margin-bottom:5px;
+  text-align:center;
 }
 
 .game-name{
-  font-size:20px;
+  font-size:15px;
   font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .game-description{
   color:#9ca3af;
-  font-size:13px;
-  margin:7px 0 12px;
-  line-height:1.5;
+  font-size:11px;
+  margin:5px 0 8px;
+  line-height:1.35;
+  min-height:30px;
+}
+
+.game-card button{
+  font-size:11px;
+  padding:8px 5px;
+  margin:3px 0;
 }
 
 .details-box{
@@ -242,54 +222,81 @@ table{
   margin-top:10px;
 }
 
-th,
-td{
+th,td{
   padding:9px 5px;
   border-bottom:1px solid #263044;
   text-align:left;
   font-size:13px;
 }
 
-.pending{
-  color:#ffd166;
-}
+.pending{color:#ffd166}
+.approved{color:#36e38b}
+.rejected{color:#ff6b6b}
 
-.approved{
-  color:#36e38b;
-}
-
-.rejected{
-  color:#ff6b6b;
-}
-
-.section-buttons{
+.top-actions{
   display:flex;
+  align-items:center;
   gap:8px;
-  flex-wrap:wrap;
 }
 
-.section-buttons button{
-  width:auto;
-  padding:10px 15px;
+.deposit-top{
+  width:auto!important;
+  margin:0!important;
+  padding:9px 15px!important;
+  border-radius:9px!important;
+  font-size:14px!important;
+  white-space:nowrap;
 }
 
-@media(max-width:600px){
+@media(max-width:700px){
 
   .container{
+    padding:10px;
+  }
+
+  header{
+    padding:7px 0;
+  }
+
+  .games-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:5px;
+  }
+
+  .game-card{
+    padding:6px;
+    border-radius:9px;
+  }
+
+  .game-icon{
+    font-size:23px;
+    margin-bottom:3px;
+  }
+
+  .game-name{
+    font-size:10px;
+  }
+
+  .game-description{
+    font-size:8px;
+    line-height:1.2;
+    min-height:28px;
+    margin:3px 0;
+  }
+
+  .game-card button{
+    font-size:8px;
+    padding:6px 2px;
+  }
+
+  .card{
     padding:12px;
+    border-radius:12px;
   }
 
   .balance-card{
     flex-direction:column;
     align-items:stretch;
-  }
-
-  .deposit-button{
-    max-width:none;
-  }
-
-  .games-grid{
-    grid-template-columns:1fr;
   }
 
   .number-grid{
@@ -299,15 +306,8 @@ td{
   .row{
     flex-direction:column;
   }
-
-  table{
-    font-size:11px;
-  }
-
 }
-
 </style>
-
 </head>
 
 <body>
@@ -316,31 +316,33 @@ td{
 
 <header>
 
-  <div class="logo">
-    KENO
+  <div class="top-actions">
+
+    <button
+      class="deposit-top"
+      onclick="showDeposit()">
+
+      💰 Deposit
+
+    </button>
+
+    <button
+      id="logoutBtn"
+      class="secondary hidden"
+      onclick="logout()">
+
+      Logout
+
+    </button>
+
   </div>
-
-  <button
-    id="logoutBtn"
-    class="secondary hidden"
-    onclick="logout()">
-
-    Logout
-
-  </button>
 
 </header>
 
 
-<!-- =================================================
-     LOGIN
-================================================= -->
-
 <div id="authBox" class="card">
 
-  <h2>
-    Login
-  </h2>
+  <h2>Login</h2>
 
   <input
     id="email"
@@ -384,486 +386,491 @@ td{
 </div>
 
 
-<!-- =================================================
-     APP
-================================================= -->
+<div id="app" class="hidden">
 
-<div
-  id="app"
-  class="hidden">
 
+<div class="card balance-card">
 
-  <!-- BALANCE -->
-
-  <div class="card balance-card">
-
-    <div>
-
-      <div class="small">
-        Your Balance
-      </div>
-
-      <div
-        id="balance"
-        class="balance">
-
-        0.00 ETB
-
-      </div>
-
-    </div>
-
-    <button
-      class="deposit-button"
-      onclick="showDeposit()">
-
-      💰 DEPOSIT
-
-    </button>
-
-  </div>
-
-
-  <!-- =================================================
-       GAMES
-  ================================================= -->
-
-  <div class="card">
-
-    <div class="games-title">
-
-      <h2>
-        🎮 Games
-      </h2>
-
-      <span class="small">
-        Choose a game
-      </span>
-
-    </div>
-
-
-    <div class="games-grid">
-
-
-      <!-- KENO -->
-
-      <div class="game-card">
-
-        <div class="game-icon">
-          🎱
-        </div>
-
-        <div class="game-name">
-          KENO
-        </div>
-
-        <div class="game-description">
-          Select numbers from 1–80,
-          place your bet and watch
-          the draw.
-        </div>
-
-        <button
-          onclick="openGame('keno')">
-
-          PLAY KENO
-
-        </button>
-
-      </div>
-
-
-      <!-- SLOT -->
-
-      <div class="game-card">
-
-        <div class="game-icon">
-          🎰
-        </div>
-
-        <div class="game-name">
-          SLOT
-        </div>
-
-        <div class="game-description">
-          Spin the reels and match
-          symbols.
-        </div>
-
-        <button
-          onclick="openGame('slot')">
-
-          PLAY SLOT
-
-        </button>
-
-      </div>
-
-
-      <!-- DICE -->
-
-      <div class="game-card">
-
-        <div class="game-icon">
-          🎲
-        </div>
-
-        <div class="game-name">
-          DICE
-        </div>
-
-        <div class="game-description">
-          Roll the dice and try
-          your luck.
-        </div>
-
-        <button
-          onclick="openGame('dice')">
-
-          PLAY DICE
-
-        </button>
-
-      </div>
-
-
-      <!-- LUCKY -->
-
-      <div class="game-card">
-
-        <div class="game-icon">
-          🎯
-        </div>
-
-        <div class="game-name">
-          LUCKY NUMBER
-        </div>
-
-        <div class="game-description">
-          Choose your lucky number
-          and play.
-        </div>
-
-        <button
-          onclick="openGame('lucky')">
-
-          PLAY LUCKY
-
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =================================================
-       GAME DETAILS
-  ================================================= -->
-
-  <div class="card">
-
-    <h2>
-      📋 Game Details
-    </h2>
-
-    <div class="details-box">
-
-      <strong>
-        🎱 KENO
-      </strong>
-
-      <p class="small">
-        Select up to 10 numbers from
-        1–80 and place your bet.
-        The draw produces 10 numbers.
-      </p>
-
-    </div>
-
-
-    <div class="details-box">
-
-      <strong>
-        🎰 SLOT
-      </strong>
-
-      <p class="small">
-        Spin the reels and match
-        symbols.
-      </p>
-
-    </div>
-
-
-    <div class="details-box">
-
-      <strong>
-        🎲 DICE
-      </strong>
-
-      <p class="small">
-        Roll the dice and try to
-        reach the target.
-      </p>
-
-    </div>
-
-
-    <div class="details-box">
-
-      <strong>
-        🎯 LUCKY NUMBER
-      </strong>
-
-      <p class="small">
-        Select your lucky number
-        and check the result.
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <!-- =================================================
-       DEPOSIT
-  ================================================= -->
-
-  <div
-    id="depositBox"
-    class="card hidden">
-
-    <h2>
-      💰 Deposit
-    </h2>
-
-    <input
-      id="depositAmount"
-      type="number"
-      min="1"
-      placeholder="Amount (ETB)">
-
-    <select
-      id="depositMethod">
-
-      <option value="Telebirr">
-        Telebirr
-      </option>
-
-      <option value="CBE Birr">
-        CBE Birr
-      </option>
-
-      <option value="Bank">
-        Bank
-      </option>
-
-    </select>
-
-    <input
-      id="depositPhone"
-      placeholder="Phone / Bank Account">
-
-    <input
-      id="depositReference"
-      placeholder="Transaction Reference">
-
-    <button
-      onclick="makeDeposit()">
-
-      SUBMIT DEPOSIT
-
-    </button>
-
-    <button
-      class="secondary"
-      onclick="hideDeposit()">
-
-      CLOSE
-
-    </button>
-
-    <div
-      id="depositMessage"
-      class="status">
-
-    </div>
-
-  </div>
-
-
-  <!-- =================================================
-       MY DEPOSITS
-  ================================================= -->
-
-  <div class="card">
-
-    <h2>
-      📜 My Deposits
-    </h2>
-
-    <table>
-
-      <thead>
-
-        <tr>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Status</th>
-        </tr>
-
-      </thead>
-
-      <tbody
-        id="depositList">
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-
-  <!-- =================================================
-       KENO
-  ================================================= -->
-
-  <div
-    id="kenoGame"
-    class="card hidden">
-
-    <h2>
-      🎱 KENO
-    </h2>
+  <div>
 
     <div class="small">
-
-      Select up to 10 numbers
-
+      Your Balance
     </div>
 
     <div
-      id="numberGrid"
-      class="number-grid">
+      id="balance"
+      class="balance">
+
+      0.00 ETB
 
     </div>
 
-    <div class="row">
+  </div>
 
-      <input
-        id="betAmount"
-        type="number"
-        min="1"
-        placeholder="Bet amount">
+</div>
 
-      <button
-        id="playBtn"
-        onclick="playKeno()">
 
+<div class="card">
+
+  <div class="games-title">
+
+    <h2>🎮 Games</h2>
+
+    <span class="small">
+      Choose a game
+    </span>
+
+  </div>
+
+
+  <div class="games-grid">
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🎲</div>
+
+      <div class="game-name">
+        Ludo
+      </div>
+
+      <div class="game-description">
+        Classic multiplayer Ludo.
+      </div>
+
+      <button onclick="openGame('ludo')">
         PLAY
-
       </button>
 
     </div>
 
-    <div
-      id="gameMessage"
-      class="status">
+
+    <div class="game-card">
+
+      <div class="game-icon">🎱</div>
+
+      <div class="game-name">
+        Bingo
+      </div>
+
+      <div class="game-description">
+        Pick numbers and play Bingo.
+      </div>
+
+      <button onclick="openGame('bingo')">
+        PLAY
+      </button>
 
     </div>
 
-    <div
-      id="resultNumbers"
-      class="result-numbers">
+
+    <div class="game-card">
+
+      <div class="game-icon">🃏</div>
+
+      <div class="game-name">
+        Conquer
+      </div>
+
+      <div class="game-description">
+        Fast card game battles.
+      </div>
+
+      <button onclick="openGame('conquer')">
+        PLAY
+      </button>
 
     </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">⚡</div>
+
+      <div class="game-name">
+        Fast Bingo
+      </div>
+
+      <div class="game-description">
+        Quick Bingo rounds.
+      </div>
+
+      <button onclick="openGame('fastbingo')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">♠️</div>
+
+      <div class="game-name">
+        Crazy 8
+      </div>
+
+      <div class="game-description">
+        Classic Crazy 8 card game.
+      </div>
+
+      <button onclick="openGame('crazy8')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">⚽</div>
+
+      <div class="game-name">
+        Trace Soccer
+      </div>
+
+      <div class="game-description">
+        Soccer challenge game.
+      </div>
+
+      <button onclick="openGame('soccer')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🌃</div>
+
+      <div class="game-name">
+        Night Hunter
+      </div>
+
+      <div class="game-description">
+        Night-time adventure.
+      </div>
+
+      <button onclick="openGame('night')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🧠</div>
+
+      <div class="game-name">
+        Memory Game
+      </div>
+
+      <div class="game-description">
+        Test your memory skills.
+      </div>
+
+      <button onclick="openGame('memory')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🎯</div>
+
+      <div class="game-name">
+        Lat Lat
+      </div>
+
+      <div class="game-description">
+        Simple quick-play game.
+      </div>
+
+      <button onclick="openGame('latlat')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">✋</div>
+
+      <div class="game-name">
+        Rock Paper Scissors
+      </div>
+
+      <div class="game-description">
+        Rock, paper or scissors.
+      </div>
+
+      <button onclick="openGame('rps')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🃏</div>
+
+      <div class="game-name">
+        Uno
+      </div>
+
+      <div class="game-description">
+        Match cards and win.
+      </div>
+
+      <button onclick="openGame('uno')">
+        PLAY
+      </button>
+
+    </div>
+
+
+    <div class="game-card">
+
+      <div class="game-icon">🔴</div>
+
+      <div class="game-name">
+        Connect 4
+      </div>
+
+      <div class="game-description">
+        Connect four to win.
+      </div>
+
+      <button onclick="openGame('connect4')">
+        PLAY
+      </button>
+
+    </div>
+
 
   </div>
 
+</div>
 
-  <!-- =================================================
-       OTHER GAMES
-  ================================================= -->
+
+<div class="card">
+
+  <h2>
+    📋 Game Details
+  </h2>
+
+  <div class="details-box">
+
+    <strong>
+      🎮 Games
+    </strong>
+
+    <p class="small">
+      Choose any game above.
+      Game rooms can be added one by one.
+    </p>
+
+  </div>
+
+</div>
+
+
+<div
+  id="depositBox"
+  class="card hidden">
+
+  <h2>
+    💰 Deposit
+  </h2>
+
+  <input
+    id="depositAmount"
+    type="number"
+    min="1"
+    placeholder="Amount (ETB)">
+
+  <select id="depositMethod">
+
+    <option value="Telebirr">
+      Telebirr
+    </option>
+
+    <option value="CBE Birr">
+      CBE Birr
+    </option>
+
+    <option value="Bank">
+      Bank
+    </option>
+
+  </select>
+
+  <input
+    id="depositPhone"
+    placeholder="Phone / Bank Account">
+
+  <input
+    id="depositReference"
+    placeholder="Transaction Reference">
+
+  <button onclick="makeDeposit()">
+    SUBMIT DEPOSIT
+  </button>
+
+  <button
+    class="secondary"
+    onclick="hideDeposit()">
+
+    CLOSE
+
+  </button>
 
   <div
-    id="otherGame"
-    class="card hidden">
+    id="depositMessage"
+    class="status">
 
-    <h2
-      id="otherGameTitle">
+  </div>
 
-      Game
+</div>
 
-    </h2>
 
-    <div
-      id="otherGameMessage"
-      class="status">
+<div class="card">
 
-    </div>
+  <h2>
+    📜 My Deposits
+  </h2>
+
+  <table>
+
+    <thead>
+
+      <tr>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="depositList"></tbody>
+
+  </table>
+
+</div>
+
+
+<div
+  id="kenoGame"
+  class="card hidden">
+
+  <h2>
+    🎱 KENO
+  </h2>
+
+  <div class="small">
+    Select up to 10 numbers
+  </div>
+
+  <div
+    id="numberGrid"
+    class="number-grid">
+  </div>
+
+  <div class="row">
+
+    <input
+      id="betAmount"
+      type="number"
+      min="1"
+      placeholder="Bet amount">
 
     <button
-      class="secondary"
-      onclick="closeOtherGame()">
+      id="playBtn"
+      onclick="playKeno()">
 
-      BACK TO GAMES
+      PLAY
 
     </button>
 
   </div>
 
-
-  <!-- =================================================
-       ADMIN
-  ================================================= -->
-
   <div
-    id="adminPanel"
-    class="card hidden">
-
-    <h2>
-      🔐 Admin Panel
-    </h2>
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>User</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Status</th>
-          <th>Action</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody
-        id="adminDeposits">
-
-      </tbody>
-
-    </table>
-
+    id="gameMessage"
+    class="status">
   </div>
 
+  <div
+    id="resultNumbers"
+    class="result-numbers">
+  </div>
 
 </div>
 
+
+<div
+  id="otherGame"
+  class="card hidden">
+
+  <h2 id="otherGameTitle">
+    Game
+  </h2>
+
+  <div
+    id="otherGameMessage"
+    class="status">
+  </div>
+
+  <button
+    class="secondary"
+    onclick="closeOtherGame()">
+
+    BACK TO GAMES
+
+  </button>
+
+</div>
+
+
+<div
+  id="adminPanel"
+  class="card hidden">
+
+  <h2>
+    🔐 Admin Panel
+  </h2>
+
+  <table>
+
+    <thead>
+
+      <tr>
+        <th>User</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="adminDeposits"></tbody>
+
+  </table>
+
+</div>
+
+
+</div>
 </div>
 
 
 <script>
-
-/* =================================================
-   SUPABASE
-================================================= */
 
 const SUPABASE_URL =
 "https://eizpxgwkottliyvvhlar.supabase.co";
@@ -877,95 +884,67 @@ supabase.createClient(
   SUPABASE_KEY
 );
 
+let currentUser=null;
+let selectedNumbers=[];
+let isDrawing=false;
 
-/* =================================================
-   GLOBAL
-================================================= */
-
-let currentUser = null;
-
-let selectedNumbers = [];
-
-let isDrawing = false;
-
-
-/* =================================================
-   MESSAGE
-================================================= */
 
 function show(id,message,type=""){
 
   const element =
     document.getElementById(id);
 
-  if(!element){
-    return;
-  }
+  if(!element)return;
 
-  element.textContent = message;
+  element.textContent=message;
 
   element.className =
-    "status " + type;
+    "status "+type;
 
 }
 
 
-/* =================================================
-   REGISTER
-================================================= */
-
 async function register(){
 
   const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
+    document.getElementById("email")
+      .value.trim();
 
   const password =
-    document
-      .getElementById("password")
+    document.getElementById("password")
       .value;
 
   if(!email){
-
     show(
       "authMessage",
       "Please enter your email.",
       "error"
     );
-
     return;
   }
 
   if(!password){
-
     show(
       "authMessage",
       "Please enter your password.",
       "error"
     );
-
     return;
   }
 
-  if(password.length < 6){
-
+  if(password.length<6){
     show(
       "authMessage",
       "Password must be at least 6 characters.",
       "error"
     );
-
     return;
   }
 
   const button =
-    document.getElementById(
-      "registerBtn"
-    );
+    document.getElementById("registerBtn");
 
-  button.disabled = true;
+  button.disabled=true;
 
   show(
     "authMessage",
@@ -976,28 +955,18 @@ async function register(){
 
     const {data,error} =
       await supabaseClient.auth.signUp({
-
-        email:email,
-
-        password:password
-
+        email,
+        password
       });
 
     if(error){
-
       show(
         "authMessage",
         error.message,
         "error"
       );
-
       return;
     }
-
-    /*
-      If Supabase email confirmation
-      is disabled, session may already exist.
-    */
 
     if(data.session){
 
@@ -1031,78 +1000,59 @@ async function register(){
 
   }finally{
 
-    button.disabled = false;
+    button.disabled=false;
 
   }
 
 }
 
 
-/* =================================================
-   LOGIN
-================================================= */
-
 async function login(){
 
   const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
+    document.getElementById("email")
+      .value.trim();
 
   const password =
-    document
-      .getElementById("password")
+    document.getElementById("password")
       .value;
 
   if(!email){
-
     show(
       "authMessage",
       "Please enter your email.",
       "error"
     );
-
     return;
   }
 
   if(!password){
-
     show(
       "authMessage",
       "Please enter your password.",
       "error"
     );
-
     return;
   }
 
-
   const button =
-    document.getElementById(
-      "loginBtn"
-    );
+    document.getElementById("loginBtn");
 
-  button.disabled = true;
+  button.disabled=true;
 
   show(
     "authMessage",
     "Logging in..."
   );
 
-
   try{
 
     const {data,error} =
       await supabaseClient.auth
-        .signInWithPassword({
-
-          email:email,
-
-          password:password
-
-        });
-
+      .signInWithPassword({
+        email,
+        password
+      });
 
     if(error){
 
@@ -1115,7 +1065,6 @@ async function login(){
       return;
     }
 
-
     if(!data || !data.user){
 
       show(
@@ -1127,21 +1076,8 @@ async function login(){
       return;
     }
 
-
-    /*
-      IMPORTANT:
-      Set currentUser first.
-      Then open the app immediately.
-    */
-
     currentUser =
       data.user;
-
-
-    /*
-      Open app BEFORE database
-      loading functions.
-    */
 
     document
       .getElementById("authBox")
@@ -1155,25 +1091,13 @@ async function login(){
       .getElementById("logoutBtn")
       .classList.remove("hidden");
 
-
     show(
       "authMessage",
       "Login successful.",
       "success"
     );
 
-
-    /*
-      Build KENO immediately.
-    */
-
     createNumbers();
-
-
-    /*
-      Database functions are separated.
-      If one fails, login still works.
-    */
 
     loadBalance()
       .catch(error =>
@@ -1183,7 +1107,6 @@ async function login(){
         )
       );
 
-
     loadDeposits()
       .catch(error =>
         console.log(
@@ -1192,7 +1115,6 @@ async function login(){
         )
       );
 
-
     checkAdmin()
       .catch(error =>
         console.log(
@@ -1200,7 +1122,6 @@ async function login(){
           error
         )
       );
-
 
   }catch(error){
 
@@ -1212,16 +1133,12 @@ async function login(){
 
   }finally{
 
-    button.disabled = false;
+    button.disabled=false;
 
   }
 
 }
 
-
-/* =================================================
-   START APP
-================================================= */
 
 async function startApp(){
 
@@ -1239,68 +1156,36 @@ async function startApp(){
 
   createNumbers();
 
-
   try{
-
     await loadBalance();
-
   }catch(error){
-
-    console.log(
-      "Balance:",
-      error
-    );
-
+    console.log("Balance:",error);
   }
 
-
   try{
-
     await loadDeposits();
-
   }catch(error){
-
-    console.log(
-      "Deposits:",
-      error
-    );
-
+    console.log("Deposits:",error);
   }
 
-
   try{
-
     await checkAdmin();
-
   }catch(error){
-
-    console.log(
-      "Admin:",
-      error
-    );
-
+    console.log("Admin:",error);
   }
 
 }
 
 
-/* =================================================
-   LOGOUT
-================================================= */
-
 async function logout(){
 
   try{
-
     await supabaseClient.auth.signOut();
-
   }catch(error){
-
     console.log(error);
-
   }
 
-  currentUser = null;
+  currentUser=null;
 
   document
     .getElementById("app")
@@ -1316,35 +1201,25 @@ async function logout(){
 
   document
     .getElementById("email")
-    .value = "";
+    .value="";
 
   document
     .getElementById("password")
-    .value = "";
+    .value="";
 
 }
 
 
-/* =================================================
-   BALANCE
-================================================= */
-
 async function loadBalance(){
 
-  if(!currentUser){
-    return;
-  }
+  if(!currentUser)return;
 
   const {data,error} =
     await supabaseClient
       .from("profiles")
       .select("balance")
-      .eq(
-        "id",
-        currentUser.id
-      )
+      .eq("id",currentUser.id)
       .maybeSingle();
-
 
   if(error){
 
@@ -1354,28 +1229,18 @@ async function loadBalance(){
     );
 
     return;
-
   }
 
-
   const balance =
-    Number(
-      data?.balance || 0
-    );
-
+    Number(data?.balance||0);
 
   document
     .getElementById("balance")
     .textContent =
-    balance.toFixed(2) +
-    " ETB";
+    balance.toFixed(2)+" ETB";
 
 }
 
-
-/* =================================================
-   DEPOSIT SHOW
-================================================= */
 
 function showDeposit(){
 
@@ -1392,10 +1257,6 @@ function showDeposit(){
 }
 
 
-/* =================================================
-   DEPOSIT HIDE
-================================================= */
-
 function hideDeposit(){
 
   document
@@ -1404,10 +1265,6 @@ function hideDeposit(){
 
 }
 
-
-/* =================================================
-   DEPOSIT
-================================================= */
 
 async function makeDeposit(){
 
@@ -1422,7 +1279,6 @@ async function makeDeposit(){
     return;
   }
 
-
   const amount =
     Number(
       document
@@ -1430,28 +1286,22 @@ async function makeDeposit(){
         .value
     );
 
-
   const method =
     document
       .getElementById("depositMethod")
       .value;
 
-
   const phone =
     document
       .getElementById("depositPhone")
-      .value
-      .trim();
-
+      .value.trim();
 
   const reference =
     document
       .getElementById("depositReference")
-      .value
-      .trim();
+      .value.trim();
 
-
-  if(!amount || amount <= 0){
+  if(!amount || amount<=0){
 
     show(
       "depositMessage",
@@ -1461,7 +1311,6 @@ async function makeDeposit(){
 
     return;
   }
-
 
   if(!phone){
 
@@ -1474,7 +1323,6 @@ async function makeDeposit(){
     return;
   }
 
-
   if(!reference){
 
     show(
@@ -1486,47 +1334,29 @@ async function makeDeposit(){
     return;
   }
 
-
   show(
     "depositMessage",
     "Submitting..."
   );
 
-
-  /*
-    Existing deposits table is used.
-    Phone/bank account is stored in reference.
-  */
-
   const fullReference =
-    "Phone/Bank: " +
-    phone +
-    " | Ref: " +
+    "Phone/Bank: "+
+    phone+
+    " | Ref: "+
     reference;
-
 
   const {error} =
     await supabaseClient
       .from("deposits")
       .insert({
 
-        user_id:
-          currentUser.id,
-
-        amount:
-          amount,
-
-        method:
-          method,
-
-        reference:
-          fullReference,
-
-        status:
-          "pending"
+        user_id:currentUser.id,
+        amount,
+        method,
+        reference:fullReference,
+        status:"pending"
 
       });
-
 
   if(error){
 
@@ -1539,68 +1369,48 @@ async function makeDeposit(){
     return;
   }
 
-
   show(
     "depositMessage",
     "Deposit submitted. Waiting for admin approval.",
     "success"
   );
 
-
   document
     .getElementById("depositAmount")
-    .value = "";
-
+    .value="";
 
   document
     .getElementById("depositPhone")
-    .value = "";
-
+    .value="";
 
   document
     .getElementById("depositReference")
-    .value = "";
-
+    .value="";
 
   try{
-
     await loadDeposits();
-
   }catch(error){
-
     console.log(error);
-
   }
 
 }
 
 
-/* =================================================
-   LOAD DEPOSITS
-================================================= */
-
 async function loadDeposits(){
 
-  if(!currentUser){
-    return;
-  }
-
+  if(!currentUser)return;
 
   const {data,error} =
     await supabaseClient
       .from("deposits")
       .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
+      .eq("user_id",currentUser.id)
       .order(
         "created_at",
         {
           ascending:false
         }
       );
-
 
   if(error){
 
@@ -1610,41 +1420,35 @@ async function loadDeposits(){
     );
 
     return;
-
   }
-
 
   const list =
     document.getElementById(
       "depositList"
     );
 
+  list.innerHTML="";
 
-  list.innerHTML = "";
-
-
-  (data || []).forEach(item=>{
+  (data||[]).forEach(item=>{
 
     const tr =
       document.createElement("tr");
 
-
-    tr.innerHTML = `
+    tr.innerHTML=`
 
       <td>
         ${Number(item.amount).toFixed(2)} ETB
       </td>
 
       <td>
-        ${item.method || ""}
+        ${item.method||""}
       </td>
 
-      <td class="${item.status || ""}">
-        ${item.status || "pending"}
+      <td class="${item.status||""}">
+        ${item.status||"pending"}
       </td>
 
     `;
-
 
     list.appendChild(tr);
 
@@ -1652,10 +1456,6 @@ async function loadDeposits(){
 
 }
 
-
-/* =================================================
-   GAME OPEN
-================================================= */
 
 function openGame(game){
 
@@ -1667,13 +1467,11 @@ function openGame(game){
     .getElementById("otherGame")
     .classList.add("hidden");
 
-
-  if(game === "keno"){
+  if(game==="keno"){
 
     document
       .getElementById("kenoGame")
       .classList.remove("hidden");
-
 
     document
       .getElementById("kenoGame")
@@ -1681,61 +1479,45 @@ function openGame(game){
         behavior:"smooth"
       });
 
-
     return;
-
   }
-
 
   const title =
     document.getElementById(
       "otherGameTitle"
     );
 
-
   const message =
     document.getElementById(
       "otherGameMessage"
     );
 
+  const names={
 
-  if(game === "slot"){
+    ludo:"🎲 LUDO",
+    bingo:"🎱 BINGO",
+    conquer:"🃏 CONQUER",
+    fastbingo:"⚡ FAST BINGO",
+    crazy8:"♠️ CRAZY 8",
+    soccer:"⚽ TRACE SOCCER",
+    night:"🌃 NIGHT HUNTER",
+    memory:"🧠 MEMORY GAME",
+    latlat:"🎯 LAT LAT",
+    rps:"✋ ROCK PAPER SCISSORS",
+    uno:"🃏 UNO",
+    connect4:"🔴 CONNECT 4"
 
-    title.textContent =
-      "🎰 SLOT";
+  };
 
-    message.textContent =
-      "SLOT game area is ready.";
+  title.textContent =
+    names[game]||"Game";
 
-  }
-
-
-  if(game === "dice"){
-
-    title.textContent =
-      "🎲 DICE";
-
-    message.textContent =
-      "DICE game area is ready.";
-
-  }
-
-
-  if(game === "lucky"){
-
-    title.textContent =
-      "🎯 LUCKY NUMBER";
-
-    message.textContent =
-      "LUCKY NUMBER game area is ready.";
-
-  }
-
+  message.textContent =
+    "This game area is ready. The game can be built next.";
 
   document
     .getElementById("otherGame")
     .classList.remove("hidden");
-
 
   document
     .getElementById("otherGame")
@@ -1746,10 +1528,6 @@ function openGame(game){
 }
 
 
-/* =================================================
-   CLOSE GAME
-================================================= */
-
 function closeOtherGame(){
 
   document
@@ -1759,10 +1537,6 @@ function closeOtherGame(){
 }
 
 
-/* =================================================
-   KENO NUMBERS
-================================================= */
-
 function createNumbers(){
 
   const grid =
@@ -1770,77 +1544,48 @@ function createNumbers(){
       "numberGrid"
     );
 
+  if(!grid)return;
 
-  if(!grid){
-    return;
-  }
+  grid.innerHTML="";
 
+  selectedNumbers=[];
 
-  grid.innerHTML = "";
-
-  selectedNumbers = [];
-
-
-  for(
-    let i=1;
-    i<=80;
-    i++
-  ){
+  for(let i=1;i<=80;i++){
 
     const button =
-      document.createElement(
-        "button"
-      );
+      document.createElement("button");
 
+    button.className="num";
 
-    button.className =
-      "num";
+    button.textContent=i;
 
+    button.onclick=()=>{
 
-    button.textContent =
-      i;
+      if(isDrawing)return;
 
-
-    button.onclick = ()=>{
-
-      if(isDrawing){
-        return;
-      }
-
-
-      if(
-        selectedNumbers.includes(i)
-      ){
+      if(selectedNumbers.includes(i)){
 
         selectedNumbers =
           selectedNumbers.filter(
-            n => n !== i
+            n=>n!==i
           );
-
 
         button.classList.remove(
           "selected"
         );
 
-
       }else{
 
-
-        if(
-          selectedNumbers.length >= 10
-        ){
+        if(selectedNumbers.length>=10){
 
           alert(
             "Maximum 10 numbers."
           );
 
           return;
-
         }
 
-
         selectedNumbers.push(i);
-
 
         button.classList.add(
           "selected"
@@ -1850,7 +1595,6 @@ function createNumbers(){
 
     };
 
-
     grid.appendChild(button);
 
   }
@@ -1858,16 +1602,9 @@ function createNumbers(){
 }
 
 
-/* =================================================
-   KENO PLAY
-================================================= */
-
 async function playKeno(){
 
-  if(isDrawing){
-    return;
-  }
-
+  if(isDrawing)return;
 
   if(!currentUser){
 
@@ -1878,9 +1615,7 @@ async function playKeno(){
     );
 
     return;
-
   }
-
 
   const bet =
     Number(
@@ -1889,8 +1624,7 @@ async function playKeno(){
         .value
     );
 
-
-  if(!bet || bet <= 0){
+  if(!bet || bet<=0){
 
     show(
       "gameMessage",
@@ -1899,13 +1633,9 @@ async function playKeno(){
     );
 
     return;
-
   }
 
-
-  if(
-    selectedNumbers.length < 1
-  ){
+  if(selectedNumbers.length<1){
 
     show(
       "gameMessage",
@@ -1914,20 +1644,14 @@ async function playKeno(){
     );
 
     return;
-
   }
-
 
   const {data:profile,error} =
     await supabaseClient
       .from("profiles")
       .select("balance")
-      .eq(
-        "id",
-        currentUser.id
-      )
+      .eq("id",currentUser.id)
       .maybeSingle();
-
 
   if(error){
 
@@ -1938,17 +1662,12 @@ async function playKeno(){
     );
 
     return;
-
   }
 
-
   const balance =
-    Number(
-      profile?.balance || 0
-    );
+    Number(profile?.balance||0);
 
-
-  if(balance < bet){
+  if(balance<bet){
 
     show(
       "gameMessage",
@@ -1957,56 +1676,41 @@ async function playKeno(){
     );
 
     return;
-
   }
 
-
-  isDrawing = true;
-
+  isDrawing=true;
 
   document
     .getElementById("playBtn")
-    .disabled = true;
-
+    .disabled=true;
 
   document
     .getElementById("resultNumbers")
-    .innerHTML = "";
-
+    .innerHTML="";
 
   show(
     "gameMessage",
     "🎰 DRAWING..."
   );
 
-
-  const winningNumbers = [];
-
+  const winningNumbers=[];
 
   while(
-    winningNumbers.length < 10
+    winningNumbers.length<10
   ){
 
     const n =
       Math.floor(
-        Math.random() * 80
-      ) + 1;
+        Math.random()*80
+      )+1;
 
-
-    if(
-      !winningNumbers.includes(n)
-    ){
+    if(!winningNumbers.includes(n)){
 
       winningNumbers.push(n);
 
     }
 
   }
-
-
-  /*
-    DRAW
-  */
 
   for(
     let i=0;
@@ -2016,79 +1720,54 @@ async function playKeno(){
 
     show(
       "gameMessage",
-      "🎱 Drawing " +
-      (i+1) +
+      "🎱 Drawing "+
+      (i+1)+
       "/10..."
     );
 
-
     await wait(600);
-
 
     show(
       "gameMessage",
-      "🎱 Number: " +
+      "🎱 Number: "+
       winningNumbers[i]
     );
-
 
     await wait(350);
 
   }
-
-
-  /*
-    RESULTS
-  */
 
   const resultBox =
     document.getElementById(
       "resultNumbers"
     );
 
-
   winningNumbers.forEach(n=>{
 
     const ball =
-      document.createElement(
-        "div"
-      );
-
+      document.createElement("div");
 
     ball.className =
       "result-ball";
 
-
-    if(
-      selectedNumbers.includes(n)
-    ){
+    if(selectedNumbers.includes(n)){
 
       ball.classList.add("hit");
 
     }
 
-
-    ball.textContent =
-      n;
-
+    ball.textContent=n;
 
     resultBox.appendChild(ball);
 
   });
 
-
   const hits =
     selectedNumbers.filter(
-      n =>
-        winningNumbers.includes(n)
+      n=>winningNumbers.includes(n)
     ).length;
 
-
-  /*
-    PAYOUT
-  */
-
-  const multipliers = {
+  const multipliers={
 
     0:0,
     1:0,
@@ -2104,39 +1783,25 @@ async function playKeno(){
 
   };
 
-
-  const multiplier =
-    multipliers[hits] || 0;
-
-
   const payout =
-    bet * multiplier;
-
+    bet*
+    (multipliers[hits]||0);
 
   const finalBalance =
-    balance -
-    bet +
+    balance-
+    bet+
     payout;
-
-
-  /*
-    UPDATE BALANCE
-  */
 
   const {error:balanceError} =
     await supabaseClient
       .from("profiles")
       .update({
-
-        balance:
-          finalBalance
-
+        balance:finalBalance
       })
       .eq(
         "id",
         currentUser.id
       );
-
 
   if(balanceError){
 
@@ -2146,54 +1811,40 @@ async function playKeno(){
       "error"
     );
 
-
-    isDrawing = false;
-
+    isDrawing=false;
 
     document
       .getElementById("playBtn")
-      .disabled = false;
-
+      .disabled=false;
 
     return;
-
   }
-
 
   show(
     "gameMessage",
-
-    "🏆 Hits: " +
-    hits +
-    " | Payout: " +
-    payout.toFixed(2) +
+    "🏆 Hits: "+
+    hits+
+    " | Payout: "+
+    payout.toFixed(2)+
     " ETB",
-
     "success"
   );
 
-
   await loadBalance();
 
-
-  isDrawing = false;
-
+  isDrawing=false;
 
   document
     .getElementById("playBtn")
-    .disabled = false;
+    .disabled=false;
 
 }
 
 
-/* =================================================
-   WAIT
-================================================= */
-
 function wait(ms){
 
   return new Promise(
-    resolve =>
+    resolve=>
       setTimeout(
         resolve,
         ms
@@ -2203,27 +1854,16 @@ function wait(ms){
 }
 
 
-/* =================================================
-   ADMIN
-================================================= */
-
 async function checkAdmin(){
 
-  if(!currentUser){
-    return;
-  }
-
+  if(!currentUser)return;
 
   const {data,error} =
     await supabaseClient
       .from("profiles")
       .select("role")
-      .eq(
-        "id",
-        currentUser.id
-      )
+      .eq("id",currentUser.id)
       .maybeSingle();
-
 
   if(error){
 
@@ -2233,18 +1873,13 @@ async function checkAdmin(){
     );
 
     return;
-
   }
 
-
-  if(
-    data?.role === "admin"
-  ){
+  if(data?.role==="admin"){
 
     document
       .getElementById("adminPanel")
       .classList.remove("hidden");
-
 
     await loadAdminDeposits();
 
@@ -2252,10 +1887,6 @@ async function checkAdmin(){
 
 }
 
-
-/* =================================================
-   ADMIN DEPOSITS
-================================================= */
 
 async function loadAdminDeposits(){
 
@@ -2274,7 +1905,6 @@ async function loadAdminDeposits(){
         }
       );
 
-
   if(error){
 
     console.log(
@@ -2283,28 +1913,21 @@ async function loadAdminDeposits(){
     );
 
     return;
-
   }
-
 
   const list =
     document.getElementById(
       "adminDeposits"
     );
 
+  list.innerHTML="";
 
-  list.innerHTML = "";
-
-
-  (data || []).forEach(item=>{
+  (data||[]).forEach(item=>{
 
     const tr =
-      document.createElement(
-        "tr"
-      );
+      document.createElement("tr");
 
-
-    tr.innerHTML = `
+    tr.innerHTML=`
 
       <td>
         ${item.user_id}
@@ -2315,7 +1938,7 @@ async function loadAdminDeposits(){
       </td>
 
       <td>
-        ${item.method || ""}
+        ${item.method||""}
       </td>
 
       <td class="pending">
@@ -2335,7 +1958,6 @@ async function loadAdminDeposits(){
 
         </button>
 
-
         <button
           class="danger"
           onclick="rejectDeposit(
@@ -2350,17 +1972,12 @@ async function loadAdminDeposits(){
 
     `;
 
-
     list.appendChild(tr);
 
   });
 
 }
 
-
-/* =================================================
-   APPROVE
-================================================= */
 
 async function approveDeposit(
   depositId,
@@ -2379,7 +1996,6 @@ async function approveDeposit(
         depositId
       );
 
-
   if(updateError){
 
     alert(
@@ -2387,9 +2003,7 @@ async function approveDeposit(
     );
 
     return;
-
   }
-
 
   const {data:profile,error:profileError} =
     await supabaseClient
@@ -2401,7 +2015,6 @@ async function approveDeposit(
       )
       .maybeSingle();
 
-
   if(profileError){
 
     alert(
@@ -2409,16 +2022,11 @@ async function approveDeposit(
     );
 
     return;
-
   }
 
-
   const newBalance =
-    Number(
-      profile?.balance || 0
-    ) +
+    Number(profile?.balance||0)+
     Number(amount);
-
 
   const {error:balanceError} =
     await supabaseClient
@@ -2431,7 +2039,6 @@ async function approveDeposit(
         userId
       );
 
-
   if(balanceError){
 
     alert(
@@ -2439,51 +2046,33 @@ async function approveDeposit(
     );
 
     return;
-
   }
-
 
   alert(
     "Deposit approved successfully."
   );
-
 
   await loadAdminDeposits();
 
 }
 
 
-/* =================================================
-   REJECT
-================================================= */
-
 async function rejectDeposit(id){
 
-  if(
-    !confirm(
-      "Reject this deposit?"
-    )
-  ){
-
-    return;
-
-  }
-
+  if(!confirm(
+    "Reject this deposit?"
+  ))return;
 
   const {error} =
     await supabaseClient
       .from("deposits")
       .update({
-
-        status:
-          "rejected"
-
+        status:"rejected"
       })
       .eq(
         "id",
         id
       );
-
 
   if(error){
 
@@ -2492,23 +2081,16 @@ async function rejectDeposit(id){
     );
 
     return;
-
   }
-
 
   alert(
     "Deposit rejected."
   );
 
-
   await loadAdminDeposits();
 
 }
 
-
-/* =================================================
-   AUTO LOGIN
-================================================= */
 
 (async function(){
 
@@ -2519,7 +2101,6 @@ async function rejectDeposit(id){
         .auth
         .getSession();
 
-
     if(error){
 
       console.log(
@@ -2528,53 +2109,36 @@ async function rejectDeposit(id){
       );
 
       return;
-
     }
-
 
     if(data?.session){
 
       currentUser =
         data.session.user;
 
-
-      /*
-        Open app immediately.
-      */
-
       document
         .getElementById("authBox")
         .classList.add("hidden");
-
 
       document
         .getElementById("app")
         .classList.remove("hidden");
 
-
       document
         .getElementById("logoutBtn")
         .classList.remove("hidden");
 
-
       createNumbers();
-
-
-      /*
-        Database loading separately.
-      */
 
       loadBalance()
         .catch(error =>
           console.log(error)
         );
 
-
       loadDeposits()
         .catch(error =>
           console.log(error)
         );
-
 
       checkAdmin()
         .catch(error =>
