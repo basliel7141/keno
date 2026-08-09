@@ -1,2013 +1,2706 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1.0">  
-<title>KENO Gaming</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>  
-*{box-sizing:border-box}  
-  
-body{  
-  margin:0;  
-  font-family:Arial,Helvetica,sans-serif;  
-  background:#070b12;  
-  color:white;  
-}  
-  
-.container{  
-  max-width:1000px;  
-  margin:auto;  
-  padding:15px;  
-}  
-  
-header{  
-  display:flex;  
-  justify-content:flex-end;  
-  align-items:center;  
-  padding:10px 0;  
-  border-bottom:1px solid #263044;  
-}  
-  
-.card{  
-  background:#111827;  
-  border:1px solid #263044;  
-  border-radius:16px;  
-  padding:18px;  
-  margin-top:18px;  
-}  
-  
-.hidden{display:none!important}  
-  
-input,select,button{  
-  width:100%;  
-  padding:13px;  
-  margin:6px 0;  
-  border-radius:9px;  
-  border:1px solid #344054;  
-  font-size:15px;  
-}  
-  
-input,select{  
-  background:#0b1220;  
-  color:white;  
-}  
-  
-button{  
-  background:#20c878;  
-  color:#04120b;  
-  font-weight:bold;  
-  border:0;  
-  cursor:pointer;  
-}  
-  
-button:hover{opacity:.9}  
-  
-button:disabled{  
-  opacity:.5;  
-  cursor:not-allowed;  
-}  
-  
-.secondary{  
-  background:#263044;  
-  color:white;  
-}  
-  
-.danger{  
-  background:#dc3545;  
-  color:white;  
-}  
-  
-.row{  
-  display:flex;  
-  gap:10px;  
-}  
-  
-.row>*{flex:1}  
-  
-.status{  
-  background:#182235;  
-  padding:10px;  
-  border-radius:8px;  
-  margin-top:8px;  
-  min-height:20px;  
-}  
-  
-.success{color:#36e38b}  
-.error{color:#ff6b6b}  
-  
-.small{  
-  color:#9ca3af;  
-  font-size:13px;  
-}  
-  
-.balance-card{  
-  display:flex;  
-  justify-content:space-between;  
-  align-items:center;  
-  gap:15px;  
-}  
-  
-.balance{  
-  font-size:30px;  
-  font-weight:bold;  
-  color:#36e38b;  
-}  
-  
-.games-title{  
-  display:flex;  
-  justify-content:space-between;  
-  align-items:center;  
-}  
-  
-.games-grid{  
-  display:grid;  
-  grid-template-columns:repeat(6,minmax(0,1fr));  
-  gap:10px;  
-  margin-top:15px;  
-}  
-  
-.game-card{  
-  background:#0b1220;  
-  border:1px solid #263044;  
-  border-radius:12px;  
-  padding:10px;  
-  min-width:0;  
-}  
-  
-.game-icon{  
-  font-size:32px;  
-  margin-bottom:5px;  
-  text-align:center;  
-}  
-  
-.game-name{  
-  font-size:15px;  
-  font-weight:bold;  
-  white-space:nowrap;  
-  overflow:hidden;  
-  text-overflow:ellipsis;  
-}  
-  
-.game-description{  
-  color:#9ca3af;  
-  font-size:11px;  
-  margin:5px 0 8px;  
-  line-height:1.35;  
-  min-height:30px;  
-}  
-  
-.game-card button{  
-  font-size:11px;  
-  padding:8px 5px;  
-  margin:3px 0;  
-}  
-  
-.details-box{  
-  background:#0b1220;  
-  border-radius:12px;  
-  padding:15px;  
-  margin-top:10px;  
-}  
-  
-.number-grid{  
-  display:grid;  
-  grid-template-columns:repeat(10,1fr);  
-  gap:6px;  
-  margin-top:15px;  
-}  
-  
-.num{  
-  background:#182235;  
-  color:white;  
-  border:1px solid #344054;  
-  padding:10px 0;  
-  margin:0;  
-}  
-  
-.num.selected{  
-  background:#20c878;  
-  color:#06130b;  
-}  
-  
-.result-numbers{  
-  display:flex;  
-  flex-wrap:wrap;  
-  gap:8px;  
-  margin-top:12px;  
-}  
-  
-.result-ball{  
-  width:42px;  
-  height:42px;  
-  border-radius:50%;  
-  display:flex;  
-  justify-content:center;  
-  align-items:center;  
-  background:#263044;  
-  color:white;  
-  font-weight:bold;  
-}  
-  
-.result-ball.hit{  
-  background:#20c878;  
-  color:#06130b;  
-}  
-  
-table{  
-  width:100%;  
-  border-collapse:collapse;  
-  margin-top:10px;  
-}  
-  
-th,td{  
-  padding:9px 5px;  
-  border-bottom:1px solid #263044;  
-  text-align:left;  
-  font-size:13px;  
-}  
-  
-.pending{color:#ffd166}  
-.approved{color:#36e38b}  
-.rejected{color:#ff6b6b}  
-  
-.top-actions{  
-  display:flex;  
-  align-items:center;  
-  gap:8px;  
-}  
-  
-.deposit-top{  
-  width:auto!important;  
-  margin:0!important;  
-  padding:9px 15px!important;  
-  border-radius:9px!important;  
-  font-size:14px!important;  
-  white-space:nowrap;  
-}  
-  
-@media(max-width:700px){  
-  
-  .container{  
-    padding:10px;  
-  }  
-  
-  header{  
-    padding:7px 0;  
-  }  
-  
-  .games-grid{  
-    grid-template-columns:repeat(6,minmax(0,1fr));  
-    gap:5px;  
-  }  
-  
-  .game-card{  
-    padding:6px;  
-    border-radius:9px;  
-  }  
-  
-  .game-icon{  
-    font-size:23px;  
-    margin-bottom:3px;  
-  }  
-  
-  .game-name{  
-    font-size:10px;  
-  }  
-  
-  .game-description{  
-    font-size:8px;  
-    line-height:1.2;  
-    min-height:28px;  
-    margin:3px 0;  
-  }  
-  
-  .game-card button{  
-    font-size:8px;  
-    padding:6px 2px;  
-  }  
-  
-  .card{  
-    padding:12px;  
-    border-radius:12px;  
-  }  
-  
-  .balance-card{  
-    flex-direction:column;  
-    align-items:stretch;  
-  }  
-  
-  .number-grid{  
-    grid-template-columns:repeat(8,1fr);  
-  }  
-  
-  .row{  
-    flex-direction:column;  
-  }  
-}  
-</style>  </head>  <body>  <div class="container">  <header>    <div class="top-actions">  <button  
-  class="deposit-top"  
-  onclick="showDeposit()">  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KENO Gaming</title>
 
-  💰 Deposit  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-</button>  
+<style>
+*{box-sizing:border-box}
 
-<button  
-  id="logoutBtn"  
-  class="secondary hidden"  
-  onclick="logout()">  
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#070b12;
+  color:white;
+}
 
-  Logout  
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:15px;
+}
 
+header{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #263044;
+}
+
+.card{
+  background:#111827;
+  border:1px solid #263044;
+  border-radius:16px;
+  padding:18px;
+  margin-top:18px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+input,select,button{
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border-radius:9px;
+  border:1px solid #344054;
+  font-size:15px;
+}
+
+input,select{
+  background:#0b1220;
+  color:white;
+}
+
+button{
+  background:#20c878;
+  color:#04120b;
+  font-weight:bold;
+  border:0;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.secondary{
+  background:#263044;
+  color:white;
+}
+
+.danger{
+  background:#dc3545;
+  color:white;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+}
+
+.row>*{
+  flex:1;
+}
+
+.status{
+  background:#182235;
+  padding:10px;
+  border-radius:8px;
+  margin-top:8px;
+  min-height:20px;
+}
+
+.success{
+  color:#36e38b;
+}
+
+.error{
+  color:#ff6b6b;
+}
+
+.small{
+  color:#9ca3af;
+  font-size:13px;
+}
+
+.balance-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.balance{
+  font-size:30px;
+  font-weight:bold;
+  color:#36e38b;
+}
+
+.games-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
+  margin-top:15px;
+}
+
+.game-card{
+  background:#0b1220;
+  border:1px solid #263044;
+  border-radius:12px;
+  padding:10px;
+  min-width:0;
+}
+
+.game-icon{
+  font-size:32px;
+  margin-bottom:5px;
+  text-align:center;
+}
+
+.game-name{
+  font-size:15px;
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.game-description{
+  color:#9ca3af;
+  font-size:11px;
+  margin:5px 0 8px;
+  line-height:1.35;
+  min-height:30px;
+}
+
+.game-card button{
+  font-size:11px;
+  padding:8px 5px;
+  margin:3px 0;
+}
+
+.details-box{
+  background:#0b1220;
+  border-radius:12px;
+  padding:15px;
+  margin-top:10px;
+}
+
+.number-grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:6px;
+  margin-top:15px;
+}
+
+.num{
+  background:#182235;
+  color:white;
+  border:1px solid #344054;
+  padding:10px 0;
+  margin:0;
+}
+
+.num.selected{
+  background:#20c878;
+  color:#06130b;
+}
+
+.result-numbers{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.result-ball{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#263044;
+  color:white;
+  font-weight:bold;
+}
+
+.result-ball.hit{
+  background:#20c878;
+  color:#06130b;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+
+th,td{
+  padding:9px 5px;
+  border-bottom:1px solid #263044;
+  text-align:left;
+  font-size:13px;
+}
+
+.pending{
+  color:#ffd166;
+}
+
+.approved{
+  color:#36e38b;
+}
+
+.rejected{
+  color:#ff6b6b;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.deposit-top{
+  width:auto!important;
+  margin:0!important;
+  padding:9px 15px!important;
+  border-radius:9px!important;
+  font-size:14px!important;
+  white-space:nowrap;
+}
+
+/* FREE GAME */
+.free-game{
+  background:#182235;
+  border:1px solid #20c878;
+  border-radius:10px;
+  padding:8px;
+  margin-top:8px;
+  color:#36e38b;
+  text-align:center;
+  font-size:12px;
+  font-weight:bold;
+}
+
+@media(max-width:700px){
+
+  .container{
+    padding:10px;
+  }
+
+  header{
+    padding:7px 0;
+  }
+
+  .games-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:5px;
+  }
+
+  .game-card{
+    padding:6px;
+    border-radius:9px;
+  }
+
+  .game-icon{
+    font-size:23px;
+    margin-bottom:3px;
+  }
+
+  .game-name{
+    font-size:10px;
+  }
+
+  .game-description{
+    font-size:8px;
+    line-height:1.2;
+    min-height:28px;
+    margin:3px 0;
+  }
+
+  .game-card button{
+    font-size:8px;
+    padding:6px 2px;
+  }
+
+  .card{
+    padding:12px;
+    border-radius:12px;
+  }
+
+  .balance-card{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .number-grid{
+    grid-template-columns:repeat(8,1fr);
+  }
+
+  .row{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<div class="top-actions">
+
+<button
+  class="deposit-top"
+  onclick="showDeposit()">
+  💰 Deposit
 </button>
 
-  </div>  </header>  <div id="authBox" class="card">    <h2>Login</h2>  <input  
-id="email"  
-type="email"  
-autocomplete="email"  
-placeholder="Email">
-
-<input  
-id="password"  
-type="password"  
-autocomplete="current-password"  
-placeholder="Password">
-
-  <div class="row">  <button  
-  id="loginBtn"  
-  onclick="login()">  
-
-  Login  
-
-</button>  
-
-<button  
-  id="registerBtn"  
-  class="secondary"  
-  onclick="register()">  
-
-  Register  
-
+<button
+  id="logoutBtn"
+  class="secondary hidden"
+  onclick="logout()">
+  Logout
 </button>
 
-  </div>    <div  
-    id="authMessage"  
-    class="status">    </div>  </div>  <div id="app" class="hidden">  <div class="card balance-card">    <div>  <div class="small">  
-  Your Balance  
-</div>  
+</div>
+</header>
 
-<div  
-  id="balance"  
-  class="balance">  
+<div id="authBox" class="card">
 
-  0.00 ETB  
+<h2>Login</h2>
+
+<input
+  id="email"
+  type="email"
+  autocomplete="email"
+  placeholder="Email">
+
+<input
+  id="password"
+  type="password"
+  autocomplete="current-password"
+  placeholder="Password">
+
+<div class="row">
+
+<button
+  id="loginBtn"
+  onclick="login()">
+  Login
+</button>
+
+<button
+  id="registerBtn"
+  class="secondary"
+  onclick="register()">
+  Register
+</button>
 
 </div>
 
-  </div>  </div>  <div class="card">    <div class="games-title">  <h2>🎮 Games</h2>  
+<div id="authMessage" class="status"></div>
 
-<span class="small">  
-  Choose a game  
+</div>
+
+<div id="app" class="hidden">
+
+<div class="card balance-card">
+
+<div>
+
+<div class="small">
+Your Balance
+</div>
+
+<div id="balance" class="balance">
+0.00 ETB
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="games-title">
+
+<h2>🎮 Games</h2>
+
+<span class="small">
+Choose a game
 </span>
 
-  </div>    <div class="games-grid">  <div class="game-card">  
+</div>
 
-  <div class="game-icon">🎲</div>  
+<div class="games-grid">
 
-  <div class="game-name">  
-    Ludo  
-  </div>  
+<div class="game-card">
 
-  <div class="game-description">  
-    Classic multiplayer Ludo.  
-  </div>  
+<div class="game-icon">🎲</div>
 
-  <button onclick="openGame('ludo')">  
-    PLAY  
-  </button>  
+<div class="game-name">
+Ludo
+</div>
 
-</div>  
+<div class="game-description">
+Classic multiplayer Ludo.
+</div>
 
+<div class="free-game">
+FREE • 0 BALANCE
+</div>
 
-<div class="game-card">  
-
-  <div class="game-icon">🎱</div>  
-
-  <div class="game-name">  
-    Bingo  
-  </div>  
-
-  <div class="game-description">  
-    Pick numbers and play Bingo.  
-  </div>  
-
-  <button onclick="openGame('bingo')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🃏</div>  
-
-  <div class="game-name">  
-    Conquer  
-  </div>  
-
-  <div class="game-description">  
-    Fast card game battles.  
-  </div>  
-
-  <button onclick="openGame('conquer')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">⚡</div>  
-
-  <div class="game-name">  
-    Fast Bingo  
-  </div>  
-
-  <div class="game-description">  
-    Quick Bingo rounds.  
-  </div>  
-
-  <button onclick="openGame('fastbingo')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">♠️</div>  
-
-  <div class="game-name">  
-    Crazy 8  
-  </div>  
-
-  <div class="game-description">  
-    Classic Crazy 8 card game.  
-  </div>  
-
-  <button onclick="openGame('crazy8')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">⚽</div>  
-
-  <div class="game-name">  
-    Trace Soccer  
-  </div>  
-
-  <div class="game-description">  
-    Soccer challenge game.  
-  </div>  
-
-  <button onclick="openGame('soccer')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🌃</div>  
-
-  <div class="game-name">  
-    Night Hunter  
-  </div>  
-
-  <div class="game-description">  
-    Night-time adventure.  
-  </div>  
-
-  <button onclick="openGame('night')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🧠</div>  
-
-  <div class="game-name">  
-    Memory Game  
-  </div>  
-
-  <div class="game-description">  
-    Test your memory skills.  
-  </div>  
-
-  <button onclick="openGame('memory')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🎯</div>  
-
-  <div class="game-name">  
-    Lat Lat  
-  </div>  
-
-  <div class="game-description">  
-    Simple quick-play game.  
-  </div>  
-
-  <button onclick="openGame('latlat')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">✋</div>  
-
-  <div class="game-name">  
-    Rock Paper Scissors  
-  </div>  
-
-  <div class="game-description">  
-    Rock, paper or scissors.  
-  </div>  
-
-  <button onclick="openGame('rps')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🃏</div>  
-
-  <div class="game-name">  
-    Uno  
-  </div>  
-
-  <div class="game-description">  
-    Match cards and win.  
-  </div>  
-
-  <button onclick="openGame('uno')">  
-    PLAY  
-  </button>  
-
-</div>  
-
-
-<div class="game-card">  
-
-  <div class="game-icon">🔴</div>  
-
-  <div class="game-name">  
-    Connect 4  
-  </div>  
-
-  <div class="game-description">  
-    Connect four to win.  
-  </div>  
-
-  <button onclick="openGame('connect4')">  
-    PLAY  
-  </button>  
+<button onclick="openGame('ludo')">
+PLAY
+</button>
 
 </div>
 
-  </div>  </div>  <div class="card">    <h2>  
-    📋 Game Details  
-  </h2>    <div class="details-box">  <strong>  
-  🎮 Games  
-</strong>  
+<div class="game-card">
 
-<p class="small">  
-  Choose any game above.  
-  Game rooms can be added one by one.  
+<div class="game-icon">🎱</div>
+
+<div class="game-name">
+Keno
+</div>
+
+<div class="game-description">
+Pick numbers and play Keno.
+</div>
+
+<button onclick="openGame('keno')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🎱</div>
+
+<div class="game-name">
+Bingo
+</div>
+
+<div class="game-description">
+Pick numbers and play Bingo.
+</div>
+
+<button onclick="openGame('bingo')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🃏</div>
+
+<div class="game-name">
+Conquer
+</div>
+
+<div class="game-description">
+Fast card game battles.
+</div>
+
+<button onclick="openGame('conquer')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">⚡</div>
+
+<div class="game-name">
+Fast Bingo
+</div>
+
+<div class="game-description">
+Quick Bingo rounds.
+</div>
+
+<button onclick="openGame('fastbingo')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">♠️</div>
+
+<div class="game-name">
+Crazy 8
+</div>
+
+<div class="game-description">
+Classic Crazy 8 card game.
+</div>
+
+<button onclick="openGame('crazy8')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">⚽</div>
+
+<div class="game-name">
+Trace Soccer
+</div>
+
+<div class="game-description">
+Soccer challenge game.
+</div>
+
+<button onclick="openGame('soccer')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🌃</div>
+
+<div class="game-name">
+Night Hunter
+</div>
+
+<div class="game-description">
+Night-time adventure.
+</div>
+
+<button onclick="openGame('night')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🧠</div>
+
+<div class="game-name">
+Memory Game
+</div>
+
+<div class="game-description">
+Test your memory skills.
+</div>
+
+<button onclick="openGame('memory')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🎯</div>
+
+<div class="game-name">
+Lat Lat
+</div>
+
+<div class="game-description">
+Simple quick-play game.
+</div>
+
+<button onclick="openGame('latlat')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">✋</div>
+
+<div class="game-name">
+Rock Paper Scissors
+</div>
+
+<div class="game-description">
+Rock, paper or scissors.
+</div>
+
+<button onclick="openGame('rps')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🃏</div>
+
+<div class="game-name">
+Uno
+</div>
+
+<div class="game-description">
+Match cards and win.
+</div>
+
+<button onclick="openGame('uno')">
+PLAY
+</button>
+
+</div>
+
+<div class="game-card">
+
+<div class="game-icon">🔴</div>
+
+<div class="game-name">
+Connect 4
+</div>
+
+<div class="game-description">
+Connect four to win.
+</div>
+
+<button onclick="openGame('connect4')">
+PLAY
+</button>
+
+</div>
+
+</div>
+</div>
+
+<div class="card">
+
+<h2>
+📋 Game Details
+</h2>
+
+<div class="details-box">
+
+<strong>
+🎮 Games
+</strong>
+
+<p class="small">
+Choose any game above.
+Ludo is available as a free game and can be played with 0 balance.
 </p>
 
-  </div>  </div>  <div  
-  id="depositBox"  
-  class="card hidden">    <h2>  
-    💰 Deposit  
-  </h2>  <input  
-id="depositAmount"  
-type="number"  
-min="1"  
-placeholder="Amount (ETB)">
+</div>
 
-  <select id="depositMethod">  <option value="Telebirr">  
-  Telebirr  
-</option>  
+</div>
 
-<option value="CBE Birr">  
-  CBE Birr  
-</option>  
+<div id="depositBox" class="card hidden">
 
-<option value="Bank">  
-  Bank  
+<h2>
+💰 Deposit
+</h2>
+
+<input
+  id="depositAmount"
+  type="number"
+  min="1"
+  placeholder="Amount (ETB)">
+
+<select id="depositMethod">
+
+<option value="Telebirr">
+Telebirr
 </option>
 
-  </select>  <input  
-id="depositPhone"  
-placeholder="Phone / Bank Account">
+<option value="CBE Birr">
+CBE Birr
+</option>
 
-<input  
-id="depositReference"  
-placeholder="Transaction Reference">
+<option value="Bank">
+Bank
+</option>
 
-  <button onclick="makeDeposit()">  
-    SUBMIT DEPOSIT  
-  </button>  <button  
-class="secondary"  
-onclick="hideDeposit()">
+</select>
 
+<input
+  id="depositPhone"
+  placeholder="Phone / Bank Account">
+
+<input
+  id="depositReference"
+  placeholder="Transaction Reference">
+
+<button onclick="makeDeposit()">
+SUBMIT DEPOSIT
+</button>
+
+<button
+  class="secondary"
+  onclick="hideDeposit()">
 CLOSE
+</button>
 
-  </button>    <div  
-    id="depositMessage"  
-    class="status">    </div>  </div>  <div class="card">    <h2>  
-    📜 My Deposits  
-  </h2>    <table>  <thead>  
+<div id="depositMessage" class="status"></div>
 
-  <tr>  
-    <th>Amount</th>  
-    <th>Method</th>  
-    <th>Status</th>  
-  </tr>  
+</div>
 
-</thead>  
+<div class="card">
+
+<h2>
+📜 My Deposits
+</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+</tr>
+</thead>
 
 <tbody id="depositList"></tbody>
 
-  </table>  </div>  <div  
-  id="kenoGame"  
-  class="card hidden">    <h2>  
-    🎱 KENO  
-  </h2>    <div class="small">  
-    Select up to 10 numbers  
-  </div>    <div  
-    id="numberGrid"  
-    class="number-grid">  
-  </div>    <div class="row">  <input  
-  id="betAmount"  
-  type="number"  
-  min="1"  
-  placeholder="Bet amount">  
+</table>
 
-<button  
-  id="playBtn"  
-  onclick="playKeno()">  
+</div>
 
-  PLAY  
+<div id="kenoGame" class="card hidden">
 
+<h2>
+🎱 KENO
+</h2>
+
+<div class="small">
+Select up to 10 numbers
+</div>
+
+<div
+  id="numberGrid"
+  class="number-grid">
+</div>
+
+<div class="row">
+
+<input
+  id="betAmount"
+  type="number"
+  min="1"
+  placeholder="Bet amount">
+
+<button
+  id="playBtn"
+  onclick="playKeno()">
+  PLAY
 </button>
 
-  </div>    <div  
-    id="gameMessage"  
-    class="status">  
-  </div>    <div  
-    id="resultNumbers"  
-    class="result-numbers">  
-  </div>  </div>  <div  
-  id="otherGame"  
-  class="card hidden">    <h2 id="otherGameTitle">  
-    Game  
-  </h2>    <div  
-    id="otherGameMessage"  
-    class="status">  
-  </div>  <button  
-class="secondary"  
+</div>
+
+<div id="gameMessage" class="status"></div>
+
+<div
+  id="resultNumbers"
+  class="result-numbers">
+</div>
+
+</div>
+
+<div id="otherGame" class="card hidden">
+
+<h2 id="otherGameTitle">
+Game
+</h2>
+
+<div id="otherGameMessage" class="status"></div>
+
+<div id="ludoBoard" class="hidden">
+
+<h3>🎲 LUDO — FREE MODE</h3>
+
+<div class="free-game">
+PLAY FREE • BALANCE NOT REQUIRED
+</div>
+
+<div class="details-box">
+
+<p>
+Ludo is free to play.
+</p>
+
+<p class="small">
+You can play even when your balance is 0.00 ETB.
+No deposit is required to enter free mode.
+</p>
+
+<div class="row">
+
+<button onclick="startLudo()">
+START LUDO
+</button>
+
+<button
+  class="secondary"
+  onclick="resetLudo()">
+RESET
+</button>
+
+</div>
+
+<div
+  id="ludoMessage"
+  class="status">
+Ready to play.
+</div>
+
+<div
+  id="ludoArea"
+  style="
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:12px;">
+</div>
+
+</div>
+
+</div>
+
+<button
+class="secondary"
 onclick="closeOtherGame()">
-
 BACK TO GAMES
+</button>
 
-  </button>  </div>  <div  
-  id="adminPanel"  
-  class="card hidden">    <h2>  
-    🔐 Admin Panel  
-  </h2>    <table>  <thead>  
+</div>
 
-  <tr>  
-    <th>User</th>  
-    <th>Amount</th>  
-    <th>Method</th>  
-    <th>Status</th>  
-    <th>Action</th>  
-  </tr>  
+<div id="adminPanel" class="card hidden">
 
-</thead>  
+<h2>
+🔐 Admin Panel
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>User</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+</thead>
 
 <tbody id="adminDeposits"></tbody>
 
-  </table>  </div>  </div>  
-</div>  <script>  
-  
-const SUPABASE_URL =  
-"https://eizpxgwkottliyvvhlar.supabase.co";  
-  
-const SUPABASE_KEY =  
-"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";  
-  
-const supabaseClient =  
-supabase.createClient(  
-  SUPABASE_URL,  
-  SUPABASE_KEY  
-);  
-  
-let currentUser=null;  
-let selectedNumbers=[];  
-let isDrawing=false;  
-  
-  
-function show(id,message,type=""){  
-  
-  const element =  
-    document.getElementById(id);  
-  
-  if(!element)return;  
-  
-  element.textContent=message;  
-  
-  element.className =  
-    "status "+type;  
-  
-}  
-  
-  
-async function register(){  
-  
-  const email =  
-    document.getElementById("email")  
-      .value.trim();  
-  
-  const password =  
-    document.getElementById("password")  
-      .value;  
-  
-  if(!email){  
-    show(  
-      "authMessage",  
-      "Please enter your email.",  
-      "error"  
-    );  
-    return;  
-  }  
-  
-  if(!password){  
-    show(  
-      "authMessage",  
-      "Please enter your password.",  
-      "error"  
-    );  
-    return;  
-  }  
-  
-  if(password.length<6){  
-    show(  
-      "authMessage",  
-      "Password must be at least 6 characters.",  
-      "error"  
-    );  
-    return;  
-  }  
-  
-  const button =  
-    document.getElementById("registerBtn");  
-  
-  button.disabled=true;  
-  
-  show(  
-    "authMessage",  
-    "Creating account..."  
-  );  
-  
-  try{  
-  
-    const {data,error} =  
-      await supabaseClient.auth.signUp({  
-        email,  
-        password  
-      });  
-  
-    if(error){  
-      show(  
-        "authMessage",  
-        error.message,  
-        "error"  
-      );  
-      return;  
-    }  
-  
-    if(data.session){  
-  
-      currentUser =  
-        data.session.user;  
-  
-      show(  
-        "authMessage",  
-        "Account created. Opening...",  
-        "success"  
-      );  
-  
-      await startApp();  
-  
-      return;  
-    }  
-  
-    show(  
-      "authMessage",  
-      "Registration successful. Now login with your email and password.",  
-      "success"  
-    );  
-  
-  }catch(error){  
-  
-    show(  
-      "authMessage",  
-      error.message,  
-      "error"  
-    );  
-  
-  }finally{  
-  
-    button.disabled=false;  
-  
-  }  
-  
-}  
-  
-  
-async function login(){  
-  
-  const email =  
-    document.getElementById("email")  
-      .value.trim();  
-  
-  const password =  
-    document.getElementById("password")  
-      .value;  
-  
-  if(!email){  
-    show(  
-      "authMessage",  
-      "Please enter your email.",  
-      "error"  
-    );  
-    return;  
-  }  
-  
-  if(!password){  
-    show(  
-      "authMessage",  
-      "Please enter your password.",  
-      "error"  
-    );  
-    return;  
-  }  
-  
-  const button =  
-    document.getElementById("loginBtn");  
-  
-  button.disabled=true;  
-  
-  show(  
-    "authMessage",  
-    "Logging in..."  
-  );  
-  
-  try{  
-  
-    const {data,error} =  
-      await supabaseClient.auth  
-      .signInWithPassword({  
-        email,  
-        password  
-      });  
-  
-    if(error){  
-  
-      show(  
-        "authMessage",  
-        error.message,  
-        "error"  
-      );  
-  
-      return;  
-    }  
-  
-    if(!data || !data.user){  
-  
-      show(  
-        "authMessage",  
-        "Login failed.",  
-        "error"  
-      );  
-  
-      return;  
-    }  
-  
-    currentUser =  
-      data.user;  
-  
-    document  
-      .getElementById("authBox")  
-      .classList.add("hidden");  
-  
-    document  
-      .getElementById("app")  
-      .classList.remove("hidden");  
-  
-    document  
-      .getElementById("logoutBtn")  
-      .classList.remove("hidden");  
-  
-    show(  
-      "authMessage",  
-      "Login successful.",  
-      "success"  
-    );  
-  
-    createNumbers();  
-  
-    loadBalance()  
-      .catch(error =>  
-        console.log(  
-          "Balance error:",  
-          error  
-        )  
-      );  
-  
-    loadDeposits()  
-      .catch(error =>  
-        console.log(  
-          "Deposit error:",  
-          error  
-        )  
-      );  
-  
-    checkAdmin()  
-      .catch(error =>  
-        console.log(  
-          "Admin error:",  
-          error  
-        )  
-      );  
-  
-  }catch(error){  
-  
-    show(  
-      "authMessage",  
-      error.message,  
-      "error"  
-    );  
-  
-  }finally{  
-  
-    button.disabled=false;  
-  
-  }  
-  
-}  
-  
-  
-async function startApp(){  
-  
-  document  
-    .getElementById("authBox")  
-    .classList.add("hidden");  
-  
-  document  
-    .getElementById("app")  
-    .classList.remove("hidden");  
-  
-  document  
-    .getElementById("logoutBtn")  
-    .classList.remove("hidden");  
-  
-  createNumbers();  
-  
-  try{  
-    await loadBalance();  
-  }catch(error){  
-    console.log("Balance:",error);  
-  }  
-  
-  try{  
-    await loadDeposits();  
-  }catch(error){  
-    console.log("Deposits:",error);  
-  }  
-  
-  try{  
-    await checkAdmin();  
-  }catch(error){  
-    console.log("Admin:",error);  
-  }  
-  
-}  
-  
-  
-async function logout(){  
-  
-  try{  
-    await supabaseClient.auth.signOut();  
-  }catch(error){  
-    console.log(error);  
-  }  
-  
-  currentUser=null;  
-  
-  document  
-    .getElementById("app")  
-    .classList.add("hidden");  
-  
-  document  
-    .getElementById("authBox")  
-    .classList.remove("hidden");  
-  
-  document  
-    .getElementById("logoutBtn")  
-    .classList.add("hidden");  
-  
-  document  
-    .getElementById("email")  
-    .value="";  
-  
-  document  
-    .getElementById("password")  
-    .value="";  
-  
-}  
-  
-  
-async function loadBalance(){  
-  
-  if(!currentUser)return;  
-  
-  const {data,error} =  
-    await supabaseClient  
-      .from("profiles")  
-      .select("balance")  
-      .eq("id",currentUser.id)  
-      .maybeSingle();  
-  
-  if(error){  
-  
-    console.log(  
-      "Balance database error:",  
-      error  
-    );  
-  
-    return;  
-  }  
-  
-  const balance =  
-    Number(data?.balance||0);  
-  
-  document  
-    .getElementById("balance")  
-    .textContent =  
-    balance.toFixed(2)+" ETB";  
-  
-}  
-  
-  
-function showDeposit(){  
-  
-  document  
-    .getElementById("depositBox")  
-    .classList.remove("hidden");  
-  
-  document  
-    .getElementById("depositBox")  
-    .scrollIntoView({  
-      behavior:"smooth"  
-    });  
-  
-}  
-  
-  
-function hideDeposit(){  
-  
-  document  
-    .getElementById("depositBox")  
-    .classList.add("hidden");  
-  
-}  
-  
-  
-async function makeDeposit(){  
-  
-  if(!currentUser){  
-  
-    show(  
-      "depositMessage",  
-      "Please login first.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  const amount =  
-    Number(  
-      document  
-        .getElementById("depositAmount")  
-        .value  
-    );  
-  
-  const method =  
-    document  
-      .getElementById("depositMethod")  
-      .value;  
-  
-  const phone =  
-    document  
-      .getElementById("depositPhone")  
-      .value.trim();  
-  
-  const reference =  
-    document  
-      .getElementById("depositReference")  
-      .value.trim();  
-  
-  if(!amount || amount<=0){  
-  
-    show(  
-      "depositMessage",  
-      "Enter a valid amount.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  if(!phone){  
-  
-    show(  
-      "depositMessage",  
-      "Enter phone or bank account.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  if(!reference){  
-  
-    show(  
-      "depositMessage",  
-      "Enter transaction reference.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  show(  
-    "depositMessage",  
-    "Submitting..."  
-  );  
-  
-  const fullReference =  
-    "Phone/Bank: "+  
-    phone+  
-    " | Ref: "+  
-    reference;  
-  
-  const {error} =  
-    await supabaseClient  
-      .from("deposits")  
-      .insert({  
-  
-        user_id:currentUser.id,  
-        amount,  
-        method,  
-        reference:fullReference,  
-        status:"pending"  
-  
-      });  
-  
-  if(error){  
-  
-    show(  
-      "depositMessage",  
-      error.message,  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  show(  
-    "depositMessage",  
-    "Deposit submitted. Waiting for admin approval.",  
-    "success"  
-  );  
-  
-  document  
-    .getElementById("depositAmount")  
-    .value="";  
-  
-  document  
-    .getElementById("depositPhone")  
-    .value="";  
-  
-  document  
-    .getElementById("depositReference")  
-    .value="";  
-  
-  try{  
-    await loadDeposits();  
-  }catch(error){  
-    console.log(error);  
-  }  
-  
-}  
-  
-  
-async function loadDeposits(){  
-  
-  if(!currentUser)return;  
-  
-  const {data,error} =  
-    await supabaseClient  
-      .from("deposits")  
-      .select("*")  
-      .eq("user_id",currentUser.id)  
-      .order(  
-        "created_at",  
-        {  
-          ascending:false  
-        }  
-      );  
-  
-  if(error){  
-  
-    console.log(  
-      "Deposits database error:",  
-      error  
-    );  
-  
-    return;  
-  }  
-  
-  const list =  
-    document.getElementById(  
-      "depositList"  
-    );  
-  
-  list.innerHTML="";  
-  
-  (data||[]).forEach(item=>{  
-  
-    const tr =  
-      document.createElement("tr");  
-  
-    tr.innerHTML=`  
-  
-      <td>  
-        ${Number(item.amount).toFixed(2)} ETB  
-      </td>  
-  
-      <td>  
-        ${item.method||""}  
-      </td>  
-  
-      <td class="${item.status||""}">  
-        ${item.status||"pending"}  
-      </td>  
-  
-    `;  
-  
-    list.appendChild(tr);  
-  
-  });  
-  
-}  
-  
-  
-function openGame(game){  
-  
-  document  
-    .getElementById("kenoGame")  
-    .classList.add("hidden");  
-  
-  document  
-    .getElementById("otherGame")  
-    .classList.add("hidden");  
-  
-  if(game==="keno"){  
-  
-    document  
-      .getElementById("kenoGame")  
-      .classList.remove("hidden");  
-  
-    document  
-      .getElementById("kenoGame")  
-      .scrollIntoView({  
-        behavior:"smooth"  
-      });  
-  
-    return;  
-  }  
-  
-  const title =  
-    document.getElementById(  
-      "otherGameTitle"  
-    );  
-  
-  const message =  
-    document.getElementById(  
-      "otherGameMessage"  
-    );  
-  
-  const names={  
-  
-    ludo:"🎲 LUDO",  
-    bingo:"🎱 BINGO",  
-    conquer:"🃏 CONQUER",  
-    fastbingo:"⚡ FAST BINGO",  
-    crazy8:"♠️ CRAZY 8",  
-    soccer:"⚽ TRACE SOCCER",  
-    night:"🌃 NIGHT HUNTER",  
-    memory:"🧠 MEMORY GAME",  
-    latlat:"🎯 LAT LAT",  
-    rps:"✋ ROCK PAPER SCISSORS",  
-    uno:"🃏 UNO",  
-    connect4:"🔴 CONNECT 4"  
-  
-  };  
-  
-  title.textContent =  
-    names[game]||"Game";  
-  
-  message.textContent =  
-    "This game area is ready. The game can be built next.";  
-  
-  document  
-    .getElementById("otherGame")  
-    .classList.remove("hidden");  
-  
-  document  
-    .getElementById("otherGame")  
-    .scrollIntoView({  
-      behavior:"smooth"  
-    });  
-  
-}  
-  
-  
-function closeOtherGame(){  
-  
-  document  
-    .getElementById("otherGame")  
-    .classList.add("hidden");  
-  
-}  
-  
-  
-function createNumbers(){  
-  
-  const grid =  
-    document.getElementById(  
-      "numberGrid"  
-    );  
-  
-  if(!grid)return;  
-  
-  grid.innerHTML="";  
-  
-  selectedNumbers=[];  
-  
-  for(let i=1;i<=80;i++){  
-  
-    const button =  
-      document.createElement("button");  
-  
-    button.className="num";  
-  
-    button.textContent=i;  
-  
-    button.onclick=()=>{  
-  
-      if(isDrawing)return;  
-  
-      if(selectedNumbers.includes(i)){  
-  
-        selectedNumbers =  
-          selectedNumbers.filter(  
-            n=>n!==i  
-          );  
-  
-        button.classList.remove(  
-          "selected"  
-        );  
-  
-      }else{  
-  
-        if(selectedNumbers.length>=10){  
-  
-          alert(  
-            "Maximum 10 numbers."  
-          );  
-  
-          return;  
-        }  
-  
-        selectedNumbers.push(i);  
-  
-        button.classList.add(  
-          "selected"  
-        );  
-  
-      }  
-  
-    };  
-  
-    grid.appendChild(button);  
-  
-  }  
-  
-}  
-  
-  
-async function playKeno(){  
-  
-  if(isDrawing)return;  
-  
-  if(!currentUser){  
-  
-    show(  
-      "gameMessage",  
-      "Please login first.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  const bet =  
-    Number(  
-      document  
-        .getElementById("betAmount")  
-        .value  
-    );  
-  
-  if(!bet || bet<=0){  
-  
-    show(  
-      "gameMessage",  
-      "Enter bet amount.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  if(selectedNumbers.length<1){  
-  
-    show(  
-      "gameMessage",  
-      "Select at least one number.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  const {data:profile,error} =  
-    await supabaseClient  
-      .from("profiles")  
-      .select("balance")  
-      .eq("id",currentUser.id)  
-      .maybeSingle();  
-  
-  if(error){  
-  
-    show(  
-      "gameMessage",  
-      error.message,  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  const balance =  
-    Number(profile?.balance||0);  
-  
-  if(balance<bet){  
-  
-    show(  
-      "gameMessage",  
-      "Insufficient balance.",  
-      "error"  
-    );  
-  
-    return;  
-  }  
-  
-  isDrawing=true;  
-  
-  document  
-    .getElementById("playBtn")  
-    .disabled=true;  
-  
-  document  
-    .getElementById("resultNumbers")  
-    .innerHTML="";  
-  
-  show(  
-    "gameMessage",  
-    "🎰 DRAWING..."  
-  );  
-  
-  const winningNumbers=[];  
-  
-  while(  
-    winningNumbers.length<10  
-  ){  
-  
-    const n =  
-      Math.floor(  
-        Math.random()*80  
-      )+1;  
-  
-    if(!winningNumbers.includes(n)){  
-  
-      winningNumbers.push(n);  
-  
-    }  
-  
-  }  
-  
-  for(  
-    let i=0;  
-    i<winningNumbers.length;  
-    i++  
-  ){  
-  
-    show(  
-      "gameMessage",  
-      "🎱 Drawing "+  
-      (i+1)+  
-      "/10..."  
-    );  
-  
-    await wait(600);  
-  
-    show(  
-      "gameMessage",  
-      "🎱 Number: "+  
-      winningNumbers[i]  
-    );  
-  
-    await wait(350);  
-  
-  }  
-  
-  const resultBox =  
-    document.getElementById(  
-      "resultNumbers"  
-    );  
-  
-  winningNumbers.forEach(n=>{  
-  
-    const ball =  
-      document.createElement("div");  
-  
-    ball.className =  
-      "result-ball";  
-  
-    if(selectedNumbers.includes(n)){  
-  
-      ball.classList.add("hit");  
-  
-    }  
-  
-    ball.textContent=n;  
-  
-    resultBox.appendChild(ball);  
-  
-  });  
-  
-  const hits =  
-    selectedNumbers.filter(  
-      n=>winningNumbers.includes(n)  
-    ).length;  
-  
-  const multipliers={  
-  
-    0:0,  
-    1:0,  
-    2:1,  
-    3:2,  
-    4:5,  
-    5:10,  
-    6:20,  
-    7:50,  
-    8:100,  
-    9:250,  
-    10:500  
-  
-  };  
-  
-  const payout =  
-    bet*  
-    (multipliers[hits]||0);  
-  
-  const finalBalance =  
-    balance-  
-    bet+  
-    payout;  
-  
-  const {error:balanceError} =  
-    await supabaseClient  
-      .from("profiles")  
-      .update({  
-        balance:finalBalance  
-      })  
-      .eq(  
-        "id",  
-        currentUser.id  
-      );  
-  
-  if(balanceError){  
-  
-    show(  
-      "gameMessage",  
-      balanceError.message,  
-      "error"  
-    );  
-  
-    isDrawing=false;  
-  
-    document  
-      .getElementById("playBtn")  
-      .disabled=false;  
-  
-    return;  
-  }  
-  
-  show(  
-    "gameMessage",  
-    "🏆 Hits: "+  
-    hits+  
-    " | Payout: "+  
-    payout.toFixed(2)+  
-    " ETB",  
-    "success"  
-  );  
-  
-  await loadBalance();  
-  
-  isDrawing=false;  
-  
-  document  
-    .getElementById("playBtn")  
-    .disabled=false;  
-  
-}  
-  
-  
-function wait(ms){  
-  
-  return new Promise(  
-    resolve=>  
-      setTimeout(  
-        resolve,  
-        ms  
-      )  
-  );  
-  
-}  
-  
-  
-async function checkAdmin(){  
-  
-  if(!currentUser)return;  
-  
-  const {data,error} =  
-    await supabaseClient  
-      .from("profiles")  
-      .select("role")  
-      .eq("id",currentUser.id)  
-      .maybeSingle();  
-  
-  if(error){  
-  
-    console.log(  
-      "Admin check error:",  
-      error  
-    );  
-  
-    return;  
-  }  
-  
-  if(data?.role==="admin"){  
-  
-    document  
-      .getElementById("adminPanel")  
-      .classList.remove("hidden");  
-  
-    await loadAdminDeposits();  
-  
-  }  
-  
-}  
-  
-  
-async function loadAdminDeposits(){  
-  
-  const {data,error} =  
-    await supabaseClient  
-      .from("deposits")  
-      .select("*")  
-      .eq(  
-        "status",  
-        "pending"  
-      )  
-      .order(  
-        "created_at",  
-        {  
-          ascending:false  
-        }  
-      );  
-  
-  if(error){  
-  
-    console.log(  
-      "Admin deposits error:",  
-      error  
-    );  
-  
-    return;  
-  }  
-  
-  const list =  
-    document.getElementById(  
-      "adminDeposits"  
-    );  
-  
-  list.innerHTML="";  
-  
-  (data||[]).forEach(item=>{  
-  
-    const tr =  
-      document.createElement("tr");  
-  
-    tr.innerHTML=`  
-  
-      <td>  
-        ${item.user_id}  
-      </td>  
-  
-      <td>  
-        ${Number(item.amount).toFixed(2)} ETB  
-      </td>  
-  
-      <td>  
-        ${item.method||""}  
-      </td>  
-  
-      <td class="pending">  
-        pending  
-      </td>  
-  
-      <td>  
-  
-        <button  
-          onclick="approveDeposit(  
-            '${item.id}',  
-            ${Number(item.amount)},  
-            '${item.user_id}'  
-          )">  
-  
-          APPROVE  
-  
-        </button>  
-  
-        <button  
-          class="danger"  
-          onclick="rejectDeposit(  
-            '${item.id}'  
-          )">  
-  
-          REJECT  
-  
-        </button>  
-  
-      </td>  
-  
-    `;  
-  
-    list.appendChild(tr);  
-  
-  });  
-  
-}  
-  
-  
-async function approveDeposit(  
-  depositId,  
-  amount,  
-  userId  
-){  
-  
-  const {error:updateError} =  
-    await supabaseClient  
-      .from("deposits")  
-      .update({  
-        status:"approved"  
-      })  
-      .eq(  
-        "id",  
-        depositId  
-      );  
-  
-  if(updateError){  
-  
-    alert(  
-      updateError.message  
-    );  
-  
-    return;  
-  }  
-  
-  const {data:profile,error:profileError} =  
-    await supabaseClient  
-      .from("profiles")  
-      .select("balance")  
-      .eq(  
-        "id",  
-        userId  
-      )  
-      .maybeSingle();  
-  
-  if(profileError){  
-  
-    alert(  
-      profileError.message  
-    );  
-  
-    return;  
-  }  
-  
-  const newBalance =  
-    Number(profile?.balance||0)+  
-    Number(amount);  
-  
-  const {error:balanceError} =  
-    await supabaseClient  
-      .from("profiles")  
-      .update({  
-        balance:newBalance  
-      })  
-      .eq(  
-        "id",  
-        userId  
-      );  
-  
-  if(balanceError){  
-  
-    alert(  
-      balanceError.message  
-    );  
-  
-    return;  
-  }  
-  
-  alert(  
-    "Deposit approved successfully."  
-  );  
-  
-  await loadAdminDeposits();  
-  
-}  
-  
-  
-async function rejectDeposit(id){  
-  
-  if(!confirm(  
-    "Reject this deposit?"  
-  ))return;  
-  
-  const {error} =  
-    await supabaseClient  
-      .from("deposits")  
-      .update({  
-        status:"rejected"  
-      })  
-      .eq(  
-        "id",  
-        id  
-      );  
-  
-  if(error){  
-  
-    alert(  
-      error.message  
-    );  
-  
-    return;  
-  }  
-  
-  alert(  
-    "Deposit rejected."  
-  );  
-  
-  await loadAdminDeposits();  
-  
-}  
-  
-  
-(async function(){  
-  
-  try{  
-  
-    const {data,error} =  
-      await supabaseClient  
-        .auth  
-        .getSession();  
-  
-    if(error){  
-  
-      console.log(  
-        "Session error:",  
-        error  
-      );  
-  
-      return;  
-    }  
-  
-    if(data?.session){  
-  
-      currentUser =  
-        data.session.user;  
-  
-      document  
-        .getElementById("authBox")  
-        .classList.add("hidden");  
-  
-      document  
-        .getElementById("app")  
-        .classList.remove("hidden");  
-  
-      document  
-        .getElementById("logoutBtn")  
-        .classList.remove("hidden");  
-  
-      createNumbers();  
-  
-      loadBalance()  
-        .catch(error =>  
-          console.log(error)  
-        );  
-  
-      loadDeposits()  
-        .catch(error =>  
-          console.log(error)  
-        );  
-  
-      checkAdmin()  
-        .catch(error =>  
-          console.log(error)  
-        );  
-  
-    }  
-  
-  }catch(error){  
-  
-    console.log(  
-      "Auto login error:",  
-      error  
-    );  
-  
-  }  
-  
-})();  
-  
-</script>  </body>  
+</table>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+const SUPABASE_URL =
+"https://eizpxgwkottliyvvhlar.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let currentUser=null;
+let selectedNumbers=[];
+let isDrawing=false;
+
+function show(id,message,type=""){
+
+const element =
+document.getElementById(id);
+
+if(!element)return;
+
+element.textContent=message;
+
+element.className =
+"status "+type;
+
+}
+
+async function register(){
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+const password =
+document.getElementById("password")
+.value;
+
+if(!email){
+
+show(
+"authMessage",
+"Please enter your email.",
+"error"
+);
+
+return;
+}
+
+if(!password){
+
+show(
+"authMessage",
+"Please enter your password.",
+"error"
+);
+
+return;
+}
+
+if(password.length<6){
+
+show(
+"authMessage",
+"Password must be at least 6 characters.",
+"error"
+);
+
+return;
+}
+
+const button =
+document.getElementById("registerBtn");
+
+button.disabled=true;
+
+show(
+"authMessage",
+"Creating account..."
+);
+
+try{
+
+const {data,error} =
+await supabaseClient.auth.signUp({
+email,
+password
+});
+
+if(error){
+
+show(
+"authMessage",
+error.message,
+"error"
+);
+
+return;
+}
+
+if(data.session){
+
+currentUser =
+data.session.user;
+
+show(
+"authMessage",
+"Account created. Opening...",
+"success"
+);
+
+await startApp();
+
+return;
+}
+
+show(
+"authMessage",
+"Registration successful. Now login with your email and password.",
+"success"
+);
+
+}catch(error){
+
+show(
+"authMessage",
+error.message,
+"error"
+);
+
+}finally{
+
+button.disabled=false;
+
+}
+
+}
+
+async function login(){
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+const password =
+document.getElementById("password")
+.value;
+
+if(!email){
+
+show(
+"authMessage",
+"Please enter your email.",
+"error"
+);
+
+return;
+}
+
+if(!password){
+
+show(
+"authMessage",
+"Please enter your password.",
+"error"
+);
+
+return;
+}
+
+const button =
+document.getElementById("loginBtn");
+
+button.disabled=true;
+
+show(
+"authMessage",
+"Logging in..."
+);
+
+try{
+
+const {data,error} =
+await supabaseClient.auth
+.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+show(
+"authMessage",
+error.message,
+"error"
+);
+
+return;
+}
+
+if(!data || !data.user){
+
+show(
+"authMessage",
+"Login failed.",
+"error"
+);
+
+return;
+}
+
+currentUser =
+data.user;
+
+document
+.getElementById("authBox")
+.classList.add("hidden");
+
+document
+.getElementById("app")
+.classList.remove("hidden");
+
+document
+.getElementById("logoutBtn")
+.classList.remove("hidden");
+
+show(
+"authMessage",
+"Login successful.",
+"success"
+);
+
+createNumbers();
+
+loadBalance()
+.catch(error =>
+console.log(
+"Balance error:",
+error
+)
+);
+
+loadDeposits()
+.catch(error =>
+console.log(
+"Deposit error:",
+error
+)
+);
+
+checkAdmin()
+.catch(error =>
+console.log(
+"Admin error:",
+error
+)
+);
+
+}catch(error){
+
+show(
+"authMessage",
+error.message,
+"error"
+);
+
+}finally{
+
+button.disabled=false;
+
+}
+
+}
+
+async function startApp(){
+
+document
+.getElementById("authBox")
+.classList.add("hidden");
+
+document
+.getElementById("app")
+.classList.remove("hidden");
+
+document
+.getElementById("logoutBtn")
+.classList.remove("hidden");
+
+createNumbers();
+
+try{
+await loadBalance();
+}catch(error){
+console.log("Balance:",error);
+}
+
+try{
+await loadDeposits();
+}catch(error){
+console.log("Deposits:",error);
+}
+
+try{
+await checkAdmin();
+}catch(error){
+console.log("Admin:",error);
+}
+
+}
+
+async function logout(){
+
+try{
+await supabaseClient.auth.signOut();
+}catch(error){
+console.log(error);
+}
+
+currentUser=null;
+
+document
+.getElementById("app")
+.classList.add("hidden");
+
+document
+.getElementById("authBox")
+.classList.remove("hidden");
+
+document
+.getElementById("logoutBtn")
+.classList.add("hidden");
+
+document
+.getElementById("email")
+.value="";
+
+document
+.getElementById("password")
+.value="";
+
+}
+
+async function loadBalance(){
+
+if(!currentUser)return;
+
+const {data,error} =
+await supabaseClient
+.from("profiles")
+.select("balance")
+.eq("id",currentUser.id)
+.maybeSingle();
+
+if(error){
+
+console.log(
+"Balance database error:",
+error
+);
+
+return;
+}
+
+const balance =
+Number(data?.balance||0);
+
+document
+.getElementById("balance")
+.textContent =
+balance.toFixed(2)+" ETB";
+
+}
+
+function showDeposit(){
+
+document
+.getElementById("depositBox")
+.classList.remove("hidden");
+
+document
+.getElementById("depositBox")
+.scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+function hideDeposit(){
+
+document
+.getElementById("depositBox")
+.classList.add("hidden");
+
+}
+
+async function makeDeposit(){
+
+if(!currentUser){
+
+show(
+"depositMessage",
+"Please login first.",
+"error"
+);
+
+return;
+}
+
+const amount =
+Number(
+document
+.getElementById("depositAmount")
+.value
+);
+
+const method =
+document
+.getElementById("depositMethod")
+.value;
+
+const phone =
+document
+.getElementById("depositPhone")
+.value.trim();
+
+const reference =
+document
+.getElementById("depositReference")
+.value.trim();
+
+if(!amount || amount<=0){
+
+show(
+"depositMessage",
+"Enter a valid amount.",
+"error"
+);
+
+return;
+}
+
+if(!phone){
+
+show(
+"depositMessage",
+"Enter phone or bank account.",
+"error"
+);
+
+return;
+}
+
+if(!reference){
+
+show(
+"depositMessage",
+"Enter transaction reference.",
+"error"
+);
+
+return;
+}
+
+show(
+"depositMessage",
+"Submitting..."
+);
+
+const fullReference =
+"Phone/Bank: "+
+phone+
+" | Ref: "+
+reference;
+
+const {error} =
+await supabaseClient
+.from("deposits")
+.insert({
+
+user_id:currentUser.id,
+amount,
+method,
+reference:fullReference,
+status:"pending"
+
+});
+
+if(error){
+
+show(
+"depositMessage",
+error.message,
+"error"
+);
+
+return;
+}
+
+show(
+"depositMessage",
+"Deposit submitted. Waiting for admin approval.",
+"success"
+);
+
+document
+.getElementById("depositAmount")
+.value="";
+
+document
+.getElementById("depositPhone")
+.value="";
+
+document
+.getElementById("depositReference")
+.value="";
+
+try{
+await loadDeposits();
+}catch(error){
+console.log(error);
+}
+
+}
+
+async function loadDeposits(){
+
+if(!currentUser)return;
+
+const {data,error} =
+await supabaseClient
+.from("deposits")
+.select("*")
+.eq("user_id",currentUser.id)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(error){
+
+console.log(
+"Deposits database error:",
+error
+);
+
+return;
+}
+
+const list =
+document.getElementById(
+"depositList"
+);
+
+list.innerHTML="";
+
+(data||[]).forEach(item=>{
+
+const tr =
+document.createElement("tr");
+
+tr.innerHTML=`
+
+<td>
+${Number(item.amount).toFixed(2)} ETB
+</td>
+
+<td>
+${item.method||""}
+</td>
+
+<td class="${item.status||""}">
+${item.status||"pending"}
+</td>
+
+`;
+
+list.appendChild(tr);
+
+});
+
+}<script>
+
+const SUPABASE_URL =
+"https://eizpxgwkottliyvvhlar.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let currentUser = null;
+let selectedNumbers = [];
+let isDrawing = false;
+let ludoState = null;
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function show(id,message,type=""){
+  const el=document.getElementById(id);
+  if(!el)return;
+
+  el.textContent=message;
+  el.className="status "+type;
+}
+
+function wait(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+
+/* =========================
+   REGISTER
+========================= */
+
+async function register(){
+
+  const email=document
+    .getElementById("email")
+    .value.trim();
+
+  const password=document
+    .getElementById("password")
+    .value;
+
+  if(!email){
+    show(
+      "authMessage",
+      "Please enter your email.",
+      "error"
+    );
+    return;
+  }
+
+  if(!password){
+    show(
+      "authMessage",
+      "Please enter your password.",
+      "error"
+    );
+    return;
+  }
+
+  if(password.length<6){
+    show(
+      "authMessage",
+      "Password must be at least 6 characters.",
+      "error"
+    );
+    return;
+  }
+
+  const btn=document.getElementById("registerBtn");
+  btn.disabled=true;
+
+  show(
+    "authMessage",
+    "Creating account..."
+  );
+
+  try{
+
+    const {data,error}=
+      await supabaseClient.auth.signUp({
+        email,
+        password
+      });
+
+    if(error){
+      show(
+        "authMessage",
+        error.message,
+        "error"
+      );
+      return;
+    }
+
+    if(data.session){
+
+      currentUser=data.session.user;
+
+      await startApp();
+
+      return;
+    }
+
+    show(
+      "authMessage",
+      "Account created. Please login.",
+      "success"
+    );
+
+  }catch(error){
+
+    show(
+      "authMessage",
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled=false;
+
+  }
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+  const email=document
+    .getElementById("email")
+    .value.trim();
+
+  const password=document
+    .getElementById("password")
+    .value;
+
+  if(!email){
+    show(
+      "authMessage",
+      "Please enter your email.",
+      "error"
+    );
+    return;
+  }
+
+  if(!password){
+    show(
+      "authMessage",
+      "Please enter your password.",
+      "error"
+    );
+    return;
+  }
+
+  const btn=document.getElementById("loginBtn");
+
+  btn.disabled=true;
+
+  show(
+    "authMessage",
+    "Logging in..."
+  );
+
+  try{
+
+    const {data,error}=
+      await supabaseClient.auth
+      .signInWithPassword({
+        email,
+        password
+      });
+
+    if(error){
+      show(
+        "authMessage",
+        error.message,
+        "error"
+      );
+      return;
+    }
+
+    if(!data?.user){
+      show(
+        "authMessage",
+        "Login failed.",
+        "error"
+      );
+      return;
+    }
+
+    currentUser=data.user;
+
+    await startApp();
+
+    show(
+      "authMessage",
+      "Login successful.",
+      "success"
+    );
+
+  }catch(error){
+
+    show(
+      "authMessage",
+      error.message,
+      "error"
+    );
+
+  }finally{
+
+    btn.disabled=false;
+
+  }
+}
+
+
+/* =========================
+   START APP
+========================= */
+
+async function startApp(){
+
+  document
+    .getElementById("authBox")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("logoutBtn")
+    .classList.remove("hidden");
+
+  createNumbers();
+
+  await loadBalance();
+  await loadDeposits();
+  await checkAdmin();
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser=null;
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authBox")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("logoutBtn")
+    .classList.add("hidden");
+}
+
+
+/* =========================
+   BALANCE
+========================= */
+
+async function loadBalance(){
+
+  if(!currentUser)return;
+
+  const {data,error}=
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq("id",currentUser.id)
+      .maybeSingle();
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  const balance=
+    Number(data?.balance||0);
+
+  document
+    .getElementById("balance")
+    .textContent=
+    balance.toFixed(2)+" ETB";
+}
+
+
+/* =========================
+   DEPOSIT
+   SYSTEM STAYS AVAILABLE
+========================= */
+
+function showDeposit(){
+
+  document
+    .getElementById("depositBox")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("depositBox")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+}
+
+
+function hideDeposit(){
+
+  document
+    .getElementById("depositBox")
+    .classList.add("hidden");
+}
+
+
+async function makeDeposit(){
+
+  if(!currentUser){
+
+    show(
+      "depositMessage",
+      "Please login first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const amount=Number(
+    document
+      .getElementById("depositAmount")
+      .value
+  );
+
+  const method=document
+    .getElementById("depositMethod")
+    .value;
+
+  const phone=document
+    .getElementById("depositPhone")
+    .value.trim();
+
+  const reference=document
+    .getElementById("depositReference")
+    .value.trim();
+
+  if(!amount || amount<=0){
+
+    show(
+      "depositMessage",
+      "Enter a valid amount.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(!phone){
+
+    show(
+      "depositMessage",
+      "Enter phone or bank account.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(!<script>
+
+/* =========================
+   GAME OPEN / CLOSE
+========================= */
+
+function openGame(game){
+
+  document
+    .getElementById("kenoGame")
+    .classList.add("hidden");
+
+  document
+    .getElementById("otherGame")
+    .classList.add("hidden");
+
+  if(game==="keno"){
+
+    document
+      .getElementById("kenoGame")
+      .classList.remove("hidden");
+
+    createNumbers();
+
+    document
+      .getElementById("kenoGame")
+      .scrollIntoView({
+        behavior:"smooth"
+      });
+
+    return;
+  }
+
+  document
+    .getElementById("otherGame")
+    .classList.remove("hidden");
+
+  const title =
+    document.getElementById(
+      "otherGameTitle"
+    );
+
+  const message =
+    document.getElementById(
+      "otherGameMessage"
+    );
+
+  const ludoBoard =
+    document.getElementById(
+      "ludoBoard"
+    );
+
+  ludoBoard.classList.add("hidden");
+
+  const names={
+    ludo:"🎲 LUDO",
+    bingo:"🎱 BINGO",
+    conquer:"🃏 CONQUER",
+    fastbingo:"⚡ FAST BINGO",
+    crazy8:"♠️ CRAZY 8",
+    soccer:"⚽ TRACE SOCCER",
+    night:"🌃 NIGHT HUNTER",
+    memory:"🧠 MEMORY GAME",
+    latlat:"🎯 LAT LAT",
+    rps:"✋ ROCK PAPER SCISSORS",
+    uno:"🃏 UNO",
+    connect4:"🔴 CONNECT 4"
+  };
+
+  title.textContent =
+    names[game] || "GAME";
+
+  if(game==="ludo"){
+
+    ludoBoard.classList.remove("hidden");
+
+    message.textContent =
+      "Ludo is ready. You can play for free.";
+
+  }else{
+
+    message.textContent =
+      "This game is ready for the next game module.";
+
+  }
+
+  document
+    .getElementById("otherGame")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+
+function closeOtherGame(){
+
+  document
+    .getElementById("otherGame")
+    .classList.add("hidden");
+
+}
+
+
+/* =========================
+   KENO NUMBERS
+========================= */
+
+function createNumbers(){
+
+  const grid =
+    document.getElementById(
+      "numberGrid"
+    );
+
+  if(!grid)return;
+
+  grid.innerHTML="";
+
+  selectedNumbers=[];
+
+  for(let i=1;i<=80;i++){
+
+    const button =
+      document.createElement("button");
+
+    button.className="num";
+
+    button.textContent=i;
+
+    button.onclick=()=>{
+
+      if(isDrawing)return;
+
+      if(
+        selectedNumbers.includes(i)
+      ){
+
+        selectedNumbers =
+          selectedNumbers.filter(
+            n=>n!==i
+          );
+
+        button.classList.remove(
+          "selected"
+        );
+
+        return;
+      }
+
+      if(
+        selectedNumbers.length>=10
+      ){
+
+        show(
+          "gameMessage",
+          "You can select up to 10 numbers.",
+          "error"
+        );
+
+        return;
+      }
+
+      selectedNumbers.push(i);
+
+      button.classList.add(
+        "selected"
+      );
+
+      show(
+        "gameMessage",
+        selectedNumbers.length+
+        " number(s) selected."
+      );
+
+    };
+
+    grid.appendChild(button);
+
+  }
+
+}
+
+
+/* =========================
+   KENO PLAY
+========================= */
+
+async function playKeno(){
+
+  if(!currentUser){
+
+    show(
+      "gameMessage",
+      "Please login first.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(isDrawing)return;
+
+  if(
+    selectedNumbers.length===0
+  ){
+
+    show(
+      "gameMessage",
+      "Please select numbers first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const bet =
+    Number(
+      document
+        .getElementById("betAmount")
+        .value
+    );
+
+  if(!bet || bet<=0){
+
+    show(
+      "gameMessage",
+      "Enter a valid bet amount.",
+      "error"
+    );
+
+    return;
+  }
+
+  const balanceText =
+    document
+      .getElementById("balance")
+      .textContent
+      .replace(" ETB","");
+
+  const balance =
+    Number(balanceText)||0;
+
+  if(bet>balance){
+
+    show(
+      "gameMessage",
+      "Insufficient balance.",
+      "error"
+    );
+
+    return;
+  }
+
+  isDrawing=true;
+
+  const playButton =
+    document.getElementById(
+      "playBtn"
+    );
+
+  playButton.disabled=true;
+
+  show(
+    "gameMessage",
+    "Drawing numbers..."
+  );
+
+  const numbers=[];
+
+  while(numbers.length<20){
+
+    const n =
+      Math.floor(
+        Math.random()*80
+      )+1;
+
+    if(!numbers.includes(n)){
+      numbers.push(n);
+    }
+
+  }
+
+  const result =
+    document.getElementById(
+      "resultNumbers"
+    );
+
+  result.innerHTML="";
+
+  for(const n of numbers){
+
+    const ball =
+      document.createElement("div");
+
+    ball.className="result-ball";
+
+    if(
+      selectedNumbers.includes(n)
+    ){
+
+      ball.classList.add("hit");
+
+    }
+
+    ball.textContent=n;
+
+    result.appendChild(ball);
+
+    await wait(80);
+
+  }
+
+  const hits =
+    selectedNumbers.filter(
+      n=>numbers.includes(n)
+    ).length;
+
+  show(
+    "gameMessage",
+    "Draw complete. You hit "+
+    hits+
+    " number(s).",
+    hits>0 ? "success" : ""
+  );
+
+  isDrawing=false;
+
+  playButton.disabled=false;
+
+}
+
+
+/* =========================
+   LUDO FREE GAME
+========================= */
+
+function startLudo(){
+
+  ludoState={
+    started:true,
+    player:1,
+    position:0,
+    moves:0
+  };
+
+  renderLudo();
+
+  show(
+    "ludoMessage",
+    "Ludo started! Roll the dice.",
+    "success"
+  );
+
+}
+
+
+function resetLudo(){
+
+  ludoState=null;
+
+  const area =
+    document.getElementById(
+      "ludoArea"
+    );
+
+  area.innerHTML="";
+
+  show(
+    "ludoMessage",
+    "Ready to play."
+  );
+
+}
+
+
+function renderLudo(){
+
+  const area =
+    document.getElementById(
+      "ludoArea"
+    );
+
+  area.innerHTML="";
+
+  for(let i=1;i<=16;i++){
+
+    const cell =
+      document.createElement("div");
+
+    cell.style.background =
+      "#0b1220";
+
+    cell.style.border =
+      "1px solid #344054";
+
+    cell.style.borderRadius =
+      "8px";
+
+    cell.style.padding =
+      "15px 5px";
+
+    cell.style.textAlign =
+      "center";
+
+    cell.textContent=i;
+
+    if(
+      ludoState &&
+      i===ludoState.position
+    ){
+
+      cell.textContent="🎲";
+
+      cell.style.background =
+        "#20c878";
+
+      cell.style.color =
+        "#06130b";
+
+    }
+
+    area.appendChild(cell);
+
+  }
+
+  const roll =
+    document.createElement("button");
+
+  roll.textContent =
+    "🎲 ROLL DICE";
+
+  roll.style.gridColumn =
+    "1 / -1";
+
+  roll.onclick=rollLudo;
+
+  area.appendChild(roll);
+
+}
+
+
+function rollLudo(){
+
+  if(!ludoState){
+
+    show(
+      "ludoMessage",
+      "Press START LUDO first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const dice =
+    Math.floor(
+      Math.random()*6
+    )+1;
+
+  ludoState.moves++;
+
+  ludoState.position += dice;
+
+  if(ludoState.position>16){
+
+    ludoState.position=16;
+
+  }
+
+  renderLudo();
+
+  if(ludoState.position===16){
+
+    show(
+      "ludoMessage",
+      "🎉 You reached the finish! You win!",
+      "success"
+    );
+
+    return;
+  }
+
+  show(
+    "ludoMessage",
+    "You rolled "+
+    dice+
+    ". Move to position "+
+    ludoState.position+"."
+  );
+
+}
+
+
+/* =========================
+   ADMIN
+========================= */
+
+async function checkAdmin(){
+
+  if(!currentUser)return;
+
+  const email =
+    currentUser.email;
+
+  const adminEmails=[
+    "admin@example.com"
+  ];
+
+  if(
+    !adminEmails.includes(email)
+  ){
+
+    return;
+  }
+
+  document
+    .getElementById("adminPanel")
+    .classList.remove("hidden");
+
+  await loadAdminDeposits();
+
+}
+
+
+async function loadAdminDeposits(){
+
+  const table =
+    document.getElementById(
+      "adminDeposits"
+    );
+
+  if(!table)return;
+
+  const {data,error} =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+  if(error){
+
+    console.log(
+      "Admin deposits:",
+      error
+    );
+
+    return;
+  }
+
+  table.innerHTML="";
+
+  (data||[]).forEach(item=>{
+
+    const tr =
+      document.createElement("tr");
+
+    tr.innerHTML=`
+
+      <td>
+        ${item.user_id||""}
+      </td>
+
+      <td>
+        ${Number(item.amount||0).toFixed(2)} ETB
+      </td>
+
+      <td>
+        ${item.method||""}
+      </td>
+
+      <td class="${item.status||""}">
+        ${item.status||"pending"}
+      </td>
+
+      <td>
+
+        ${
+          item.status==="pending"
+          ?
+          `
+          <button
+            onclick="approveDeposit('${item.id}')">
+            APPROVE
+          </button>
+
+          <button
+            class="danger"
+            onclick="rejectDeposit('${item.id}')">
+            REJECT
+          </button>
+          `
+          :
+          "Completed"
+        }
+
+      </td>
+
+    `;
+
+    table.appendChild(tr);
+
+  });
+
+}
+
+
+/* =========================
+   APPROVE DEPOSIT
+========================= */
+
+async function approveDeposit(id){
+
+  if(!id)return;
+
+  const {data:deposit,error} =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .eq("id",id)
+      .maybeSingle();
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+  }
+
+  if(!deposit){
+
+    alert("Deposit not found.");
+
+    return;
+  }
+
+  if(
+    deposit.status!=="pending"
+  ){
+
+    alert("This deposit is already processed.");
+
+    return;
+  }
+
+  const {data:profile,error:profileError} =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq("id",deposit.user_id)
+      .maybeSingle();
+
+  if(profileError){
+
+    alert(profileError.message);
+
+    return;
+  }
+
+  const oldBalance =
+    Number(profile?.balance||0);
+
+  const newBalance =
+    oldBalance+
+    Number(deposit.amount||0);
+
+  const {error:updateError} =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        balance:newBalance
+      })
+      .eq("id",deposit.user_id);
+
+  if(updateError){
+
+    alert(updateError.message);
+
+    return;
+  }
+
+  const {error:depositError} =
+    await supabaseClient
+      .from("deposits")
+      .update({
+        status:"approved"
+      })
+      .eq("id",id);
+
+  if(depositError){
+
+    alert(depositError.message);
+
+    return;
+  }
+
+  alert(
+    "Deposit approved successfully."
+  );
+
+  await loadAdminDeposits();
+
+  if(
+    currentUser &&
+    currentUser.id===deposit.user_id
+  ){
+
+    await loadBalance();
+
+    await loadDeposits();
+
+  }
+
+}
+
+
+/* =========================
+   REJECT DEPOSIT
+========================= */
+
+async function rejectDeposit(id){
+
+  if(!id)return;
+
+  const {error} =
+    await supabaseClient
+      .from("deposits")
+      .update({
+        status:"rejected"
+      })
+      .eq("id",id)
+      .eq("status","pending");
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+  }
+
+  alert(
+    "Deposit rejected."
+  );
+
+  await loadAdminDeposits();
+
+  if(currentUser){
+
+    await loadDeposits();
+
+  }
+
+}
+
+
+/* =========================
+   SESSION CHECK
+========================= */
+
+async function checkSession(){
+
+  try{
+
+    const {data} =
+      await supabaseClient.auth
+        .getSession();
+
+    if(data?.session?.user){
+
+      currentUser =
+        data.session.user;
+
+      await startApp();
+
+    }
+
+  }catch(error){
+
+    console.log(
+      "Session error:",
+      error
+    );
+
+  }
+
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+  (event,session)=>{
+
+    if(
+      session?.user &&
+      !currentUser
+    ){
+
+      currentUser =
+        session.user;
+
+      startApp();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+
+    checkSession();
+
+  }
+);
+
+</script>
+
+</body>
 </html>
