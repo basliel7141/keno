@@ -9,36 +9,10 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,Helvetica,sans-serif;
- background:#070b12;
- color:white;
-}
-
-.container{
- max-width:1000px;
- margin:auto;
- padding:15px;
-}
-
-header{
- display:flex;
- justify-content:flex-end;
- align-items:center;
- padding:10px 0;
- border-bottom:1px solid #263044;
-}
-
-.card{
- background:#111827;
- border:1px solid #263044;
- border-radius:16px;
- padding:18px;
- margin-top:18px;
-}
-
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#070b12;color:white}
+.container{max-width:1000px;margin:auto;padding:15px}
+header{display:flex;justify-content:flex-end;align-items:center;padding:10px 0;border-bottom:1px solid #263044}
+.card{background:#111827;border:1px solid #263044;border-radius:16px;padding:18px;margin-top:18px}
 .hidden{display:none!important}
 
 input,select,button{
@@ -47,85 +21,44 @@ input,select,button{
  margin:6px 0;
  border-radius:9px;
  border:1px solid #344054;
- font-size:15px;
+ font-size:15px
 }
 
-input,select{
- background:#0b1220;
- color:white;
-}
-
-button{
- background:#20c878;
- color:#04120b;
- font-weight:bold;
- border:0;
- cursor:pointer;
-}
-
+input,select{background:#0b1220;color:white}
+button{background:#20c878;color:#04120b;font-weight:bold;border:0;cursor:pointer}
 button:hover{opacity:.9}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#263044;color:white}
+.danger{background:#dc3545;color:white}
 
-button:disabled{
- opacity:.5;
- cursor:not-allowed;
-}
-
-.secondary{
- background:#263044;
- color:white;
-}
-
-.danger{
- background:#dc3545;
- color:white;
-}
-
-.row{
- display:flex;
- gap:10px;
-}
-
+.row{display:flex;gap:10px}
 .row>*{flex:1}
 
-.status{
- background:#182235;
- padding:10px;
- border-radius:8px;
- margin-top:8px;
- min-height:20px;
-}
-
+.status{background:#182235;padding:10px;border-radius:8px;margin-top:8px;min-height:20px}
 .success{color:#36e38b}
 .error{color:#ff6b6b}
-.small{
- color:#9ca3af;
- font-size:13px;
-}
+.small{color:#9ca3af;font-size:13px}
 
 .balance-card{
  display:flex;
  justify-content:space-between;
  align-items:center;
- gap:15px;
+ gap:15px
 }
 
-.balance{
- font-size:30px;
- font-weight:bold;
- color:#36e38b;
-}
+.balance{font-size:30px;font-weight:bold;color:#36e38b}
 
 .games-title{
  display:flex;
  justify-content:space-between;
- align-items:center;
+ align-items:center
 }
 
 .games-grid{
  display:grid;
  grid-template-columns:repeat(4,minmax(0,1fr));
  gap:10px;
- margin-top:15px;
+ margin-top:15px
 }
 
 .game-card{
@@ -133,49 +66,29 @@ button:disabled{
  border:1px solid #263044;
  border-radius:12px;
  padding:10px;
- min-width:0;
+ min-width:0
 }
 
-.game-icon{
- font-size:32px;
- margin-bottom:5px;
- text-align:center;
-}
-
-.game-name{
- font-size:15px;
- font-weight:bold;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
-}
+.game-icon{font-size:32px;margin-bottom:5px;text-align:center}
+.game-name{font-size:15px;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .game-description{
  color:#9ca3af;
  font-size:11px;
  margin:5px 0 8px;
  line-height:1.35;
- min-height:30px;
+ min-height:30px
 }
 
-.game-card button{
- font-size:11px;
- padding:8px 5px;
- margin:3px 0;
-}
+.game-card button{font-size:11px;padding:8px 5px;margin:3px 0}
 
-.details-box{
- background:#0b1220;
- border-radius:12px;
- padding:15px;
- margin-top:10px;
-}
+.details-box{background:#0b1220;border-radius:12px;padding:15px;margin-top:10px}
 
 .number-grid{
  display:grid;
  grid-template-columns:repeat(10,1fr);
  gap:6px;
- margin-top:15px;
+ margin-top:15px
 }
 
 .num{
@@ -183,20 +96,12 @@ button:disabled{
  color:white;
  border:1px solid #344054;
  padding:10px 0;
- margin:0;
+ margin:0
 }
 
-.num.selected{
- background:#20c878;
- color:#06130b;
-}
+.num.selected{background:#20c878;color:#06130b}
 
-.result-numbers{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
- margin-top:12px;
-}
+.result-numbers{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
 .result-ball{
  width:42px;
@@ -207,36 +112,18 @@ button:disabled{
  align-items:center;
  background:#263044;
  color:white;
- font-weight:bold;
+ font-weight:bold
 }
 
-.result-ball.hit{
- background:#20c878;
- color:#06130b;
-}
+.result-ball.hit{background:#20c878;color:#06130b}
 
-table{
- width:100%;
- border-collapse:collapse;
- margin-top:10px;
-}
-
-th,td{
- padding:9px 5px;
- border-bottom:1px solid #263044;
- text-align:left;
- font-size:13px;
-}
-
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:9px 5px;border-bottom:1px solid #263044;text-align:left;font-size:13px}
 .pending{color:#ffd166}
 .approved{color:#36e38b}
 .rejected{color:#ff6b6b}
 
-.top-actions{
- display:flex;
- align-items:center;
- gap:8px;
-}
+.top-actions{display:flex;align-items:center;gap:8px}
 
 .deposit-top{
  width:auto!important;
@@ -244,16 +131,11 @@ th,td{
  padding:9px 15px!important;
  border-radius:9px!important;
  font-size:14px!important;
- white-space:nowrap;
+ white-space:nowrap
 }
 
 /* LUDO */
-
-.ludo-board-wrap{
- margin-top:15px;
- display:flex;
- justify-content:center;
-}
+.ludo-board-wrap{margin-top:15px;display:flex;justify-content:center}
 
 .ludo-board{
  width:min(92vw,520px);
@@ -264,7 +146,7 @@ th,td{
  background:#f5f5f5;
  border:5px solid #263044;
  border-radius:12px;
- overflow:hidden;
+ overflow:hidden
 }
 
 .ludo-cell{
@@ -272,7 +154,7 @@ th,td{
  position:relative;
  display:flex;
  align-items:center;
- justify-content:center;
+ justify-content:center
 }
 
 .ludo-safe{background:#dbeafe}
@@ -283,7 +165,7 @@ th,td{
  #6ee7a8 0 50%,
  #ffe66d 0 75%,
  #74a7ff 0
- );
+ )
 }
 
 .ludo-home{
@@ -293,7 +175,7 @@ th,td{
  grid-template-rows:1fr 1fr;
  padding:10px;
  gap:8px;
- border:2px solid #111827;
+ border:2px solid #111827
 }
 
 .ludo-home.red{background:#ff7676}
@@ -306,7 +188,7 @@ th,td{
  border-radius:10px;
  display:flex;
  align-items:center;
- justify-content:center;
+ justify-content:center
 }
 
 .ludo-pawn{
@@ -315,7 +197,7 @@ th,td{
  border-radius:50%;
  border:2px solid #111827;
  box-shadow:0 2px 4px #0005;
- cursor:pointer;
+ cursor:pointer
 }
 
 .ludo-pawn.red{background:#ef4444}
@@ -327,4 +209,663 @@ th,td{
  display:flex;
  gap:10px;
  align-items:center;
- margin-top:12
+ margin-top:12px
+}
+
+.ludo-dice{
+ font-size:28px;
+ font-weight:bold;
+ text-align:center;
+ background:#0b1220;
+ border:1px solid #344054;
+ border-radius:12px;
+ padding:8px 18px;
+ min-width:75px
+}
+
+.ludo-players{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:6px;
+ margin-top:10px
+}
+
+.ludo-player{
+ padding:8px;
+ border-radius:8px;
+ background:#182235;
+ font-size:12px
+}
+
+.ludo-player.active{outline:2px solid #20c878}
+
+.ludo-log{
+ margin-top:10px;
+ max-height:120px;
+ overflow:auto
+}
+
+@media(max-width:700px){
+ .container{padding:10px}
+ header{padding:7px 0}
+
+ .games-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px
+ }
+
+ .game-card{padding:6px;border-radius:9px}
+ .game-icon{font-size:23px}
+ .game-name{font-size:10px}
+
+ .game-description{
+  font-size:11px;
+  line-height:1.25;
+  min-height:42px
+ }
+
+ .game-card button{
+  font-size:10px;
+  padding:7px 3px
+ }
+
+ .card{padding:12px;border-radius:12px}
+
+ .balance-card{
+  flex-direction:column;
+  align-items:stretch
+ }
+
+ .number-grid{grid-template-columns:repeat(8,1fr)}
+ .row{flex-direction:column}
+ .ludo-controls{flex-wrap:wrap}
+ .ludo-players{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<div class="top-actions">
+
+<button id="depositTopBtn"
+class="deposit-top hidden"
+onclick="showDeposit()">
+💰 Deposit
+</button>
+
+<button id="logoutBtn"
+class="secondary hidden"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+</header>
+
+
+<!-- LOGIN -->
+<div id="authBox" class="card">
+
+<h2>Login</h2>
+
+<input id="email"
+type="email"
+autocomplete="email"
+placeholder="Email">
+
+<input id="password"
+type="password"
+autocomplete="current-password"
+placeholder="Password">
+
+<div class="row">
+
+<button id="loginBtn"
+onclick="login()">
+Login
+</button>
+
+<button id="registerBtn"
+class="secondary"
+onclick="register()">
+Register
+</button>
+
+</div>
+
+<div id="authMessage"
+class="status">
+</div>
+
+</div>
+
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+
+<!-- BALANCE -->
+<div class="card balance-card">
+
+<div>
+<div class="small">Your Balance</div>
+
+<div id="balance"
+class="balance">
+0.00 ETB
+</div>
+</div>
+
+</div>
+
+
+<!-- GAMES -->
+<div class="card">
+
+<div class="games-title">
+<h2>🎮 Games</h2>
+<span class="small">Choose a game</span>
+</div>
+
+<div class="games-grid">
+
+
+<div class="game-card">
+<div class="game-icon">🎲</div>
+<div class="game-name">Ludo</div>
+<div class="game-description">Classic multiplayer Ludo.</div>
+
+<div class="free-game"
+style="background:#182235;border:1px solid #20c878;border-radius:8px;padding:6px;margin:5px 0;color:#36e38b;text-align:center;font-size:11px;font-weight:bold;">
+FREE
+</div>
+
+<button onclick="openGame('ludo')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🎱</div>
+<div class="game-name">Keno</div>
+<div class="game-description">Pick numbers and play Keno.</div>
+<button onclick="openGame('keno')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🎱</div>
+<div class="game-name">Bingo</div>
+<div class="game-description">Pick numbers and play Bingo.</div>
+<button onclick="openGame('bingo')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🃏</div>
+<div class="game-name">Conquer</div>
+<div class="game-description">Fast card game battles.</div>
+<button onclick="openGame('conquer')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">⚡</div>
+<div class="game-name">Fast Bingo</div>
+<div class="game-description">Quick Bingo rounds.</div>
+<button onclick="openGame('fastbingo')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">♠️</div>
+<div class="game-name">Crazy 8</div>
+<div class="game-description">Classic Crazy 8 card game.</div>
+<button onclick="openGame('crazy8')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">⚽</div>
+<div class="game-name">Trace Soccer</div>
+<div class="game-description">Soccer challenge game.</div>
+<button onclick="openGame('soccer')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🌃</div>
+<div class="game-name">Night Hunter</div>
+<div class="game-description">Night-time adventure.</div>
+<button onclick="openGame('night')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🧠</div>
+<div class="game-name">Memory Game</div>
+<div class="game-description">Test your memory skills.</div>
+<button onclick="openGame('memory')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🎯</div>
+<div class="game-name">Lat Lat</div>
+<div class="game-description">Simple quick-play game.</div>
+<button onclick="openGame('latlat')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">✋</div>
+<div class="game-name">Rock Paper Scissors</div>
+<div class="game-description">Rock, paper or scissors.</div>
+<button onclick="openGame('rps')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🃏</div>
+<div class="game-name">Uno</div>
+<div class="game-description">Match cards and win.</div>
+<button onclick="openGame('uno')">PLAY</button>
+</div>
+
+
+<div class="game-card">
+<div class="game-icon">🔴</div>
+<div class="game-name">Connect 4</div>
+<div class="game-description">Connect four to win.</div>
+<button onclick="openGame('connect4')">PLAY</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- DETAILS -->
+<div class="card">
+
+<h2>📋 Game Details</h2>
+
+<div class="details-box">
+
+<strong>🎮 Games</strong>
+
+<p class="small">
+Choose any game above.
+Ludo is free to play and does not require balance.
+</p>
+
+</div>
+</div>
+
+
+<!-- DEPOSIT -->
+<div id="depositBox" class="card hidden">
+
+<h2>💰 Deposit</h2>
+
+<input id="depositAmount"
+type="number"
+min="1"
+placeholder="Amount (ETB)">
+
+<select id="depositMethod">
+<option value="Telebirr">Telebirr</option>
+<option value="CBE Birr">CBE Birr</option>
+<option value="Bank">Bank</option>
+</select>
+
+<input id="depositPhone"
+placeholder="Phone / Bank Account">
+
+<input id="depositReference"
+placeholder="Transaction Reference">
+
+<button onclick="makeDeposit()">
+SUBMIT DEPOSIT
+</button>
+
+<button class="secondary"
+onclick="hideDeposit()">
+CLOSE
+</button>
+
+<div id="depositMessage"
+class="status">
+</div>
+
+</div>
+
+
+<!-- DEPOSITS -->
+<div class="card">
+
+<h2>📜 My Deposits</h2>
+
+<table>
+<thead>
+<tr>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="depositList"></tbody>
+</table>
+
+</div>
+
+
+<!-- KENO -->
+<div id="kenoGame" class="card hidden">
+
+<h2>🎱 KENO</h2>
+
+<div class="small">
+Select up to 10 numbers
+</div>
+
+<div id="numberGrid"
+class="number-grid">
+</div>
+
+<div class="row">
+
+<input id="betAmount"
+type="number"
+min="1"
+placeholder="Bet amount">
+
+<button id="playBtn"
+onclick="playKeno()">
+PLAY
+</button>
+
+</div>
+
+<div id="gameMessage"
+class="status">
+</div>
+
+<div id="resultNumbers"
+class="result-numbers">
+</div>
+
+</div>
+
+
+<!-- LUDO -->
+<div id="ludoGame" class="card hidden">
+
+<div class="games-title">
+
+<h2>🎲 LUDO</h2>
+
+<span class="small">FREE PLAY</span>
+
+</div>
+
+<div class="status success">
+Ludo is free to play. Balance is not required.
+</div>
+
+<div id="ludoMessage"
+class="status">
+Roll the dice to start.
+</div>
+
+<div id="ludoPlayers"
+class="ludo-players">
+</div>
+
+<div class="ludo-board-wrap">
+
+<div id="ludoBoard"
+class="ludo-board">
+</div>
+
+</div>
+
+<div class="ludo-controls">
+
+<button id="ludoRollBtn"
+onclick="ludoRoll()">
+🎲 ROLL DICE
+</button>
+
+<div id="ludoDice"
+class="ludo-dice">
+—
+</div>
+
+<button class="secondary"
+onclick="closeLudo()">
+BACK
+</button>
+
+</div>
+
+<div id="ludoLog"
+class="ludo-log status">
+</div>
+
+</div>
+
+
+<!-- OTHER GAMES -->
+<div id="otherGame" class="card hidden">
+
+<h2 id="otherGameTitle">
+Game
+</h2>
+
+<div id="otherGameMessage"
+class="status">
+</div>
+
+<button class="secondary"
+onclick="closeOtherGame()">
+BACK TO GAMES
+</button>
+
+</div>
+
+
+<!-- ADMIN -->
+<div id="adminPanel" class="card hidden">
+
+<h2>🔐 Admin Panel</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>User</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="adminDeposits"></tbody>
+
+</table>
+
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://eizpxgwkottliyvvhlar.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+
+/* VARIABLES */
+
+let currentUser=null;
+let selectedNumbers=[];
+let isDrawing=false;
+let ludoState=null;
+
+
+/* HELPERS */
+
+function show(id,message,type=""){
+
+const element=document.getElementById(id);
+
+if(!element)return;
+
+element.textContent=message;
+element.className="status "+type;
+
+}
+
+
+function wait(ms){
+
+return new Promise(
+resolve=>setTimeout(resolve,ms)
+);
+
+}
+
+
+/* UI */
+
+function setLoggedInUI(loggedIn){
+
+document
+.getElementById("authBox")
+.classList
+.toggle("hidden",loggedIn);
+
+document
+.getElementById("app")
+.classList
+.toggle("hidden",!loggedIn);
+
+document
+.getElementById("logoutBtn")
+.classList
+.toggle("hidden",!loggedIn);
+
+document
+.getElementById("depositTopBtn")
+.classList
+.toggle("hidden",!loggedIn);
+
+}
+
+
+/* REGISTER */
+
+async function register(){
+
+const email=document
+.getElementById("email")
+.value.trim();
+
+const password=document
+.getElementById("password")
+.value;
+
+if(!email){
+show("authMessage","Please enter your email.","error");
+return;
+}
+
+if(!password){
+show("authMessage","Please enter your password.","error");
+return;
+}
+
+if(password.length<6){
+show("authMessage","Password must be at least 6 characters.","error");
+return;
+}
+
+const button=document.getElementById("registerBtn");
+
+button.disabled=true;
+
+show("authMessage","Creating account...");
+
+try{
+
+const {data,error}=await supabaseClient.auth.signUp({
+email,
+password
+});
+
+if(error){
+show("authMessage",error.message,"error");
+return;
+}
+
+if(data.session){
+
+currentUser=data.session.user;
+
+await startApp();
+
+return;
+}
+
+show(
+"authMessage",
+"Registration successful. Please login.",
+"success"
+);
+
+}catch(error){
+
+show("authMessage",error.message,"error");
+
+}finally{
+
+button.disabled=false;
+
+}
+
+}
+
+
+/* LOGIN */
+
+async function login(){
+
+const email=document
+.getElementById("email")
+.value.trim();
+
+const password=document
+.getElementById("password")
+.value;
+
+if(!email){
+show("authMessage","Please enter your
