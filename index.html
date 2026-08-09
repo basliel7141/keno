@@ -8,7 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -43,7 +45,9 @@ header{
   display:none!important;
 }
 
-input,select,button{
+input,
+select,
+button{
   width:100%;
   padding:13px;
   margin:6px 0;
@@ -52,7 +56,8 @@ input,select,button{
   font-size:15px;
 }
 
-input,select{
+input,
+select{
   background:#0b1220;
   color:white;
 }
@@ -135,7 +140,7 @@ button:disabled{
 
 .games-grid{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:10px;
   margin-top:15px;
 }
@@ -233,7 +238,8 @@ table{
   margin-top:10px;
 }
 
-th,td{
+th,
+td{
   padding:9px 5px;
   border-bottom:1px solid #263044;
   text-align:left;
@@ -267,17 +273,148 @@ th,td{
   white-space:nowrap;
 }
 
-/* FREE GAME */
-.free-game{
-  background:#182235;
-  border:1px solid #20c878;
+/* =========================
+   LUDO
+========================= */
+
+.ludo-board-wrap{
+  margin-top:15px;
+  display:flex;
+  justify-content:center;
+}
+
+.ludo-board{
+  width:min(92vw,520px);
+  aspect-ratio:1/1;
+  display:grid;
+  grid-template-columns:repeat(15,1fr);
+  grid-template-rows:repeat(15,1fr);
+  background:#f5f5f5;
+  border:5px solid #263044;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.ludo-cell{
+  border:1px solid #d5d9df;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.ludo-safe{
+  background:#dbeafe;
+}
+
+.ludo-center{
+  background:conic-gradient(
+    #ff7676 0 25%,
+    #6ee7a8 0 50%,
+    #ffe66d 0 75%,
+    #74a7ff 0
+  );
+}
+
+.ludo-home{
+  z-index:3;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  padding:10px;
+  gap:8px;
+  border:2px solid #111827;
+}
+
+.ludo-home.red{
+  background:#ff7676;
+}
+
+.ludo-home.green{
+  background:#6ee7a8;
+}
+
+.ludo-home.yellow{
+  background:#ffe66d;
+}
+
+.ludo-home.blue{
+  background:#74a7ff;
+}
+
+.ludo-yard{
+  background:rgba(255,255,255,.85);
   border-radius:10px;
-  padding:8px;
-  margin-top:8px;
-  color:#36e38b;
-  text-align:center;
-  font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.ludo-pawn{
+  width:65%;
+  aspect-ratio:1;
+  border-radius:50%;
+  border:2px solid #111827;
+  box-shadow:0 2px 4px #0005;
+  cursor:pointer;
+}
+
+.ludo-pawn.red{
+  background:#ef4444;
+}
+
+.ludo-pawn.green{
+  background:#22c55e;
+}
+
+.ludo-pawn.yellow{
+  background:#eab308;
+}
+
+.ludo-pawn.blue{
+  background:#3b82f6;
+}
+
+.ludo-controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:12px;
+}
+
+.ludo-dice{
+  font-size:28px;
   font-weight:bold;
+  text-align:center;
+  background:#0b1220;
+  border:1px solid #344054;
+  border-radius:12px;
+  padding:8px 18px;
+  min-width:75px;
+}
+
+.ludo-players{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-top:10px;
+}
+
+.ludo-player{
+  padding:8px;
+  border-radius:8px;
+  background:#182235;
+  font-size:12px;
+}
+
+.ludo-player.active{
+  outline:2px solid #20c878;
+}
+
+.ludo-log{
+  margin-top:10px;
+  max-height:120px;
+  overflow:auto;
 }
 
 @media(max-width:700px){
@@ -291,8 +428,8 @@ th,td{
   }
 
   .games-grid{
-    grid-template-columns:repeat(6,minmax(0,1fr));
-    gap:5px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
   }
 
   .game-card{
@@ -302,7 +439,6 @@ th,td{
 
   .game-icon{
     font-size:23px;
-    margin-bottom:3px;
   }
 
   .game-name{
@@ -310,15 +446,14 @@ th,td{
   }
 
   .game-description{
-    font-size:8px;
-    line-height:1.2;
-    min-height:28px;
-    margin:3px 0;
+    font-size:11px;
+    line-height:1.25;
+    min-height:42px;
   }
 
   .game-card button{
-    font-size:8px;
-    padding:6px 2px;
+    font-size:10px;
+    padding:7px 3px;
   }
 
   .card{
@@ -338,6 +473,14 @@ th,td{
   .row{
     flex-direction:column;
   }
+
+  .ludo-controls{
+    flex-wrap:wrap;
+  }
+
+  .ludo-players{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 </style>
 </head>
@@ -350,7 +493,8 @@ th,td{
 <div class="top-actions">
 
 <button
-  class="deposit-top"
+  id="depositTopBtn"
+  class="deposit-top hidden"
   onclick="showDeposit()">
   💰 Deposit
 </button>
@@ -364,6 +508,11 @@ th,td{
 
 </div>
 </header>
+
+
+<!-- =========================
+     LOGIN / REGISTER
+========================= -->
 
 <div id="authBox" class="card">
 
@@ -398,11 +547,22 @@ th,td{
 
 </div>
 
-<div id="authMessage" class="status"></div>
+<div
+  id="authMessage"
+  class="status">
+</div>
 
 </div>
 
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
 <div id="app" class="hidden">
+
+
+<!-- BALANCE -->
 
 <div class="card balance-card">
 
@@ -412,13 +572,18 @@ th,td{
 Your Balance
 </div>
 
-<div id="balance" class="balance">
-0.00 ETB
+<div
+  id="balance"
+  class="balance">
+  0.00 ETB
 </div>
 
 </div>
 
 </div>
+
+
+<!-- GAMES -->
 
 <div class="card">
 
@@ -432,7 +597,11 @@ Choose a game
 
 </div>
 
+
 <div class="games-grid">
+
+
+<!-- LUDO -->
 
 <div class="game-card">
 
@@ -446,8 +615,18 @@ Ludo
 Classic multiplayer Ludo.
 </div>
 
-<div class="free-game">
-FREE • 0 BALANCE
+<div class="free-game"
+style="
+background:#182235;
+border:1px solid #20c878;
+border-radius:8px;
+padding:6px;
+margin:5px 0;
+color:#36e38b;
+text-align:center;
+font-size:11px;
+font-weight:bold;">
+FREE
 </div>
 
 <button onclick="openGame('ludo')">
@@ -455,6 +634,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- KENO -->
 
 <div class="game-card">
 
@@ -474,6 +656,9 @@ PLAY
 
 </div>
 
+
+<!-- BINGO -->
+
 <div class="game-card">
 
 <div class="game-icon">🎱</div>
@@ -491,6 +676,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- CONQUER -->
 
 <div class="game-card">
 
@@ -510,6 +698,9 @@ PLAY
 
 </div>
 
+
+<!-- FAST BINGO -->
+
 <div class="game-card">
 
 <div class="game-icon">⚡</div>
@@ -527,6 +718,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- CRAZY 8 -->
 
 <div class="game-card">
 
@@ -546,6 +740,9 @@ PLAY
 
 </div>
 
+
+<!-- SOCCER -->
+
 <div class="game-card">
 
 <div class="game-icon">⚽</div>
@@ -563,6 +760,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- NIGHT -->
 
 <div class="game-card">
 
@@ -582,6 +782,9 @@ PLAY
 
 </div>
 
+
+<!-- MEMORY -->
+
 <div class="game-card">
 
 <div class="game-icon">🧠</div>
@@ -599,6 +802,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- LAT LAT -->
 
 <div class="game-card">
 
@@ -618,6 +824,9 @@ PLAY
 
 </div>
 
+
+<!-- RPS -->
+
 <div class="game-card">
 
 <div class="game-icon">✋</div>
@@ -635,6 +844,9 @@ PLAY
 </button>
 
 </div>
+
+
+<!-- UNO -->
 
 <div class="game-card">
 
@@ -654,6 +866,9 @@ PLAY
 
 </div>
 
+
+<!-- CONNECT 4 -->
+
 <div class="game-card">
 
 <div class="game-icon">🔴</div>
@@ -672,8 +887,12 @@ PLAY
 
 </div>
 
+
 </div>
 </div>
+
+
+<!-- DETAILS -->
 
 <div class="card">
 
@@ -689,14 +908,21 @@ PLAY
 
 <p class="small">
 Choose any game above.
-Ludo is available as a free game and can be played with 0 balance.
+Ludo is free to play and does not require balance.
 </p>
 
 </div>
 
 </div>
 
-<div id="depositBox" class="card hidden">
+
+<!-- =========================
+     DEPOSIT
+========================= -->
+
+<div
+  id="depositBox"
+  class="card hidden">
 
 <h2>
 💰 Deposit
@@ -742,9 +968,17 @@ SUBMIT DEPOSIT
 CLOSE
 </button>
 
-<div id="depositMessage" class="status"></div>
+<div
+  id="depositMessage"
+  class="status">
+</div>
 
 </div>
+
+
+<!-- =========================
+     MY DEPOSITS
+========================= -->
 
 <div class="card">
 
@@ -755,20 +989,30 @@ CLOSE
 <table>
 
 <thead>
+
 <tr>
 <th>Amount</th>
 <th>Method</th>
 <th>Status</th>
 </tr>
+
 </thead>
 
-<tbody id="depositList"></tbody>
+<tbody id="depositList">
+</tbody>
 
 </table>
 
 </div>
 
-<div id="kenoGame" class="card hidden">
+
+<!-- =========================
+     KENO
+========================= -->
+
+<div
+  id="kenoGame"
+  class="card hidden">
 
 <h2>
 🎱 KENO
@@ -799,7 +1043,10 @@ Select up to 10 numbers
 
 </div>
 
-<div id="gameMessage" class="status"></div>
+<div
+  id="gameMessage"
+  class="status">
+</div>
 
 <div
   id="resultNumbers"
@@ -808,75 +1055,113 @@ Select up to 10 numbers
 
 </div>
 
-<div id="otherGame" class="card hidden">
 
-<h2 id="otherGameTitle">
-Game
+<!-- =========================
+     LUDO
+========================= -->
+
+<div
+  id="ludoGame"
+  class="card hidden">
+
+<div class="games-title">
+
+<h2>
+🎲 LUDO
 </h2>
 
-<div id="otherGameMessage" class="status"></div>
+<span class="small">
+FREE PLAY
+</span>
 
-<div id="ludoBoard" class="hidden">
-
-<h3>🎲 LUDO — FREE MODE</h3>
-
-<div class="free-game">
-PLAY FREE • BALANCE NOT REQUIRED
 </div>
 
-<div class="details-box">
-
-<p>
-Ludo is free to play.
-</p>
-
-<p class="small">
-You can play even when your balance is 0.00 ETB.
-No deposit is required to enter free mode.
-</p>
-
-<div class="row">
-
-<button onclick="startLudo()">
-START LUDO
-</button>
-
-<button
-  class="secondary"
-  onclick="resetLudo()">
-RESET
-</button>
-
+<div
+  class="status success">
+Ludo is free to play. Balance is not required.
 </div>
 
 <div
   id="ludoMessage"
   class="status">
-Ready to play.
+Roll the dice to start.
 </div>
 
 <div
-  id="ludoArea"
-  style="
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:8px;
-    margin-top:12px;">
+  id="ludoPlayers"
+  class="ludo-players">
+</div>
+
+<div class="ludo-board-wrap">
+
+<div
+  id="ludoBoard"
+  class="ludo-board">
 </div>
 
 </div>
 
+<div class="ludo-controls">
+
+<button
+  id="ludoRollBtn"
+  onclick="ludoRoll()">
+  🎲 ROLL DICE
+</button>
+
+<div
+  id="ludoDice"
+  class="ludo-dice">
+  —
 </div>
 
 <button
-class="secondary"
-onclick="closeOtherGame()">
+  class="secondary"
+  onclick="closeLudo()">
+  BACK
+</button>
+
+</div>
+
+<div
+  id="ludoLog"
+  class="ludo-log status">
+</div>
+
+</div>
+
+
+<!-- OTHER GAMES -->
+
+<div
+  id="otherGame"
+  class="card hidden">
+
+<h2 id="otherGameTitle">
+Game
+</h2>
+
+<div
+  id="otherGameMessage"
+  class="status">
+</div>
+
+<button
+  class="secondary"
+  onclick="closeOtherGame()">
 BACK TO GAMES
 </button>
 
 </div>
 
-<div id="adminPanel" class="card hidden">
+
+<!-- =========================
+     ADMIN
+========================= -->
+
+<div
+  id="adminPanel"
+  class="card hidden">
 
 <h2>
 🔐 Admin Panel
@@ -896,17 +1181,24 @@ BACK TO GAMES
 
 </thead>
 
-<tbody id="adminDeposits"></tbody>
+<tbody id="adminDeposits">
+</tbody>
 
 </table>
 
 </div>
 
+
 </div>
 </div>
+
 
 <script>
 
+/* =========================
+   SUPABASE
+========================= */
+
 const SUPABASE_URL =
 "https://eizpxgwkottliyvvhlar.supabase.co";
 
@@ -919,595 +1211,17 @@ supabase.createClient(
   SUPABASE_KEY
 );
 
-let currentUser=null;
-let selectedNumbers=[];
-let isDrawing=false;
 
-function show(id,message,type=""){
-
-const element =
-document.getElementById(id);
-
-if(!element)return;
-
-element.textContent=message;
-
-element.className =
-"status "+type;
-
-}
-
-async function register(){
-
-const email =
-document.getElementById("email")
-.value.trim();
-
-const password =
-document.getElementById("password")
-.value;
-
-if(!email){
-
-show(
-"authMessage",
-"Please enter your email.",
-"error"
-);
-
-return;
-}
-
-if(!password){
-
-show(
-"authMessage",
-"Please enter your password.",
-"error"
-);
-
-return;
-}
-
-if(password.length<6){
-
-show(
-"authMessage",
-"Password must be at least 6 characters.",
-"error"
-);
-
-return;
-}
-
-const button =
-document.getElementById("registerBtn");
-
-button.disabled=true;
-
-show(
-"authMessage",
-"Creating account..."
-);
-
-try{
-
-const {data,error} =
-await supabaseClient.auth.signUp({
-email,
-password
-});
-
-if(error){
-
-show(
-"authMessage",
-error.message,
-"error"
-);
-
-return;
-}
-
-if(data.session){
-
-currentUser =
-data.session.user;
-
-show(
-"authMessage",
-"Account created. Opening...",
-"success"
-);
-
-await startApp();
-
-return;
-}
-
-show(
-"authMessage",
-"Registration successful. Now login with your email and password.",
-"success"
-);
-
-}catch(error){
-
-show(
-"authMessage",
-error.message,
-"error"
-);
-
-}finally{
-
-button.disabled=false;
-
-}
-
-}
-
-async function login(){
-
-const email =
-document.getElementById("email")
-.value.trim();
-
-const password =
-document.getElementById("password")
-.value;
-
-if(!email){
-
-show(
-"authMessage",
-"Please enter your email.",
-"error"
-);
-
-return;
-}
-
-if(!password){
-
-show(
-"authMessage",
-"Please enter your password.",
-"error"
-);
-
-return;
-}
-
-const button =
-document.getElementById("loginBtn");
-
-button.disabled=true;
-
-show(
-"authMessage",
-"Logging in..."
-);
-
-try{
-
-const {data,error} =
-await supabaseClient.auth
-.signInWithPassword({
-email,
-password
-});
-
-if(error){
-
-show(
-"authMessage",
-error.message,
-"error"
-);
-
-return;
-}
-
-if(!data || !data.user){
-
-show(
-"authMessage",
-"Login failed.",
-"error"
-);
-
-return;
-}
-
-currentUser =
-data.user;
-
-document
-.getElementById("authBox")
-.classList.add("hidden");
-
-document
-.getElementById("app")
-.classList.remove("hidden");
-
-document
-.getElementById("logoutBtn")
-.classList.remove("hidden");
-
-show(
-"authMessage",
-"Login successful.",
-"success"
-);
-
-createNumbers();
-
-loadBalance()
-.catch(error =>
-console.log(
-"Balance error:",
-error
-)
-);
-
-loadDeposits()
-.catch(error =>
-console.log(
-"Deposit error:",
-error
-)
-);
-
-checkAdmin()
-.catch(error =>
-console.log(
-"Admin error:",
-error
-)
-);
-
-}catch(error){
-
-show(
-"authMessage",
-error.message,
-"error"
-);
-
-}finally{
-
-button.disabled=false;
-
-}
-
-}
-
-async function startApp(){
-
-document
-.getElementById("authBox")
-.classList.add("hidden");
-
-document
-.getElementById("app")
-.classList.remove("hidden");
-
-document
-.getElementById("logoutBtn")
-.classList.remove("hidden");
-
-createNumbers();
-
-try{
-await loadBalance();
-}catch(error){
-console.log("Balance:",error);
-}
-
-try{
-await loadDeposits();
-}catch(error){
-console.log("Deposits:",error);
-}
-
-try{
-await checkAdmin();
-}catch(error){
-console.log("Admin:",error);
-}
-
-}
-
-async function logout(){
-
-try{
-await supabaseClient.auth.signOut();
-}catch(error){
-console.log(error);
-}
-
-currentUser=null;
-
-document
-.getElementById("app")
-.classList.add("hidden");
-
-document
-.getElementById("authBox")
-.classList.remove("hidden");
-
-document
-.getElementById("logoutBtn")
-.classList.add("hidden");
-
-document
-.getElementById("email")
-.value="";
-
-document
-.getElementById("password")
-.value="";
-
-}
-
-async function loadBalance(){
-
-if(!currentUser)return;
-
-const {data,error} =
-await supabaseClient
-.from("profiles")
-.select("balance")
-.eq("id",currentUser.id)
-.maybeSingle();
-
-if(error){
-
-console.log(
-"Balance database error:",
-error
-);
-
-return;
-}
-
-const balance =
-Number(data?.balance||0);
-
-document
-.getElementById("balance")
-.textContent =
-balance.toFixed(2)+" ETB";
-
-}
-
-function showDeposit(){
-
-document
-.getElementById("depositBox")
-.classList.remove("hidden");
-
-document
-.getElementById("depositBox")
-.scrollIntoView({
-behavior:"smooth"
-});
-
-}
-
-function hideDeposit(){
-
-document
-.getElementById("depositBox")
-.classList.add("hidden");
-
-}
-
-async function makeDeposit(){
-
-if(!currentUser){
-
-show(
-"depositMessage",
-"Please login first.",
-"error"
-);
-
-return;
-}
-
-const amount =
-Number(
-document
-.getElementById("depositAmount")
-.value
-);
-
-const method =
-document
-.getElementById("depositMethod")
-.value;
-
-const phone =
-document
-.getElementById("depositPhone")
-.value.trim();
-
-const reference =
-document
-.getElementById("depositReference")
-.value.trim();
-
-if(!amount || amount<=0){
-
-show(
-"depositMessage",
-"Enter a valid amount.",
-"error"
-);
-
-return;
-}
-
-if(!phone){
-
-show(
-"depositMessage",
-"Enter phone or bank account.",
-"error"
-);
-
-return;
-}
-
-if(!reference){
-
-show(
-"depositMessage",
-"Enter transaction reference.",
-"error"
-);
-
-return;
-}
-
-show(
-"depositMessage",
-"Submitting..."
-);
-
-const fullReference =
-"Phone/Bank: "+
-phone+
-" | Ref: "+
-reference;
-
-const {error} =
-await supabaseClient
-.from("deposits")
-.insert({
-
-user_id:currentUser.id,
-amount,
-method,
-reference:fullReference,
-status:"pending"
-
-});
-
-if(error){
-
-show(
-"depositMessage",
-error.message,
-"error"
-);
-
-return;
-}
-
-show(
-"depositMessage",
-"Deposit submitted. Waiting for admin approval.",
-"success"
-);
-
-document
-.getElementById("depositAmount")
-.value="";
-
-document
-.getElementById("depositPhone")
-.value="";
-
-document
-.getElementById("depositReference")
-.value="";
-
-try{
-await loadDeposits();
-}catch(error){
-console.log(error);
-}
-
-}
-
-async function loadDeposits(){
-
-if(!currentUser)return;
-
-const {data,error} =
-await supabaseClient
-.from("deposits")
-.select("*")
-.eq("user_id",currentUser.id)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-if(error){
-
-console.log(
-"Deposits database error:",
-error
-);
-
-return;
-}
-
-const list =
-document.getElementById(
-"depositList"
-);
-
-list.innerHTML="";
-
-(data||[]).forEach(item=>{
-
-const tr =
-document.createElement("tr");
-
-tr.innerHTML=`
-
-<td>
-${Number(item.amount).toFixed(2)} ETB
-</td>
-
-<td>
-${item.method||""}
-</td>
-
-<td class="${item.status||""}">
-${item.status||"pending"}
-</td>
-
-`;
-
-list.appendChild(tr);
-
-});
-
-}<script>
-
-const SUPABASE_URL =
-"https://eizpxgwkottliyvvhlar.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+/* =========================
+   VARIABLES
+========================= */
 
 let currentUser = null;
+
 let selectedNumbers = [];
+
 let isDrawing = false;
+
 let ludoState = null;
 
 
@@ -1515,16 +1229,76 @@ let ludoState = null;
    HELPERS
 ========================= */
 
-function show(id,message,type=""){
-  const el=document.getElementById(id);
-  if(!el)return;
+function show(
+  id,
+  message,
+  type=""
+){
 
-  el.textContent=message;
-  el.className="status "+type;
+  const element =
+    document.getElementById(id);
+
+  if(!element){
+    return;
+  }
+
+  element.textContent =
+    message;
+
+  element.className =
+    "status " + type;
 }
 
+
 function wait(ms){
-  return new Promise(resolve=>setTimeout(resolve,ms));
+
+  return new Promise(
+    resolve => setTimeout(resolve,ms)
+  );
+
+}
+
+
+/* =========================
+   UI
+========================= */
+
+function setLoggedInUI(
+  loggedIn
+){
+
+  document
+    .getElementById("authBox")
+    .classList
+    .toggle(
+      "hidden",
+      loggedIn
+    );
+
+  document
+    .getElementById("app")
+    .classList
+    .toggle(
+      "hidden",
+      !loggedIn
+    );
+
+  document
+    .getElementById("logoutBtn")
+    .classList
+    .toggle(
+      "hidden",
+      !loggedIn
+    );
+
+  document
+    .getElementById("depositTopBtn")
+    .classList
+    .toggle(
+      "hidden",
+      !loggedIn
+    );
+
 }
 
 
@@ -1534,43 +1308,56 @@ function wait(ms){
 
 async function register(){
 
-  const email=document
-    .getElementById("email")
-    .value.trim();
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
-  const password=document
-    .getElementById("password")
-    .value;
+  const password =
+    document
+      .getElementById("password")
+      .value;
 
   if(!email){
+
     show(
       "authMessage",
       "Please enter your email.",
       "error"
     );
+
     return;
   }
 
   if(!password){
+
     show(
       "authMessage",
       "Please enter your password.",
       "error"
     );
+
     return;
   }
 
-  if(password.length<6){
+  if(password.length < 6){
+
     show(
       "authMessage",
       "Password must be at least 6 characters.",
       "error"
     );
+
     return;
   }
 
-  const btn=document.getElementById("registerBtn");
-  btn.disabled=true;
+  const button =
+    document.getElementById(
+      "registerBtn"
+    );
+
+  button.disabled = true;
 
   show(
     "authMessage",
@@ -1579,24 +1366,32 @@ async function register(){
 
   try{
 
-    const {data,error}=
-      await supabaseClient.auth.signUp({
-        email,
-        password
-      });
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signUp({
+          email,
+          password
+        });
 
     if(error){
+
       show(
         "authMessage",
         error.message,
         "error"
       );
+
       return;
     }
 
     if(data.session){
 
-      currentUser=data.session.user;
+      currentUser =
+        data.session.user;
 
       await startApp();
 
@@ -1605,7 +1400,7 @@ async function register(){
 
     show(
       "authMessage",
-      "Account created. Please login.",
+      "Registration successful. Please login.",
       "success"
     );
 
@@ -1619,9 +1414,10 @@ async function register(){
 
   }finally{
 
-    btn.disabled=false;
+    button.disabled = false;
 
   }
+
 }
 
 
@@ -1631,35 +1427,45 @@ async function register(){
 
 async function login(){
 
-  const email=document
-    .getElementById("email")
-    .value.trim();
+  const email =
+    document
+      .getElementById("email")
+      .value
+      .trim();
 
-  const password=document
-    .getElementById("password")
-    .value;
+  const password =
+    document
+      .getElementById("password")
+      .value;
 
   if(!email){
+
     show(
       "authMessage",
       "Please enter your email.",
       "error"
     );
+
     return;
   }
 
   if(!password){
+
     show(
       "authMessage",
       "Please enter your password.",
       "error"
     );
+
     return;
   }
 
-  const btn=document.getElementById("loginBtn");
+  const button =
+    document.getElementById(
+      "loginBtn"
+    );
 
-  btn.disabled=true;
+  button.disabled = true;
 
   show(
     "authMessage",
@@ -1668,40 +1474,43 @@ async function login(){
 
   try{
 
-    const {data,error}=
-      await supabaseClient.auth
-      .signInWithPassword({
-        email,
-        password
-      });
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
 
     if(error){
+
       show(
         "authMessage",
         error.message,
         "error"
       );
+
       return;
     }
 
-    if(!data?.user){
+    if(!data || !data.user){
+
       show(
         "authMessage",
         "Login failed.",
         "error"
       );
+
       return;
     }
 
-    currentUser=data.user;
+    currentUser =
+      data.user;
 
     await startApp();
-
-    show(
-      "authMessage",
-      "Login successful.",
-      "success"
-    );
 
   }catch(error){
 
@@ -1713,9 +1522,10 @@ async function login(){
 
   }finally{
 
-    btn.disabled=false;
+    button.disabled = false;
 
   }
+
 }
 
 
@@ -1725,23 +1535,49 @@ async function login(){
 
 async function startApp(){
 
-  document
-    .getElementById("authBox")
-    .classList.add("hidden");
-
-  document
-    .getElementById("app")
-    .classList.remove("hidden");
-
-  document
-    .getElementById("logoutBtn")
-    .classList.remove("hidden");
+  setLoggedInUI(true);
 
   createNumbers();
 
-  await loadBalance();
-  await loadDeposits();
-  await checkAdmin();
+  try{
+
+    await loadBalance();
+
+  }catch(error){
+
+    console.log(
+      "Balance error:",
+      error
+    );
+
+  }
+
+  try{
+
+    await loadDeposits();
+
+  }catch(error){
+
+    console.log(
+      "Deposit error:",
+      error
+    );
+
+  }
+
+  try{
+
+    await checkAdmin();
+
+  }catch(error){
+
+    console.log(
+      "Admin error:",
+      error
+    );
+
+  }
+
 }
 
 
@@ -1751,21 +1587,35 @@ async function startApp(){
 
 async function logout(){
 
-  await supabaseClient.auth.signOut();
+  try{
 
-  currentUser=null;
+    await supabaseClient
+      .auth
+      .signOut();
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+  currentUser = null;
+
+  setLoggedInUI(false);
 
   document
-    .getElementById("app")
-    .classList.add("hidden");
+    .getElementById("depositBox")
+    .classList
+    .add("hidden");
 
   document
-    .getElementById("authBox")
-    .classList.remove("hidden");
+    .getElementById("email")
+    .value = "";
 
   document
-    .getElementById("logoutBtn")
-    .classList.add("hidden");
+    .getElementById("password")
+    .value = "";
+
 }
 
 
@@ -1775,46 +1625,75 @@ async function logout(){
 
 async function loadBalance(){
 
-  if(!currentUser)return;
-
-  const {data,error}=
-    await supabaseClient
-      .from("profiles")
-      .select("balance")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-  if(error){
-    console.log(error);
+  if(!currentUser){
     return;
   }
 
-  const balance=
-    Number(data?.balance||0);
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq(
+        "id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+  if(error){
+
+    console.log(
+      "Balance database error:",
+      error
+    );
+
+    return;
+  }
+
+  const balance =
+    Number(
+      data?.balance || 0
+    );
 
   document
     .getElementById("balance")
-    .textContent=
-    balance.toFixed(2)+" ETB";
+    .textContent =
+      balance.toFixed(2) +
+      " ETB";
+
 }
 
 
 /* =========================
    DEPOSIT
-   SYSTEM STAYS AVAILABLE
 ========================= */
 
 function showDeposit(){
 
+  if(!currentUser){
+
+    show(
+      "authMessage",
+      "Please login first.",
+      "error"
+    );
+
+    return;
+  }
+
   document
     .getElementById("depositBox")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
   document
     .getElementById("depositBox")
     .scrollIntoView({
       behavior:"smooth"
     });
+
 }
 
 
@@ -1822,7 +1701,9 @@ function hideDeposit(){
 
   document
     .getElementById("depositBox")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
+
 }
 
 
@@ -1839,25 +1720,39 @@ async function makeDeposit(){
     return;
   }
 
-  const amount=Number(
+  const amount =
+    Number(
+      document
+        .getElementById(
+          "depositAmount"
+        )
+        .value
+    );
+
+  const method =
     document
-      .getElementById("depositAmount")
+      .getElementById(
+        "depositMethod"
+      )
+      .value;
+
+  const phone =
+    document
+      .getElementById(
+        "depositPhone"
+      )
       .value
-  );
+      .trim();
 
-  const method=document
-    .getElementById("depositMethod")
-    .value;
+  const reference =
+    document
+      .getElementById(
+        "depositReference"
+      )
+      .value
+      .trim();
 
-  const phone=document
-    .getElementById("depositPhone")
-    .value.trim();
-
-  const reference=document
-    .getElementById("depositReference")
-    .value.trim();
-
-  if(!amount || amount<=0){
+  if(!amount || amount <= 0){
 
     show(
       "depositMessage",
@@ -1879,29 +1774,190 @@ async function makeDeposit(){
     return;
   }
 
-  if(!<script>
+  if(!reference){
+
+    show(
+      "depositMessage",
+      "Enter transaction reference.",
+      "error"
+    );
+
+    return;
+  }
+
+  show(
+    "depositMessage",
+    "Submitting..."
+  );
+
+  const fullReference =
+    "Phone/Bank: " +
+    phone +
+    " | Ref: " +
+    reference;
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("deposits")
+      .insert({
+        user_id:currentUser.id,
+        amount:amount,
+        method:method,
+        reference:fullReference,
+        status:"pending"
+      });
+
+  if(error){
+
+    show(
+      "depositMessage",
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  show(
+    "depositMessage",
+    "Deposit submitted. Waiting for admin approval.",
+    "success"
+  );
+
+  document
+    .getElementById(
+      "depositAmount"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "depositPhone"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "depositReference"
+    )
+    .value = "";
+
+  await loadDeposits();
+
+}
+
 
 /* =========================
-   GAME OPEN / CLOSE
+   MY DEPOSITS
+========================= */
+
+async function loadDeposits(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("deposits")
+      .select("*")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+  if(error){
+
+    console.log(
+      "Deposits error:",
+      error
+    );
+
+    return;
+  }
+
+  const list =
+    document.getElementById(
+      "depositList"
+    );
+
+  list.innerHTML = "";
+
+  (data || []).forEach(
+    item => {
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+      tr.innerHTML = `
+        <td>
+          ${Number(item.amount).toFixed(2)} ETB
+        </td>
+
+        <td>
+          ${item.method || ""}
+        </td>
+
+        <td class="${item.status || "pending"}">
+          ${item.status || "pending"}
+        </td>
+      `;
+
+      list.appendChild(tr);
+
+    }
+  );
+
+}
+
+
+/* =========================
+   GAMES
 ========================= */
 
 function openGame(game){
 
   document
     .getElementById("kenoGame")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   document
     .getElementById("otherGame")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
-  if(game==="keno"){
+  document
+    .getElementById("ludoGame")
+    .classList
+    .add("hidden");
+
+  if(game === "ludo"){
+
+    ludoOpen();
+
+    return;
+  }
+
+  if(game === "keno"){
 
     document
       .getElementById("kenoGame")
-      .classList.remove("hidden");
-
-    createNumbers();
+      .classList
+      .remove("hidden");
 
     document
       .getElementById("kenoGame")
@@ -1912,29 +1968,8 @@ function openGame(game){
     return;
   }
 
-  document
-    .getElementById("otherGame")
-    .classList.remove("hidden");
+  const names = {
 
-  const title =
-    document.getElementById(
-      "otherGameTitle"
-    );
-
-  const message =
-    document.getElementById(
-      "otherGameMessage"
-    );
-
-  const ludoBoard =
-    document.getElementById(
-      "ludoBoard"
-    );
-
-  ludoBoard.classList.add("hidden");
-
-  const names={
-    ludo:"🎲 LUDO",
     bingo:"🎱 BINGO",
     conquer:"🃏 CONQUER",
     fastbingo:"⚡ FAST BINGO",
@@ -1946,27 +1981,34 @@ function openGame(game){
     rps:"✋ ROCK PAPER SCISSORS",
     uno:"🃏 UNO",
     connect4:"🔴 CONNECT 4"
+
   };
 
-  title.textContent =
-    names[game] || "GAME";
-
-  if(game==="ludo"){
-
-    ludoBoard.classList.remove("hidden");
-
-    message.textContent =
-      "Ludo is ready. You can play for free.";
-
-  }else{
-
-    message.textContent =
-      "This game is ready for the next game module.";
-
-  }
+  document
+    .getElementById(
+      "otherGameTitle"
+    )
+    .textContent =
+      names[game] || "Game";
 
   document
-    .getElementById("otherGame")
+    .getElementById(
+      "otherGameMessage"
+    )
+    .textContent =
+      "This game area is ready. The game can be built next.";
+
+  document
+    .getElementById(
+      "otherGame"
+    )
+    .classList
+    .remove("hidden");
+
+  document
+    .getElementById(
+      "otherGame"
+    )
     .scrollIntoView({
       behavior:"smooth"
     });
@@ -1977,8 +2019,11 @@ function openGame(game){
 function closeOtherGame(){
 
   document
-    .getElementById("otherGame")
-    .classList.add("hidden");
+    .getElementById(
+      "otherGame"
+    )
+    .classList
+    .add("hidden");
 
 }
 
@@ -1994,48 +2039,64 @@ function createNumbers(){
       "numberGrid"
     );
 
-  if(!grid)return;
+  if(!grid){
+    return;
+  }
 
-  grid.innerHTML="";
+  grid.innerHTML = "";
 
-  selectedNumbers=[];
+  selectedNumbers = [];
 
-  for(let i=1;i<=80;i++){
+  for(
+    let i = 1;
+    i <= 80;
+    i++
+  ){
 
     const button =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
-    button.className="num";
+    button.className =
+      "num";
 
-    button.textContent=i;
+    button.textContent =
+      i;
 
-    button.onclick=()=>{
+    button.onclick = () => {
 
-      if(isDrawing)return;
+      if(isDrawing){
+        return;
+      }
 
       if(
-        selectedNumbers.includes(i)
+        selectedNumbers
+          .includes(i)
       ){
 
         selectedNumbers =
-          selectedNumbers.filter(
-            n=>n!==i
-          );
+          selectedNumbers
+            .filter(
+              n => n !== i
+            );
 
-        button.classList.remove(
-          "selected"
-        );
+        button
+          .classList
+          .remove(
+            "selected"
+          );
 
         return;
       }
 
       if(
-        selectedNumbers.length>=10
+        selectedNumbers.length >= 10
       ){
 
         show(
           "gameMessage",
-          "You can select up to 10 numbers.",
+          "Maximum 10 numbers.",
           "error"
         );
 
@@ -2044,19 +2105,15 @@ function createNumbers(){
 
       selectedNumbers.push(i);
 
-      button.classList.add(
-        "selected"
-      );
-
-      show(
-        "gameMessage",
-        selectedNumbers.length+
-        " number(s) selected."
-      );
+      button
+        .classList
+        .add("selected");
 
     };
 
-    grid.appendChild(button);
+    grid.appendChild(
+      button
+    );
 
   }
 
@@ -2064,10 +2121,14 @@ function createNumbers(){
 
 
 /* =========================
-   KENO PLAY
+   KENO GAME
 ========================= */
 
 async function playKeno(){
+
+  if(isDrawing){
+    return;
+  }
 
   if(!currentUser){
 
@@ -2080,49 +2141,69 @@ async function playKeno(){
     return;
   }
 
-  if(isDrawing)return;
+  const bet =
+    Number(
+      document
+        .getElementById(
+          "betAmount"
+        )
+        .value
+    );
+
+  if(!bet || bet <= 0){
+
+    show(
+      "gameMessage",
+      "Enter bet amount.",
+      "error"
+    );
+
+    return;
+  }
 
   if(
-    selectedNumbers.length===0
+    selectedNumbers.length < 1
   ){
 
     show(
       "gameMessage",
-      "Please select numbers first.",
+      "Select at least one number.",
       "error"
     );
 
     return;
   }
 
-  const bet =
-    Number(
-      document
-        .getElementById("betAmount")
-        .value
-    );
+  const {
+    data:profile,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq(
+        "id",
+        currentUser.id
+      )
+      .maybeSingle();
 
-  if(!bet || bet<=0){
+  if(error){
 
     show(
       "gameMessage",
-      "Enter a valid bet amount.",
+      error.message,
       "error"
     );
 
     return;
   }
 
-  const balanceText =
-    document
-      .getElementById("balance")
-      .textContent
-      .replace(" ETB","");
-
   const balance =
-    Number(balanceText)||0;
+    Number(
+      profile?.balance || 0
+    );
 
-  if(bet>balance){
+  if(balance < bet){
 
     show(
       "gameMessage",
@@ -2133,242 +2214,197 @@ async function playKeno(){
     return;
   }
 
-  isDrawing=true;
+  isDrawing = true;
 
-  const playButton =
-    document.getElementById(
+  document
+    .getElementById(
       "playBtn"
-    );
+    )
+    .disabled = true;
 
-  playButton.disabled=true;
+  document
+    .getElementById(
+      "resultNumbers"
+    )
+    .innerHTML = "";
 
   show(
     "gameMessage",
-    "Drawing numbers..."
+    "DRAWING..."
   );
 
-  const numbers=[];
+  const winningNumbers = [];
 
-  while(numbers.length<20){
+  while(
+    winningNumbers.length < 10
+  ){
 
     const n =
       Math.floor(
-        Math.random()*80
-      )+1;
-
-    if(!numbers.includes(n)){
-      numbers.push(n);
-    }
-
-  }
-
-  const result =
-    document.getElementById(
-      "resultNumbers"
-    );
-
-  result.innerHTML="";
-
-  for(const n of numbers){
-
-    const ball =
-      document.createElement("div");
-
-    ball.className="result-ball";
+        Math.random() * 80
+      ) + 1;
 
     if(
-      selectedNumbers.includes(n)
+      !winningNumbers
+        .includes(n)
     ){
 
-      ball.classList.add("hit");
+      winningNumbers.push(n);
 
     }
 
-    ball.textContent=n;
+  }
 
-    result.appendChild(ball);
+  for(
+    let i = 0;
+    i < 10;
+    i++
+  ){
 
-    await wait(80);
+    show(
+      "gameMessage",
+      "Drawing " +
+      (i + 1) +
+      "/10..."
+    );
+
+    await wait(500);
+
+    show(
+      "gameMessage",
+      "Number: " +
+      winningNumbers[i]
+    );
+
+    await wait(300);
 
   }
+
+
+  winningNumbers.forEach(
+    n => {
+
+      const ball =
+        document.createElement(
+          "div"
+        );
+
+      ball.className =
+        "result-ball";
+
+      if(
+        selectedNumbers
+          .includes(n)
+      ){
+
+        ball.classList
+          .add("hit");
+
+      }
+
+      ball.textContent = n;
+
+      document
+        .getElementById(
+          "resultNumbers"
+        )
+        .appendChild(ball);
+
+    }
+  );
+
 
   const hits =
     selectedNumbers.filter(
-      n=>numbers.includes(n)
+      n =>
+        winningNumbers
+          .includes(n)
     ).length;
 
-  show(
-    "gameMessage",
-    "Draw complete. You hit "+
-    hits+
-    " number(s).",
-    hits>0 ? "success" : ""
-  );
 
-  isDrawing=false;
+  const multipliers = {
 
-  playButton.disabled=false;
+    0:0,
+    1:0,
+    2:1,
+    3:2,
+    4:5,
+    5:10,
+    6:20,
+    7:50,
+    8:100,
+    9:250,
+    10:500
 
-}
-
-
-/* =========================
-   LUDO FREE GAME
-========================= */
-
-function startLudo(){
-
-  ludoState={
-    started:true,
-    player:1,
-    position:0,
-    moves:0
   };
 
-  renderLudo();
 
-  show(
-    "ludoMessage",
-    "Ludo started! Roll the dice.",
-    "success"
-  );
-
-}
-
-
-function resetLudo(){
-
-  ludoState=null;
-
-  const area =
-    document.getElementById(
-      "ludoArea"
+  const payout =
+    bet *
+    (
+      multipliers[hits] || 0
     );
 
-  area.innerHTML="";
 
-  show(
-    "ludoMessage",
-    "Ready to play."
-  );
-
-}
+  const finalBalance =
+    balance -
+    bet +
+    payout;
 
 
-function renderLudo(){
-
-  const area =
-    document.getElementById(
-      "ludoArea"
-    );
-
-  area.innerHTML="";
-
-  for(let i=1;i<=16;i++){
-
-    const cell =
-      document.createElement("div");
-
-    cell.style.background =
-      "#0b1220";
-
-    cell.style.border =
-      "1px solid #344054";
-
-    cell.style.borderRadius =
-      "8px";
-
-    cell.style.padding =
-      "15px 5px";
-
-    cell.style.textAlign =
-      "center";
-
-    cell.textContent=i;
-
-    if(
-      ludoState &&
-      i===ludoState.position
-    ){
-
-      cell.textContent="🎲";
-
-      cell.style.background =
-        "#20c878";
-
-      cell.style.color =
-        "#06130b";
-
-    }
-
-    area.appendChild(cell);
-
-  }
-
-  const roll =
-    document.createElement("button");
-
-  roll.textContent =
-    "🎲 ROLL DICE";
-
-  roll.style.gridColumn =
-    "1 / -1";
-
-  roll.onclick=rollLudo;
-
-  area.appendChild(roll);
-
-}
+  const {
+    error:balanceError
+  } =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        balance:finalBalance
+      })
+      .eq(
+        "id",
+        currentUser.id
+      );
 
 
-function rollLudo(){
-
-  if(!ludoState){
+  if(balanceError){
 
     show(
-      "ludoMessage",
-      "Press START LUDO first.",
+      "gameMessage",
+      balanceError.message,
       "error"
     );
 
-    return;
-  }
+    isDrawing = false;
 
-  const dice =
-    Math.floor(
-      Math.random()*6
-    )+1;
-
-  ludoState.moves++;
-
-  ludoState.position += dice;
-
-  if(ludoState.position>16){
-
-    ludoState.position=16;
-
-  }
-
-  renderLudo();
-
-  if(ludoState.position===16){
-
-    show(
-      "ludoMessage",
-      "🎉 You reached the finish! You win!",
-      "success"
-    );
+    document
+      .getElementById(
+        "playBtn"
+      )
+      .disabled = false;
 
     return;
   }
+
 
   show(
-    "ludoMessage",
-    "You rolled "+
-    dice+
-    ". Move to position "+
-    ludoState.position+"."
+    "gameMessage",
+    "Hits: " +
+    hits +
+    " | Payout: " +
+    payout.toFixed(2) +
+    " ETB",
+    "success"
   );
+
+  await loadBalance();
+
+  isDrawing = false;
+
+  document
+    .getElementById(
+      "playBtn"
+    )
+    .disabled = false;
 
 }
 
@@ -2379,44 +2415,64 @@ function rollLudo(){
 
 async function checkAdmin(){
 
-  if(!currentUser)return;
+  if(!currentUser){
+    return;
+  }
 
-  const email =
-    currentUser.email;
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq(
+        "id",
+        currentUser.id
+      )
+      .maybeSingle();
 
-  const adminEmails=[
-    "admin@example.com"
-  ];
+  if(error){
 
-  if(
-    !adminEmails.includes(email)
-  ){
+    console.log(
+      "Admin check:",
+      error
+    );
 
     return;
   }
 
-  document
-    .getElementById("adminPanel")
-    .classList.remove("hidden");
+  if(
+    data?.role === "admin"
+  ){
 
-  await loadAdminDeposits();
+    document
+      .getElementById(
+        "adminPanel"
+      )
+      .classList
+      .remove("hidden");
+
+    await loadAdminDeposits();
+
+  }
 
 }
 
 
 async function loadAdminDeposits(){
 
-  const table =
-    document.getElementById(
-      "adminDeposits"
-    );
-
-  if(!table)return;
-
-  const {data,error} =
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .from("deposits")
       .select("*")
+      .eq(
+        "status",
+        "pending"
+      )
       .order(
         "created_at",
         {
@@ -2434,151 +2490,157 @@ async function loadAdminDeposits(){
     return;
   }
 
-  table.innerHTML="";
+  const list =
+    document.getElementById(
+      "adminDeposits"
+    );
 
-  (data||[]).forEach(item=>{
+  list.innerHTML = "";
 
-    const tr =
-      document.createElement("tr");
+  (data || []).forEach(
+    item => {
 
-    tr.innerHTML=`
+      const tr =
+        document.createElement(
+          "tr"
+        );
 
-      <td>
-        ${item.user_id||""}
-      </td>
+      tr.innerHTML = `
 
-      <td>
-        ${Number(item.amount||0).toFixed(2)} ETB
-      </td>
+        <td>
+          ${item.user_id}
+        </td>
 
-      <td>
-        ${item.method||""}
-      </td>
+        <td>
+          ${Number(item.amount).toFixed(2)} ETB
+        </td>
 
-      <td class="${item.status||""}">
-        ${item.status||"pending"}
-      </td>
+        <td>
+          ${item.method || ""}
+        </td>
 
-      <td>
+        <td class="pending">
+          pending
+        </td>
 
-        ${
-          item.status==="pending"
-          ?
-          `
+        <td>
+
           <button
-            onclick="approveDeposit('${item.id}')">
+            onclick="
+              approveDeposit(
+                '${item.id}',
+                ${Number(item.amount)},
+                '${item.user_id}'
+              )
+            ">
             APPROVE
           </button>
 
           <button
             class="danger"
-            onclick="rejectDeposit('${item.id}')">
+            onclick="
+              rejectDeposit(
+                '${item.id}'
+              )
+            ">
             REJECT
           </button>
-          `
-          :
-          "Completed"
-        }
 
-      </td>
+        </td>
 
-    `;
+      `;
 
-    table.appendChild(tr);
+      list.appendChild(tr);
 
-  });
+    }
+  );
 
 }
 
 
-/* =========================
-   APPROVE DEPOSIT
-========================= */
+async function approveDeposit(
+  depositId,
+  amount,
+  userId
+){
 
-async function approveDeposit(id){
-
-  if(!id)return;
-
-  const {data:deposit,error} =
-    await supabaseClient
-      .from("deposits")
-      .select("*")
-      .eq("id",id)
-      .maybeSingle();
-
-  if(error){
-
-    alert(error.message);
-
-    return;
-  }
-
-  if(!deposit){
-
-    alert("Deposit not found.");
-
-    return;
-  }
-
-  if(
-    deposit.status!=="pending"
-  ){
-
-    alert("This deposit is already processed.");
-
-    return;
-  }
-
-  const {data:profile,error:profileError} =
-    await supabaseClient
-      .from("profiles")
-      .select("balance")
-      .eq("id",deposit.user_id)
-      .maybeSingle();
-
-  if(profileError){
-
-    alert(profileError.message);
-
-    return;
-  }
-
-  const oldBalance =
-    Number(profile?.balance||0);
-
-  const newBalance =
-    oldBalance+
-    Number(deposit.amount||0);
-
-  const {error:updateError} =
-    await supabaseClient
-      .from("profiles")
-      .update({
-        balance:newBalance
-      })
-      .eq("id",deposit.user_id);
-
-  if(updateError){
-
-    alert(updateError.message);
-
-    return;
-  }
-
-  const {error:depositError} =
+  const {
+    error:updateError
+  } =
     await supabaseClient
       .from("deposits")
       .update({
         status:"approved"
       })
-      .eq("id",id);
+      .eq(
+        "id",
+        depositId
+      );
 
-  if(depositError){
+  if(updateError){
 
-    alert(depositError.message);
+    alert(
+      updateError.message
+    );
 
     return;
   }
+
+
+  const {
+    data:profile,
+    error:profileError
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("balance")
+      .eq(
+        "id",
+        userId
+      )
+      .maybeSingle();
+
+
+  if(profileError){
+
+    alert(
+      profileError.message
+    );
+
+    return;
+  }
+
+
+  const newBalance =
+    Number(
+      profile?.balance || 0
+    ) +
+    Number(amount);
+
+
+  const {
+    error:balanceError
+  } =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        balance:newBalance
+      })
+      .eq(
+        "id",
+        userId
+      );
+
+
+  if(balanceError){
+
+    alert(
+      balanceError.message
+    );
+
+    return;
+  }
+
 
   alert(
     "Deposit approved successfully."
@@ -2586,40 +2648,40 @@ async function approveDeposit(id){
 
   await loadAdminDeposits();
 
-  if(
-    currentUser &&
-    currentUser.id===deposit.user_id
-  ){
-
-    await loadBalance();
-
-    await loadDeposits();
-
-  }
-
 }
 
 
-/* =========================
-   REJECT DEPOSIT
-========================= */
+async function rejectDeposit(
+  id
+){
 
-async function rejectDeposit(id){
+  if(
+    !confirm(
+      "Reject this deposit?"
+    )
+  ){
 
-  if(!id)return;
+    return;
+  }
 
-  const {error} =
+  const {
+    error
+  } =
     await supabaseClient
       .from("deposits")
       .update({
         status:"rejected"
       })
-      .eq("id",id)
-      .eq("status","pending");
+      .eq(
+        "id",
+        id
+      );
 
   if(error){
 
-    alert(error.message);
+    alert(
+      error.message
+    );
 
     return;
   }
@@ -2630,11 +2692,661 @@ async function rejectDeposit(id){
 
   await loadAdminDeposits();
 
-  if(currentUser){
+}
 
-    await loadDeposits();
+
+/* =========================
+   LUDO ENGINE
+========================= */
+
+const LUDO_COLORS = [
+  "red",
+  "green",
+  "yellow",
+  "blue"
+];
+
+const LUDO_NAMES = [
+  "Red",
+  "Green",
+  "Yellow",
+  "Blue"
+];
+
+
+function ludoOpen(){
+
+  document
+    .getElementById(
+      "kenoGame"
+    )
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById(
+      "otherGame"
+    )
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById(
+      "ludoGame"
+    )
+    .classList
+    .remove("hidden");
+
+  document
+    .getElementById(
+      "ludoGame"
+    )
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+  ludoNewGame();
+
+}
+
+
+function ludoNewGame(){
+
+  ludoState = {
+
+    turn:0,
+
+    dice:null,
+
+    rolled:false,
+
+    winner:null,
+
+    pawns:
+      LUDO_COLORS.map(
+        () => [
+          -1,
+          -1,
+          -1,
+          -1
+        ]
+      ),
+
+    logs:[
+      "Ludo started. Red plays first."
+    ]
+
+  };
+
+  ludoRender();
+
+}
+
+
+function ludoRoll(){
+
+  if(
+    !ludoState ||
+    ludoState.winner
+  ){
+
+    return;
+  }
+
+  if(
+    ludoState.rolled
+  ){
+
+    show(
+      "ludoMessage",
+      "Move a highlighted pawn first.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const n =
+    Math.floor(
+      Math.random() * 6
+    ) + 1;
+
+
+  ludoState.dice = n;
+
+  ludoState.rolled = true;
+
+
+  const color =
+    LUDO_NAMES[
+      ludoState.turn
+    ];
+
+
+  ludoLog(
+    color +
+    " rolled " +
+    n
+  );
+
+
+  const movable =
+    ludoMovable();
+
+
+  if(!movable.length){
+
+    ludoLog(
+      color +
+      " has no legal move."
+    );
+
+    ludoState.rolled =
+      false;
+
+
+    if(n !== 6){
+
+      ludoNextTurn();
+
+    }else{
+
+      show(
+        "ludoMessage",
+        color +
+        " rolled 6 but has no move. Roll again."
+      );
+
+    }
+
+    ludoRender();
+
+    return;
+  }
+
+
+  show(
+    "ludoMessage",
+    color +
+    " rolled " +
+    n +
+    ". Choose a highlighted pawn."
+  );
+
+
+  ludoRender();
+
+}
+
+
+function ludoMovable(){
+
+  if(
+    !ludoState ||
+    ludoState.dice === null
+  ){
+
+    return [];
+  }
+
+
+  return ludoState
+    .pawns[
+      ludoState.turn
+    ]
+    .map(
+      (p,i) => {
+
+        if(p === 57){
+          return false;
+        }
+
+        if(p === -1){
+
+          return (
+            ludoState.dice === 6
+          );
+
+        }
+
+        return (
+          p +
+          ludoState.dice <=
+          57
+        );
+
+      }
+    )
+    .map(
+      (value,index) =>
+        value
+          ? index
+          : -1
+    )
+    .filter(
+      index =>
+        index >= 0
+    );
+
+}
+
+
+function ludoMove(i){
+
+  if(
+    !ludoState ||
+    !ludoState.rolled ||
+    ludoState.winner
+  ){
+
+    return;
+  }
+
+
+  if(
+    !ludoMovable()
+      .includes(i)
+  ){
+
+    return;
+  }
+
+
+  const colorIndex =
+    ludoState.turn;
+
+  const dice =
+    ludoState.dice;
+
+
+  let position =
+    ludoState
+      .pawns[
+        colorIndex
+      ][i];
+
+
+  position =
+    position === -1
+      ? 1
+      : position + dice;
+
+
+  ludoState
+    .pawns[
+      colorIndex
+    ][i] =
+      position;
+
+
+  ludoLog(
+    LUDO_NAMES[colorIndex] +
+    " moved pawn " +
+    (i + 1)
+  );
+
+
+  if(
+    position === 57 &&
+    ludoState
+      .pawns[
+        colorIndex
+      ]
+      .every(
+        x => x === 57
+      )
+  ){
+
+    ludoState.winner =
+      colorIndex;
+
+    ludoState.rolled =
+      false;
+
+    ludoRender();
+
+    show(
+      "ludoMessage",
+      LUDO_NAMES[colorIndex] +
+      " wins!",
+      "success"
+    );
+
+    ludoLog(
+      LUDO_NAMES[colorIndex] +
+      " wins the game."
+    );
+
+    return;
+  }
+
+
+  const extra =
+    dice === 6;
+
+
+  ludoState.rolled =
+    false;
+
+  ludoState.dice =
+    null;
+
+
+  if(extra){
+
+    show(
+      "ludoMessage",
+      LUDO_NAMES[colorIndex] +
+      " gets another turn!"
+    );
+
+  }else{
+
+    ludoNextTurn();
 
   }
+
+
+  ludoRender();
+
+}
+
+
+function ludoNextTurn(){
+
+  ludoState.turn =
+    (
+      ludoState.turn + 1
+    ) % 4;
+
+  show(
+    "ludoMessage",
+    LUDO_NAMES[
+      ludoState.turn
+    ] +
+    "'s turn."
+  );
+
+}
+
+
+function ludoLog(text){
+
+  if(!ludoState){
+    return;
+  }
+
+  ludoState.logs
+    .unshift(text);
+
+  ludoState.logs =
+    ludoState.logs
+      .slice(0,20);
+
+}
+
+
+function ludoRender(){
+
+  const board =
+    document.getElementById(
+      "ludoBoard"
+    );
+
+  if(
+    !board ||
+    !ludoState
+  ){
+
+    return;
+  }
+
+
+  board.innerHTML = "";
+
+
+  for(
+    let r = 0;
+    r < 15;
+    r++
+  ){
+
+    for(
+      let c = 0;
+      c < 15;
+      c++
+    ){
+
+      const cell =
+        document.createElement(
+          "div"
+        );
+
+      cell.className =
+        "ludo-cell";
+
+
+      if(
+        (
+          r === 7 &&
+          c >= 6 &&
+          c <= 8
+        ) ||
+        (
+          c === 7 &&
+          r >= 6 &&
+          r <= 8
+        )
+      ){
+
+        cell.classList
+          .add(
+            "ludo-safe"
+          );
+
+      }
+
+
+      if(
+        r >= 6 &&
+        r <= 8 &&
+        c >= 6 &&
+        c <= 8
+      ){
+
+        cell.classList
+          .add(
+            "ludo-center"
+          );
+
+      }
+
+
+      board.appendChild(
+        cell
+      );
+
+    }
+
+  }
+
+
+  const homes = [
+
+    ["red",1,1],
+    ["green",1,10],
+    ["yellow",10,1],
+    ["blue",10,10]
+
+  ];
+
+
+  homes.forEach(
+    ([color,row,col],ci) => {
+
+      const home =
+        document.createElement(
+          "div"
+        );
+
+      home.className =
+        "ludo-home " +
+        color;
+
+      home.style.gridRow =
+        row +
+        "/span 5";
+
+      home.style.gridColumn =
+        col +
+        "/span 5";
+
+
+      for(
+        let i = 0;
+        i < 4;
+        i++
+      ){
+
+        const yard =
+          document.createElement(
+            "div"
+          );
+
+        yard.className =
+          "ludo-yard";
+
+
+        const pawn =
+          document.createElement(
+            "div"
+          );
+
+        pawn.className =
+          "ludo-pawn " +
+          color;
+
+        pawn.title =
+          LUDO_NAMES[ci] +
+          " pawn " +
+          (i + 1);
+
+
+        if(
+          ci ===
+          ludoState.turn &&
+          ludoState.rolled &&
+          ludoMovable()
+            .includes(i)
+        ){
+
+          pawn.style.outline =
+            "4px solid #20c878";
+
+          pawn.onclick =
+            () => ludoMove(i);
+
+        }
+
+
+        yard.appendChild(
+          pawn
+        );
+
+        home.appendChild(
+          yard
+        );
+
+      }
+
+
+      board.appendChild(
+        home
+      );
+
+    }
+  );
+
+
+  document
+    .getElementById(
+      "ludoDice"
+    )
+    .textContent =
+      ludoState.dice || "—";
+
+
+  document
+    .getElementById(
+      "ludoPlayers"
+    )
+    .innerHTML =
+      LUDO_NAMES
+        .map(
+          (name,index) => {
+
+            const active =
+              index ===
+              ludoState.turn &&
+              !ludoState.winner
+                ? "active"
+                : "";
+
+            const finished =
+              ludoState
+                .pawns[index]
+                .filter(
+                  x => x === 57
+                )
+                .length;
+
+            return `
+              <div
+                class="ludo-player ${active}">
+                ${name} —
+                ${finished}/4
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+
+  document
+    .getElementById(
+      "ludoLog"
+    )
+    .innerHTML =
+      ludoState.logs
+        .map(
+          x => "• " + x
+        )
+        .join("<br>");
+
+
+  document
+    .getElementById(
+      "ludoRollBtn"
+    )
+    .disabled =
+      !!ludoState.rolled ||
+      !!ludoState.winner;
+
+}
+
+
+function closeLudo(){
+
+  document
+    .getElementById(
+      "ludoGame"
+    )
+    .classList
+    .add("hidden");
+
+  ludoState = null;
 
 }
 
@@ -2647,16 +3359,38 @@ async function checkSession(){
 
   try{
 
-    const {data} =
-      await supabaseClient.auth
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
         .getSession();
 
-    if(data?.session?.user){
+    if(error){
+
+      console.log(
+        "Session error:",
+        error
+      );
+
+      return;
+    }
+
+    if(
+      data &&
+      data.session &&
+      data.session.user
+    ){
 
       currentUser =
         data.session.user;
 
       await startApp();
+
+    }else{
+
+      setLoggedInUI(false);
 
     }
 
@@ -2667,33 +3401,20 @@ async function checkSession(){
       error
     );
 
+    setLoggedInUI(false);
+
   }
 
 }
 
 
-supabaseClient.auth.onAuthStateChange(
-  (event,session)=>{
-
-    if(
-      session?.user &&
-      !currentUser
-    ){
-
-      currentUser =
-        session.user;
-
-      startApp();
-
-    }
-
-  }
-);
-
+/* =========================
+   START
+========================= */
 
 document.addEventListener(
   "DOMContentLoaded",
-  ()=>{
+  () => {
 
     checkSession();
 
