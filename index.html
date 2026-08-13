@@ -1,213 +1,431 @@
 
 < ! D O C T Y P E h t m l > < h t m l l a n g = " e n " > < h e a d > < m e t a c h a r s e t = " U T F - 8 " > < m e t a n a m e = " v i e w p o r t "
 c o n t e n t = " w i d t h = d e v i c e - w i d t h , i n i t i a l - s c a l e = 1 . 0 " > < t i t l e > K E N O G a m i n g < / t i t l e > < s c r i p t
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <style> *{ box-sizing:border-box; } body{
-margin:0; font-family:Arial,Helvetica,sans-serif; background:#070b12; color:white; } .container{ max-width:1000px;
-margin:auto; padding:15px; } header{ display:flex; justify-content:flex-end; align-items:center; padding:10px 0;
-border-bottom:1px solid #263044; } .card{ background:#111827; border:1px solid #263044; border-radius:16px;
-padding:18px; margin-top:18px; } .hidden{ display:none!important; } input, select, button{ width:100%;
-padding:13px; margin:6px 0; border-radius:9px; border:1px solid #344054; font-size:15px; } input, select{
-background:#0b1220; color:white; } button{ background:#20c878; color:#04120b; font-weight:bold; border:0;
-cursor:pointer; } button:hover{ opacity:.9; } button:disabled{ opacity:.5; cursor:not-allowed; } .secondary{
-background:#263044; color:white; } .danger{ background:#dc3545; color:white; } .row{ display:flex; gap:10px; }
-.row>*{ flex:1; } .status{ background:#182235; padding:10px; border-radius:8px; margin-top:8px; min-height:20px;
-} .success{ color:#36e38b; } .error{ color:#ff6b6b; } .small{ color:#9ca3af; font-size:13px; } .balance-card{
-display:flex; justify-content:space-between; align-items:center; gap:15px; } .balance{ font-size:30px; font-
-weight:bold; color:#36e38b; } .games-title{ display:flex; justify-content:space-between; align-items:center; } .games-
-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:15px; } .game-card{
-background:#0b1220; border:1px solid #263044; border-radius:12px; padding:10px; min-width:0; } .game-icon{ font-
-size:32px; margin-bottom:5px; text-align:center; } .game-name{ font-size:15px; font-weight:bold; white-
-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .game-description{ color:#9ca3af; font-size:11px;
-margin:5px 0 8px; line-height:1.35; min-height:30px; } .game-card button{ font-size:11px; padding:8px 5px;
-margin:3px 0; } .details-box{ background:#0b1220; border-radius:12px; padding:15px; margin-top:10px; } .number-
-grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:6px; margin-top:15px; } .num{ background:#182235;
-color:white; border:1px solid #344054; padding:10px 0; margin:0; } .num.selected{ background:#20c878;
-color:#06130b; } .result-numbers{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; } .result-ball{
-width:42px; height:42px; border-radius:50%; display:flex; justify-content:center; align-items:center;
-b a c k g r o u n d : # 2 6 3 0 4 4 ; c o l o r : w h i t e ; f o n t - w e i g h t : b o l d ; a n i m a t i o n : b a l l I n . 3 s e a s e ; } . r e s u l t - b a l l . h i t {
-background:#20c878; color:#06130b; box-shadow:0 0 15px #20c878; } @keyframes ballIn{ from{
-transform:scale(.2); opacity:0; } to{ transform:scale(1); opacity:1; } } .live-badge{ display:inline-flex; align-
-items:center; gap:7px; background:#3b1117; color:#ff6b6b; border:1px solid #7f1d1d; padding:6px 10px; border-
-radius:20px; font-size:12px; font-weight:bold; } .live-dot{ width:8px; height:8px; background:#ff3333; border-
-radius:50%; animation:pulse 1s infinite; } @keyframes pulse{ 0%{opacity:1} 50%{opacity:.3} 100%{opacity:1} }
-.keno-video{ width:100%; max-height:430px; object-fit:cover; border-radius:14px; background:#000; border:1px
-solid #263044; margin-top:12px; } .keno-live-header{ display:flex; justify-content:space-between; align-items:center;
-gap:10px; flex-wrap:wrap; } .timer{ font-size:24px; font-weight:bold; color:#36e38b; } table{ width:100%; border-
-collapse:collapse; margin-top:10px; } th, td{ padding:9px 5px; border-bottom:1px solid #263044; text-align:left; font-
-size:13px; } .pending{ color:#ffd166; } .approved{ color:#36e38b; } .rejected{ color:#ff6b6b; } .top-actions{
-display:flex; align-items:center; gap:8px; } .deposit-top{ width:auto!important; margin:0!important; padding:9px
-15px!important; border-radius:9px!important; font-size:14px!important; white-space:nowrap; } /* LUDO */ .ludo-
-board-wrap{ margin-top:15px; display:flex; justify-content:center; } .ludo-board{ width:min(92vw,520px); aspect-
-ratio:1/1; display:grid; grid-template-columns:repeat(15,1fr); grid-template-rows:repeat(15,1fr); background:#f5f5f5;
-border:5px solid #263044; border-radius:12px; overflow:hidden; } .ludo-cell{ border:1px solid #d5d9df;
-position:relative; display:flex; align-items:center; justify-content:center; } .ludo-safe{ background:#dbeafe; } .ludo-
-center{ background:conic-gradient( #ff7676 0 25%, #6ee7a8 0 50%, #ffe66d 0 75%, #74a7ff 0 ); } .ludo-home{ z-
-index:3; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; padding:10px; gap:8px; border:2px
-solid #111827; } .ludo-home.red{ background:#ff7676; } .ludo-home.green{ background:#6ee7a8; } .ludo-
-h o m e . y e l l o w { b a c k g r o u n d : # f f e 6 6 d ; } . l u d o - h o m e . b l u e { b a c k g r o u n d : # 7 4 a 7 f f ; } . l u d o - y a r d {
-background:rgba(255,255,255,.85); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+*{ box-sizing:border-box;
+} body{ margin:0; font-family:Arial,Helvetica,sans-serif; background:#070b12; color:white;
+} .container{ max-width:1000px; margin:auto; padding:15px;
+} header{ display:flex; justify-content:flex-end; align-items:center; padding:10px 0; border-bottom:1px solid
+#263044;
+} .card{ background:#111827; border:1px solid #263044; border-radius:16px; padding:18px; margin-top:18px;
+} .hidden{ display:none!important;
+} input,
+select,
+button{ width:100%; padding:13px; margin:6px 0; border-radius:9px; border:1px solid #344054; font-size:15px;
+} input,
+select{ background:#0b1220; color:white;
+} button{ background:#20c878; color:#04120b; font-weight:bold; border:0; cursor:pointer;
+} button:hover{ opacity:.9;
+} button:disabled{ opacity:.5; cursor:not-allowed;
+} .secondary{ background:#263044; color:white;
+} .danger{ background:#dc3545; color:white;
+}
+.row{ display:flex; gap:10px;
+} .row>*{ flex:1;
+} .status{ background:#182235; padding:10px; border-radius:8px; margin-top:8px; min-height:20px;
+} .success{ color:#36e38b;
+} .error{ color:#ff6b6b;
+} .small{ color:#9ca3af; font-size:13px;
+} .balance-card{ display:flex; justify-content:space-between; align-items:center; gap:15px;
+} .balance{ font-size:30px; font-weight:bold; color:#36e38b;
+} .games-title{ display:flex; justify-content:space-between; align-items:center;
+} .games-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:15px;
+} .game-card{ background:#0b1220; border:1px solid #263044; border-radius:12px; padding:10px; min-width:0;
+} .game-icon{ font-size:32px; margin-bottom:5px; text-align:center;
+} .game-name{ font-size:15px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+} .game-description{ color:#9ca3af; font-size:11px; margin:5px 0 8px; line-height:1.35; min-height:30px;
+} .game-card button{ font-size:11px; padding:8px 5px; margin:3px 0;
+}
+.details-box{ background:#0b1220; border-radius:12px; padding:15px; margin-top:10px;
+} .number-grid{ display:grid; grid-template-columns:repeat(10,1fr); gap:6px; margin-top:15px;
+} .num{ background:#182235; color:white; border:1px solid #344054; padding:10px 0; margin:0;
+} .num.selected{ background:#20c878; color:#06130b;
+} .result-numbers{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+} .result-ball{ width:42px; height:42px; border-radius:50%; display:flex; justify-content:center; align-items:center;
+background:#263044; color:white; font-weight:bold; animation:ballIn .3s ease;
+}
+.result-ball.hit{ background:#20c878; color:#06130b; box-shadow:0 0 15px #20c878;
+} @keyframes ballIn{ from{ transform:scale(.2); opacity:0; } to{ transform:scale(1); opacity:1; }
+} .live-badge{ display:inline-flex; align-items:center; gap:7px; background:#3b1117; color:#ff6b6b; border:1px solid
+#7f1d1d; padding:6px 10px; border-radius:20px; font-size:12px; font-weight:bold;
+} .live-dot{ width:8px; height:8px; background:#ff3333; border-radius:50%; animation:pulse 1s infinite;
+} @keyframes pulse{ 0%{opacity:1} 50%{opacity:.3} 100%{opacity:1}
+} .keno-video{ width:100%; max-height:430px; object-fit:cover; border-radius:14px; background:#000; border:1px
+solid #263044; margin-top:12px;
+} .keno-live-header{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+} .timer{ font-size:24px; font-weight:bold; color:#36e38b;
+} table{ width:100%; border-collapse:collapse; margin-top:10px;
+} th,
+td{ padding:9px 5px; border-bottom:1px solid #263044; text-align:left; font-size:13px;
+} .pending{ color:#ffd166;
+} .approved{ color:#36e38b;
+} .rejected{ color:#ff6b6b;
+}
+.top-actions{ display:flex; align-items:center; gap:8px;
+} .deposit-top{ width:auto!important; margin:0!important; padding:9px 15px!important; border-radius:9px!important;
+font-size:14px!important; white-space:nowrap;
+} /* LUDO */ .ludo-board-wrap{ margin-top:15px; display:flex; justify-content:center;
+} .ludo-board{ width:min(92vw,520px); aspect-ratio:1/1; display:grid; grid-template-columns:repeat(15,1fr); grid-
+template-rows:repeat(15,1fr); background:#f5f5f5; border:5px solid #263044; border-radius:12px; overflow:hidden;
+} .ludo-cell{ border:1px solid #d5d9df; position:relative; display:flex; align-items:center; justify-content:center;
+}
+.ludo-safe{ background:#dbeafe;
+} .ludo-center{ background:conic-gradient( #ff7676 0 25%, #6ee7a8 0 50%, #ffe66d 0 75%, #74a7ff 0 );
+} .ludo-home{ z-index:3; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; padding:10px;
+gap:8px; border:2px solid #111827;
+} .ludo-home.red{ background:#ff7676;
+} .ludo-home.green{ background:#6ee7a8;
+} .ludo-home.yellow{ background:#ffe66d;
+} .ludo-home.blue{ background:#74a7ff;
+}
+.ludo-yard{ background:rgba(255,255,255,.85); border-radius:10px; display:flex; align-items:center; justify-
+content:center;
+}
 .ludo-pawn{ width:65%; aspect-ratio:1; border-radius:50%; border:2px solid #111827; box-shadow:0 2px 4px #0005;
-cursor:pointer; } .ludo-pawn.red{ background:#ef4444; } .ludo-pawn.green{ background:#22c55e; } .ludo-
-pawn.yellow{ background:#eab308; } .ludo-pawn.blue{ background:#3b82f6; } .ludo-controls{ display:flex;
-gap:10px; align-items:center; margin-top:12px; } .ludo-dice{ font-size:28px; font-weight:bold; text-align:center;
-background:#0b1220; border:1px solid #344054; border-radius:12px; padding:8px 18px; min-width:75px; } .ludo-
-players{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px; } .ludo-player{ padding:8px;
-border-radius:8px; background:#182235; font-size:12px; } .ludo-player.active{ outline:2px solid #20c878; } .ludo-
-log{ margin-top:10px; max-height:120px; overflow:auto; } @media(max-width:700px){ .container{ padding:10px; }
-header{ padding:7px 0; } .games-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; } .game-card{
-padding:6px; border-radius:9px; } .game-icon{ font-size:23px; } .game-name{ font-size:10px; } .game-description{
-font-size:11px; line-height:1.25; min-height:42px; } .game-card button{ font-size:10px; padding:7px 3px; } .card{
-padding:12px; border-radius:12px; } .balance-card{ flex-direction:column; align-items:stretch; } .number-grid{ grid-
-template-columns:repeat(8,1fr); } .row{ flex-direction:column; } .ludo-controls{ flex-wrap:wrap; } .ludo-players{
-grid-template-columns:repeat(2,1fr); } } /* ========================= KENO ANIMATION
-========================= */ .keno-animation-stage{position:relative;width:100%;aspect-ratio:16/9;min-
-height:320px;overflow:hidden;border- radius:14px;background:#ef0808;color:#fff;margin-top:12px;border:1px solid
-# 2 6 3 0 4 4 ; } . k a - s c r e e n { p o s i t i o n : a b s o l u t e ; i n s e t : 0 ; o v e r f l o w : h i d d e n ; b a c k g r o u n d : # e f 0 8 0 8 ; } . k a -
-h i d d e n { d i s p l a y : n o n e ! i m p o r t a n t ; } . k a - i n t r o { p o s i t i o n : a b s o l u t e ; i n s e t : 0 ; b a c k g r o u n d : l i n e a r -
-gradient(135deg,#9d0000,#ff1010 55%,#b50000);} .ka-brand{position:absolute;left:8%;top:22%;font-
-size:clamp(40px,8vw,110px);font-weight:1000;letter- spacing:5px;text-shadow:0 5px 0 #690000;} .ka-
-keno{position:absolute;left:8%;top:43%;font-size:clamp(22px,3vw,45px);font-weight:900;letter-spacing:10px;} .ka-
-timerbox{position:absolute;left:8%;top:55%;display:flex;align-items:center;gap:12px;} .ka-timerlabel{font-
-s i z e : c l a m p ( 1 4 p x , 2 v w , 2 8 p x ) ; f o n t - w e i g h t : 9 0 0 ; } . k a - t i m e r { f o n t - s i z e : c l a m p ( 2 8 p x , 5 v w , 7 0 p x ) ; f o n t -
-weight:1000;background:#ffd91b;color:#111;padding:4px 18px;border-radius:9px;min-width:145px;text-
-a l i g n : c e n t e r ; b o x - s h a d o w : 0 5 p x 0 # a 9 7 c 0 0 ; } . k a -
-preview{position:absolute;right:9%;top:16%;width:30%;height:62%;border-radius:50%;border:8px solid
+cursor:pointer;
+} .ludo-pawn.red{ background:#ef4444;
+} .ludo-pawn.green{ background:#22c55e;
+} .ludo-pawn.yellow{ background:#eab308;
+} .ludo-pawn.blue{ background:#3b82f6;
+} .ludo-controls{ display:flex; gap:10px; align-items:center; margin-top:12px;
+}
+.ludo-dice{ font-size:28px; font-weight:bold; text-align:center; background:#0b1220; border:1px solid #344054;
+border-radius:12px; padding:8px 18px; min-width:75px;
+} .ludo-players{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px;
+} .ludo-player{ padding:8px; border-radius:8px; background:#182235; font-size:12px;
+} .ludo-player.active{ outline:2px solid #20c878;
+} .ludo-log{ margin-top:10px; max-height:120px; overflow:auto;
+} @media(max-width:700px){ .container{ padding:10px; }
+header{ padding:7px 0;
+} .games-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;
+} .game-card{ padding:6px; border-radius:9px;
+} .game-icon{ font-size:23px;
+}
+.game-name{ font-size:10px;
+} .game-description{ font-size:11px; line-height:1.25; min-height:42px;
+} .game-card button{ font-size:10px; padding:7px 3px;
+} .card{ padding:12px; border-radius:12px;
+} .balance-card{ flex-direction:column; align-items:stretch; } .number-grid{ grid-template-columns:repeat(8,1fr); }
+.row{ flex-direction:column; } .ludo-controls{ flex-wrap:wrap; } .ludo-players{ grid-template-columns:repeat(2,1fr);
+}
+} /* ========================= KENO ANIMATION
+========================= */
+.keno-animation-stage{position:relative;width:100%;aspect-ratio:16/9;min-height:320px;overflow:hidden;border-
+radius:14px;background:#ef0808;color:#fff;margin-top:12px;border:1px solid #263044;}
+.ka-screen{position:absolute;inset:0;overflow:hidden;background:#ef0808;}
+.ka-hidden{display:none!important;}
+.ka-intro{position:absolute;inset:0;background:linear-gradient(135deg,#9d0000,#ff1010 55%,#b50000);}
+.ka-brand{position:absolute;left:8%;top:22%;font-size:clamp(40px,8vw,110px);font-weight:1000;letter-
+spacing:5px;text-shadow:0 5px 0 #690000;}
+.ka-keno{position:absolute;left:8%;top:43%;font-size:clamp(22px,3vw,45px);font-weight:900;letter-spacing:10px;}
+.ka-timerbox{position:absolute;left:8%;top:55%;display:flex;align-items:center;gap:12px;}
+.ka-timerlabel{font-size:clamp(14px,2vw,28px);font-weight:900;}
+.ka-timer{font-size:clamp(28px,5vw,70px);font-weight:1000;background:#ffd91b;color:#111;padding:4px
+18px;border-radius:9px;min-width:145px;text-align:center;box-shadow:0 5px 0 #a97c00;}
+.ka-preview{position:absolute;right:9%;top:16%;width:30%;height:62%;border-radius:50%;border:8px solid
 #171717;background:radial-gradient(circle,#e31a1a,#710000);box-shadow:inset 10px 0 25px #ff5c5c,inset -18px 0
-30px #220000;display:flex;align-items:center;justify-content:center;} .ka-preview:after{content:'KENO';font-
-s i z e : c l a m p ( 2 4 p x , 4 v w , 4 0 p x ) ; f o n t - w e i g h t : 1 0 0 0 ; c o l o r : # f f d 9 1 b ; o p a c i t y : . 9 ; } . k a -
-m i x { p o s i t i o n : a b s o l u t e ; i n s e t : 0 ; b a c k g r o u n d : l i n e a r - g r a d i e n t ( 1 3 5 d e g , # a 9 0 0 0 0 , # f f 1 1 1 1 ) ; } . k a -
-mixTitle{position:absolute;top:8%;width:100%;text-align:center;font-size:clamp(20px,3.5vw,50px);font-
-w e i g h t : 1 0 0 0 ; } . k a - g l a s s { p o s i t i o n : a b s o l u t e ; l e f t : 5 0 % ; t o p : 5 3 % ; t r a n s f o r m : t r a n s l a t e ( - 5 0 % , -
-50%);width:34%;height:66%;border:9px solid #171717;border-radius:50%;background:radial-gradient(circle at 45%
-40%,#ff3d3d,#c60000 55%,#550000);box-shadow:inset 20px 0 30px #ff6565,inset -25px 0 40px #220000;} .ka-
-ball{position:absolute;width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 30%
+30px #220000;display:flex;align-items:center;justify-content:center;}
+.ka-preview:after{content:'KENO';font-size:clamp(24px,4vw,40px);font-weight:1000;color:#ffd91b;opacity:.9;}
+.ka-mix{position:absolute;inset:0;background:linear-gradient(135deg,#a90000,#ff1111);}
+.ka-mixTitle{position:absolute;top:8%;width:100%;text-align:center;font-size:clamp(20px,3.5vw,50px);font-
+weight:1000;}
+.ka-glass{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);width:34%;height:66%;border:9px
+solid #171717;border-radius:50%;background:radial-gradient(circle at 45% 40%,#ff3d3d,#c60000
+55%,#550000);box-shadow:inset 20px 0 30px #ff6565,inset -25px 0 40px #220000;}
+.ka-ball{position:absolute;width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 30%
 25%,#fff7a8,#ffd51c 55%,#9a6200);color:#111;display:flex;align-items:center;justify-content:center;font-
 size:14px;font-weight:1000;box-shadow:0 4px 8px #350000;animation:kaFloat 1.1s ease-in-out infinite alternate;}
-@ k e y f r a m e s k a F l o a t { t o { t r a n s f o r m : t r a n s l a t e ( v a r ( - - x ) , v a r ( - - y ) ) r o t a t e ( 2 0 d e g ) } } . k a -
-mixSub{position:absolute;bottom:8%;width:100%;text-align:center;font-weight:800;font-size:18px;} .ka-
-d r a w { p o s i t i o n : a b s o l u t e ; i n s e t : 0 ; b a c k g r o u n d : # e f 0 8 0 8 ; } . k a -
-g r i d { p o s i t i o n : a b s o l u t e ; l e f t : 3 % ; t o p : 8 % ; w i d t h : 5 7 % ; h e i g h t : 7 5 % ; d i s p l a y : g r i d ; g r i d - t e m p l a t e -
-c o l u m n s : r e p e a t ( 1 0 , 1 f r ) ; g r i d - t e m p l a t e - r o w s : r e p e a t ( 8 , 1 f r ) ; g a p : 4 p x ; } . k a - c e l l { b o r d e r : 2 p x s o l i d
-rgba(255,220,0,.55);background:rgba(100,0,0,.2);border-radius:4px;display:flex;align- items:center;justify-
-c o n t e n t : c e n t e r ; f o n t - s i z e : c l a m p ( 1 0 p x , 1 . 5 v w , 2 4 p x ) ; f o n t - w e i g h t : 9 0 0 ; c o l o r : r g b a ( 4 0 , 0 , 0 , . 7 ) ; } . k a -
-cell.hit{background:#ffd91b;color:#111;box-shadow:0 0 15px #ffe84c;animation:kaHit .5s ease;} @keyframes
-k a H i t { 0 % { t r a n s f o r m : s c a l e ( . 6 ) } 7 0 % { t r a n s f o r m : s c a l e ( 1 . 1 2 ) } 1 0 0 % { t r a n s f o r m : s c a l e ( 1 ) } } . k a -
-m a c h i n e { p o s i t i o n : a b s o l u t e ; r i g h t : 5 % ; t o p : 1 5 % ; w i d t h : 3 2 % ; h e i g h t : 6 4 % ; } . k a - m a c h i n e . k a -
-glass{width:100%;height:100%;left:0;top:0;transform:none;} .ka-outball{position:absolute;left:50%;bottom:-
-5%;transform:translateX(- 50%);width:clamp(62px,8vw,92px);height:clamp(62px,8vw,92px);border-
-r a d i u s : 5 0 % ; b a c k g r o u n d : r a d i a l - g r a d i e n t ( c i r c l e a t 3 0 % 2 5 % , # f f f 9 a 6 , # f f d 2 1 a
-5 0 % , # a 8 6 7 0 0 ) ; c o l o r : # 1 1 1 ; d i s p l a y : f l e x ; a l i g n - i t e m s : c e n t e r ; j u s t i f y - c o n t e n t : c e n t e r ; f o n t -
-s i z e : c l a m p ( 2 6 p x , 3 v w , 3 8 p x ) ; f o n t - w e i g h t : 1 0 0 0 ; b o x - s h a d o w : 0 7 p x 1 5 p x # 3 9 0 0 0 0 ; } . k a -
-heads{position:absolute;right:35%;top:8%;background:#ffd91b;color:#111;padding:5px 14px;border- radius:6px;font-
-weight:1000;} .ka-count{position:absolute;right:4%;top:8%;font-size:clamp(22px,3vw,45px);font-weight:1000;} .ka-
-s l o t s { p o s i t i o n : a b s o l u t e ; l e f t : 3 % ; b o t t o m : 3 % ; w i d t h : 9 4 % ; h e i g h t : 1 3 % ; d i s p l a y : g r i d ; g r i d - t e m p l a t e -
-c o l u m n s : r e p e a t ( 2 0 , 1 f r ) ; g a p : 4 p x ; } . k a - s l o t { b o r d e r : 2 p x s o l i d # f f d 9 1 b ; b o r d e r -
-radius:4px;background:rgba(100,0,0,.25);display:flex;align- items:center;justify-content:center;font-weight:1000;font-
-s i z e : c l a m p ( 8 p x , 1 . 4 v w , 2 2 p x ) ; } . k a - s l o t . o n { b a c k g r o u n d : # f f d 9 1 b ; c o l o r : # 1 1 1 ; } . k a -
-next{position:absolute;left:3%;bottom:17%;font-weight:900;font-size:14px;} @media(max-width:700px){.keno-
-animation-stage{min-height:230px}.ka-grid{gap:2px}.ka-cell{border- width:1px}.ka-glass{border-width:5px}.ka-
-ball{width:28px;height:28px;font-size:10px}} </style> </head> <body> <div class="container"> <header> <div
-class="top-actions"> <button id="depositTopBtn" class="deposit-top hidden" onclick="showDeposit()"> Deposit
-</button> <button id="logoutBtn" class="secondary hidden" onclick="logout()"> Logout </button> </div> </header>
-<!-- LOGIN / REGISTER --> <div id="authBox" class="card"> <h2>Login</h2> <input id="email" type="email"
-autocomplete="email" placeholder="Email"> <input id="password" type="password" autocomplete="current-
-password" placeholder="Password"> <div class="row"> <button id="loginBtn" onclick="login()"> Login </button>
-<button id="registerBtn" class="secondary" onclick="register()"> Register </button> </div> <div id="authMessage"
-class="status"></div> </div> <!-- MAIN APP --> <div id="app" class="hidden"> <!-- BALANCE --> <div
-class="card balance-card"> <div> <div class="small"> Your Balance </div> <div id="balance" class="balance"> 0.00
-ETB </div> </div> </div> <!-- GAMES --> <div class="card"> <div class="games-title"> <h2> Games</h2> <span
-class="small"> Choose a game </span> </div> <div class="games-grid"> <!-- LUDO --> <div class="game-card">
-<div class="game-icon"></div> <div class="game-name"> Ludo </div> <div class="game-description"> Classic
-multiplayer Ludo. </div> <div style=" background:#182235; border:1px solid #20c878; border-radius:8px;
-padding:6px; margin:5px 0; color:#36e38b; text-align:center; font-size:11px; font-weight:bold;"> FREE </div>
-<button onclick="openGame('ludo')"> PLAY </button> </div> <!-- KENO --> <div class="game-card"> <div
-class="game-icon"></div> <div class="game-name"> Keno </div> <div class="game-description"> Pick numbers
-and play LIVE Keno. </div> <button onclick="openGame('keno')"> PLAY </button> </div> <!-- BINGO --> <div
-class="game-card"> <div class="game-icon"></div> <div class="game-name"> Bingo </div> <div class="game-
-description"> Pick numbers and play Bingo. </div> <button onclick="openGame('bingo')"> PLAY </button> </div>
-<!-- CONQUER --> <div class="game-card"> <div class="game-icon"></div> <div class="game-name"> Conquer
-</div> <div class="game-description"> Fast card game battles. </div> <button onclick="openGame('conquer')">
-PLAY </button> </div> <!-- FAST BINGO --> <div class="game-card"> <div class="game-icon"></div> <div
-class="game-name"> Fast Bingo </div> <div class="game-description"> Quick Bingo rounds. </div> <button
-onclick="openGame('fastbingo')"> PLAY </button> </div> <!-- CRAZY 8 --> <div class="game-card"> <div
-class="game-icon"></div> <div class="game-name"> Crazy 8 </div> <div class="game-description"> Classic Crazy
-8 card game. </div> <button onclick="openGame('crazy8')"> PLAY </button> </div> <!-- SOCCER --> <div
-class="game-card"> <div class="game-icon"></div> <div class="game-name"> Trace Soccer </div> <div
-class="game-description"> Soccer challenge game. </div> <button onclick="openGame('soccer')"> PLAY </button>
-</div> <!-- NIGHT --> <div class="game-card"> <div class="game-icon"></div> <div class="game-name"> Night
-Hunter </div> <div class="game-description"> Night-time adventure. </div> <button onclick="openGame('night')">
-PLAY </button> </div> <!-- MEMORY --> <div class="game-card"> <div class="game-icon"></div> <div
-class="game-name"> Memory Game </div> <div class="game-description"> Test your memory skills. </div>
-<button onclick="openGame('memory')"> PLAY </button> </div> <!-- LAT LAT --> <div class="game-card"> <div
-class="game-icon"></div> <div class="game-name"> Lat Lat </div> <div class="game-description"> Simple quick-
-play game. </div> <button onclick="openGame('latlat')"> PLAY </button> </div> <!-- RPS --> <div class="game-
-card"> <div class="game-icon"></div> <div class="game-name"> Rock Paper Scissors </div> <div class="game-
-description"> Rock, paper or scissors. </div> <button onclick="openGame('rps')"> PLAY </button> </div> <!-- UNO
---> <div class="game-card"> <div class="game-icon"></div> <div class="game-name"> Uno </div> <div
-class="game-description"> Match cards and win. </div> <button onclick="openGame('uno')"> PLAY </button>
-</div> <!-- CONNECT 4 --> <div class="game-card"> <div class="game-icon"></div> <div class="game-name">
-C o n n e c t 4 < / d i v > < d i v c l a s s = " g a m e - d e s c r i p t i o n " > C o n n e c t f o u r t o w i n . < / d i v > < b u t t o n
-onclick="openGame('connect4')"> PLAY </button> </div> </div> </div> <!-- DETAILS --> <div class="card">
-<h2> Game Details</h2> <div class="details-box"> <strong> Games</strong> <p class="small"> Choose any game
-above. Ludo is free to play and does not require balance. </p> </div> </div> <!-- DEPOSIT --> <div id="depositBox"
-class="card hidden"> <h2> Deposit</h2> <input id="depositAmount" type="number" min="1" placeholder="Amount
-(ETB)"> <select id="depositMethod"> <option value="Telebirr"> Telebirr </option> <option value="CBE Birr">
-CBE Birr </option> <option value="Bank"> Bank </option> </select> <input id="depositPhone" placeholder="Phone
-/ B a n k A c c o u n t " > < i n p u t i d = " d e p o s i t R e f e r e n c e " p l a c e h o l d e r = " T r a n s a c t i o n R e f e r e n c e " > < b u t t o n
-onclick="makeDeposit()"> SUBMIT DEPOSIT </button> <button class="secondary" onclick="hideDeposit()">
-CLOSE </button> <div id="depositMessage" class="status"></div> </div> <!-- MY DEPOSITS --> <div
-class="card"> <h2> My Deposits</h2> <table> <thead> <tr> <th>Amount</th> <th>Method</th> <th>Status</th>
-</tr> </thead> <tbody id="depositList"> </tbody> </table> </div> <!-- KENO --> <div id="kenoGame" class="card
-hidden"> <div class="keno-live-header"> <h2> LIVE KENO</h2> <div class="live-badge"> <span class="live-
-dot"></span> LIVE </div> </div> <!-- KENO DRAW ANIMATION --> <div id="kenoAnimationStage"
-class="keno-animation-stage hidden"> <section class="ka-screen ka-intro" id="kaIntro"> <div class="ka-
-brand">DEGA</div> <div class="ka-keno">KENO</div> <div class="ka-timerbox"><div class="ka-
-timerlabel">NEXT DRAW</div><div class="ka-timer" id="kaTimer">00:08</div></div> <div class="ka-
-preview"></div> </section> <section class="ka-screen ka-mix ka-hidden" id="kaMix"> <div class="ka-
-mixTitle">KENO — MIXING BALLS</div> <div class="ka-glass" id="kaMixGlass"></div> <div class="ka-
-mixSub">PLEASE WAIT...</div> </section> <section class="ka-screen ka-draw ka-hidden" id="kaDraw"> <div
-c l a s s = " k a - g r i d " i d = " k a G r i d " > < / d i v > < d i v c l a s s = " k a - h e a d s " > H E A D S < / d i v > < d i v c l a s s = " k a - c o u n t "
-id="kaCount">0/20</div> <div class="ka-machine"><div class="ka-glass" id="kaDrawGlass"></div><div class="ka-
-o u t b a l l " i d = " k a O u t b a l l " > - - < / d i v > < / d i v > < d i v c l a s s = " k a - n e x t " > K E N O < / d i v > < d i v c l a s s = " k a - s l o t s "
-id="kaSlots"></div> </section> </div> <!-- VIDEO --> <video id="kenoVideo" class="keno-video"
-src="1000029495.mp4" playsinline preload="auto" controls> Your browser does not support video. </video> <div
-class="status" style="text-align:center"> <div class="small"> LIVE KENO DRAW </div> <div id="kenoTimer"
-class="timer"> READY </div> </div> <div class="small"> Select up to 10 numbers </div> <div id="numberGrid"
-class="number-grid"> </div> <div class="row"> <input id="betAmount" type="number" min="1" placeholder="Bet
-amount"> <button id="playBtn" onclick="playKeno()"> PLAY </button> </div> <div id="gameMessage"
-class="status"></div> <div id="resultNumbers" class="result-numbers"> </div> </div> <!-- LUDO --> <div
-id="ludoGame" class="card hidden"> <div class="games-title"> <h2> LUDO</h2> <span class="small"> FREE
-PLAY </span> </div> <div class="status success"> Ludo is free to play. Balance is not required. </div> <div
-id="ludoMessage" class="status"> Roll the dice to start. </div> <div id="ludoPlayers" class="ludo-players"> </div>
-<div class="ludo-board-wrap"> <div id="ludoBoard" class="ludo-board"> </div> </div> <div class="ludo-controls">
-<button id="ludoRollBtn" onclick="ludoRoll()"> ROLL DICE </button> <div id="ludoDice" class="ludo-dice"> —
-</div> <button class="secondary" onclick="closeLudo()"> BACK </button> </div> <div id="ludoLog" class="ludo-
-log status"> </div> </div> <!-- OTHER GAMES --> <div id="otherGame" class="card hidden"> <h2
-id="otherGameTitle"> Game </h2> <div id="otherGameMessage" class="status"> </div> <button class="secondary"
-onclick="closeOtherGame()"> BACK TO GAMES </button> </div> <!-- ADMIN --> <div id="adminPanel"
-class="card hidden"> <h2> Admin Panel</h2> <table> <thead> <tr> <th>User</th> <th>Amount</th>
-<th>Method</th> <th>Status</th> <th>Action</th> </tr> </thead> <tbody id="adminDeposits"> </tbody> </table>
-</div> </div> </div> <script> /* ========================= SUPABASE =========================
-*/ const SUPABASE_URL = "https://eizpxgwkottliyvvhlar.supabase.co"; const SUPABASE_KEY =
-"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7"; const supabaseClient = supabase.createClient(
-S U P A B A S E _ U R L , S U P A B A S E _ K E Y ) ; / * = = = = = = = = = = = = = = = = = = = = = = = = = V A R I A B L E S
+@keyframes kaFloat{to{transform:translate(var(--x),var(--y)) rotate(20deg)}}
+.ka-mixSub{position:absolute;bottom:8%;width:100%;text-align:center;font-weight:800;font-size:18px;}
+.ka-draw{position:absolute;inset:0;background:#ef0808;}
+.ka-grid{position:absolute;left:3%;top:8%;width:57%;height:75%;display:grid;grid-template-
+columns:repeat(10,1fr);grid-template-rows:repeat(8,1fr);gap:4px;}
+.ka-cell{border:2px solid rgba(255,220,0,.55);background:rgba(100,0,0,.2);border-radius:4px;display:flex;align-
+items:center;justify-content:center;font-size:clamp(10px,1.5vw,24px);font-weight:900;color:rgba(40,0,0,.7);}
+.ka-cell.hit{background:#ffd91b;color:#111;box-shadow:0 0 15px #ffe84c;animation:kaHit .5s ease;}
+@keyframes kaHit{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.ka-machine{position:absolute;right:5%;top:15%;width:32%;height:64%;}
+.ka-machine .ka-glass{width:100%;height:100%;left:0;top:0;transform:none;}
+.ka-outball{position:absolute;left:50%;bottom:-5%;transform:translateX(-
+50%);width:clamp(62px,8vw,92px);height:clamp(62px,8vw,92px);border-radius:50%;background:radial-
+gradient(circle at 30% 25%,#fff9a6,#ffd21a 50%,#a86700);color:#111;display:flex;align-items:center;justify-
+content:center;font-size:clamp(26px,3vw,38px);font-weight:1000;box-shadow:0 7px 15px #390000;}
+.ka-heads{position:absolute;right:35%;top:8%;background:#ffd91b;color:#111;padding:5px 14px;border-
+radius:6px;font-weight:1000;}
+.ka-count{position:absolute;right:4%;top:8%;font-size:clamp(22px,3vw,45px);font-weight:1000;}
+.ka-slots{position:absolute;left:3%;bottom:3%;width:94%;height:13%;display:grid;grid-template-
+columns:repeat(20,1fr);gap:4px;}
+.ka-slot{border:2px solid #ffd91b;border-radius:4px;background:rgba(100,0,0,.25);display:flex;align-
+items:center;justify-content:center;font-weight:1000;font-size:clamp(8px,1.4vw,22px);}
+.ka-slot.on{background:#ffd91b;color:#111;}
+.ka-next{position:absolute;left:3%;bottom:17%;font-weight:900;font-size:14px;}
+@media(max-width:700px){.keno-animation-stage{min-height:230px}.ka-grid{gap:2px}.ka-cell{border-
+w i d t h : 1 p x } . k a - g l a s s { b o r d e r - w i d t h : 5 p x } . k a - b a l l { w i d t h : 2 8 p x ; h e i g h t : 2 8 p x ; f o n t - s i z e : 1 0 p x } }
+</style></head><body><div class="container"><header><div class="top-actions"><button
+id="depositTopBtn"
+class="deposit-top hidden"
+onclick="showDeposit()"> Deposit
+</button><button
+id="logoutBtn"
+class="secondary hidden"
+onclick="logout()">
+Logout
+</button></div></header><!-- LOGIN / REGISTER --><div id="authBox" class="card"><h2>Login</h2><input
+id="email"
+type="email"
+autocomplete="email"
+placeholder="Email"><input
+id="password"
+type="password"
+autocomplete="current-password"
+placeholder="Password"><div class="row"><button
+id="loginBtn"
+onclick="login()">
+Login
+</button><button
+id="registerBtn"
+class="secondary"
+onclick="register()">
+Register
+</button></div><div id="authMessage" class="status"></div></div><!-- MAIN APP --><div id="app"
+class="hidden"><!-- BALANCE --><div class="card balance-card"><div><div class="small">
+Your Balance
+</div><div id="balance" class="balance">
+0.00 ETB
+</div></div></div><!-- GAMES --><div class="card"><div class="games-title"><h2> Games</h2><span
+class="small">
+Choose a game
+</span></div><div class="games-grid"><!-- LUDO --><div class="game-card"><div class="game-icon"></div><div
+class="game-name">
+Ludo
+</div><div class="game-description">
+Classic multiplayer Ludo.
+</div><div
+style="
+background:#182235;
+border:1px solid #20c878;
+border-radius:8px;
+padding:6px;
+margin:5px 0;
+color:#36e38b;
+text-align:center;
+font-size:11px;
+font-weight:bold;">
+FREE
+</div><button onclick="openGame('ludo')">
+PLAY
+</button></div><!-- KENO --><div class="game-card"><div class="game-icon"></div><div class="game-name">
+Keno
+</div><div class="game-description">
+Pick numbers and play LIVE Keno.
+</div><button onclick="openGame('keno')">
+PLAY
+</button></div><!-- BINGO --><div class="game-card"><div class="game-icon"></div><div class="game-name">
+Bingo
+</div><div class="game-description">
+Pick numbers and play Bingo.
+</div><button onclick="openGame('bingo')">
+PLAY
+</button></div><!-- CONQUER --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Conquer
+</div><div class="game-description">
+Fast card game battles.
+</div><button onclick="openGame('conquer')">
+PLAY
+</button></div><!-- FAST BINGO --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Fast Bingo
+</div><div class="game-description">
+Quick Bingo rounds.
+</div><button onclick="openGame('fastbingo')">
+PLAY
+</button></div><!-- CRAZY 8 --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Crazy 8
+</div><div class="game-description">
+Classic Crazy 8 card game.
+</div><button onclick="openGame('crazy8')">
+PLAY
+</button></div><!-- SOCCER --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Trace Soccer
+</div><div class="game-description">
+Soccer challenge game.
+</div><button onclick="openGame('soccer')">
+PLAY
+</button></div><!-- NIGHT --><div class="game-card"><div class="game-icon"></div><div class="game-name">
+Night Hunter
+</div><div class="game-description">
+Night-time adventure.
+</div><button onclick="openGame('night')">
+PLAY
+</button></div><!-- MEMORY --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Memory Game
+</div><div class="game-description">
+Test your memory skills.
+</div><button onclick="openGame('memory')">
+PLAY
+</button></div><!-- LAT LAT --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Lat Lat
+</div><div class="game-description">
+Simple quick-play game.
+</div><button onclick="openGame('latlat')">
+PLAY
+</button></div><!-- RPS --><div class="game-card"><div class="game-icon"></div><div class="game-name">
+Rock Paper Scissors
+</div><div class="game-description">
+Rock, paper or scissors.
+</div><button onclick="openGame('rps')">
+PLAY
+</button></div><!-- UNO --><div class="game-card"><div class="game-icon"></div><div class="game-name">
+Uno
+</div><div class="game-description">
+Match cards and win.
+</div><button onclick="openGame('uno')">
+PLAY
+</button></div><!-- CONNECT 4 --><div class="game-card"><div class="game-icon"></div><div class="game-
+name">
+Connect 4
+</div><div class="game-description">
+Connect four to win.
+</div><button onclick="openGame('connect4')">
+PLAY
+</button></div></div></div><!-- DETAILS --><div class="card"><h2> Game Details</h2><div class="details-
+box"><strong> Games</strong><p class="small">
+Choose any game above.
+Ludo is free to play and does not require balance.
+</p></div></div><!-- DEPOSIT --><div id="depositBox" class="card hidden"><h2> Deposit</h2><input
+id="depositAmount"
+type="number"
+min="1"
+placeholder="Amount (ETB)"><select id="depositMethod"><option value="Telebirr">
+Telebirr
+</option><option value="CBE Birr">
+CBE Birr
+</option><option value="Bank">
+Bank
+</option></select><input
+id="depositPhone"
+placeholder="Phone / Bank Account"><input
+id="depositReference"
+placeholder="Transaction Reference"><button onclick="makeDeposit()">
+SUBMIT DEPOSIT
+</button><button
+class="secondary"
+onclick="hideDeposit()">
+CLOSE
+</button><div id="depositMessage" class="status"></div></div><!-- MY DEPOSITS --><div class="card"><h2>
+My Deposits</h2><table><thead><tr><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody
+id="depositList"></tbody></table></div><!-- KENO --><div id="kenoGame" class="card hidden"><div
+class="keno-live-header"><h2> LIVE KENO</h2><div class="live-badge"><span class="live-dot"></span>
+LIVE
+</div></div><!-- KENO DRAW ANIMATION --><div id="kenoAnimationStage" class="keno-animation-stage
+hidden"><section class="ka-screen ka-intro" id="kaIntro"><div class="ka-brand">DEGA</div><div class="ka-
+keno">KENO</div><div class="ka-timerbox"><div class="ka-timerlabel">NEXT DRAW</div><div class="ka-
+timer"
+id="kaTimer">00:08</div></div><div class="ka-preview"></div></section><section class="ka-screen ka-mix ka-
+hidden" id="kaMix"><div class="ka-mixTitle">KENO — MIXING BALLS</div><div class="ka-glass"
+id="kaMixGlass"></div><div class="ka-mixSub">PLEASE WAIT...</div></section><section class="ka-screen ka-
+draw ka-hidden" id="kaDraw"><div class="ka-grid" id="kaGrid"></div><div class="ka-heads">HEADS</div><div
+c l a s s = " k a - c o u n t " i d = " k a C o u n t " > 0 / 2 0 < / d i v > < d i v c l a s s = " k a - m a c h i n e " > < d i v c l a s s = " k a - g l a s s "
+id="kaDrawGlass"></div><div class="ka-outball"
+i d = " k a O u t b a l l " > - - < / d i v > < / d i v > < d i v c l a s s = " k a - n e x t " > K E N O < / d i v > < d i v c l a s s = " k a - s l o t s "
+id="kaSlots"></div></section></div><!-- VIDEO --><video
+id="kenoVideo"
+class="keno-video"
+src="1000029495.mp4"
+playsinline
+preload="auto"
+controls>
+Your browser does not support video.
+</video><div
+class="status"
+style="text-align:center"><div class="small">
+LIVE KENO DRAW
+</div><div id="kenoTimer" class="timer">
+READY
+</div></div><div class="small">
+Select up to 10 numbers
+</div><div
+id="numberGrid"
+class="number-grid"></div><div class="row"><input
+id="betAmount"
+type="number"
+min="1"
+placeholder="Bet amount"><button
+id="playBtn"
+onclick="playKeno()">
+PLAY
+</button></div><div id="gameMessage" class="status"></div><div
+id="resultNumbers"
+class="result-numbers"></div></div><!-- LUDO --><div id="ludoGame" class="card hidden"><div class="games-
+title"><h2> LUDO</h2><span class="small">
+FREE PLAY
+</span></div><div class="status success">
+Ludo is free to play. Balance is not required.
+</div><div id="ludoMessage" class="status">
+Roll the dice to start.
+</div><div id="ludoPlayers" class="ludo-players"></div><div class="ludo-board-wrap"><div
+id="ludoBoard"
+class="ludo-board"></div></div><div class="ludo-controls"><button
+id="ludoRollBtn"
+onclick="ludoRoll()"> ROLL DICE
+</button><div
+id="ludoDice"
+class="ludo-dice">
+—
+</div><button
+class="secondary"
+onclick="closeLudo()">
+BACK
+</button></div><div id="ludoLog" class="ludo-log status"></div></div><!-- OTHER GAMES --><div
+id="otherGame" class="card hidden"><h2 id="otherGameTitle">
+Game
+</h2><div id="otherGameMessage" class="status"></div><button
+class="secondary"
+onclick="closeOtherGame()">
+BACK TO GAMES
+< / b u t t o n > < / d i v > < ! - - A D M I N - - > < d i v i d = " a d m i n P a n e l " c l a s s = " c a r d h i d d e n " > < h 2 > A d m i n
+Panel</h2><table><thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></
+t r > < / t h e a d > < t b o d y i d = " a d m i n D e p o s i t s " > < / t b o d y > < / t a b l e > < / d i v > < / d i v > < / d i v > < s c r i p t > / *
+========================= SUPABASE
+========================= */ const SUPABASE_URL =
+"https://eizpxgwkottliyvvhlar.supabase.co"; const SUPABASE_KEY =
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7"; const supabaseClient =
+supabase.createClient( SUPABASE_URL, SUPABASE_KEY
+); /* Safe timeout helper: prevents login/startup requests from hanging forever. */
+function withTimeout(promise, ms, message){ let timer; const timeout = new Promise((_, reject)=>{ timer =
+s e t T i m e o u t ( ( ) = > r e j e c t ( n e w E r r o r ( m e s s a g e | | " R e q u e s t t i m e d o u t . " ) ) , m s ) ; } ) ; r e t u r n
+Promise.race([Promise.resolve(promise), timeout]) .finally(()=>clearTimeout(timer));
+} /* ========================= VARIABLES
 ========================= */ let currentUser = null; let selectedNumbers = []; let isDrawing = false; let
-ludoState = null; /* ========================= HELPERS ========================= */ function
-show(id,message,type=""){ const element = document.getElementById(id); if(!element){ return; }
-element.textContent = message; element.className = "status " + type; } function wait(ms){ return new Promise(
-resolve => setTimeout(resolve,ms) ); } /* ========================= UI =========================
-*/ function setLoggedInUI(loggedIn){ document .getElementById("authBox") .classList .toggle("hidden",loggedIn);
-document .getElementById("app") .classList .toggle("hidden",!loggedIn); document .getElementById("logoutBtn")
-. c l a s s L i s t . t o g g l e ( " h i d d e n " , ! l o g g e d I n ) ; d o c u m e n t . g e t E l e m e n t B y I d ( " d e p o s i t T o p B t n " ) . c l a s s L i s t
-.toggle("hidden",!loggedIn); } /* ========================= REGISTER =========================
-*/ async function register(){ const email = document .getElementById("email") .value .trim(); const password =
-document .getElementById("password") .value; if(!email){ show( "authMessage", "Please enter your email.", "error"
-); return; } if(!password){ show( "authMessage", "Please enter your password.", "error" ); return; } if(password.length
-< 6){ show( "authMessage", "Password must be at least 6 characters.", "error" ); return; } const button =
-document.getElementById( "registerBtn" ); button.disabled = true; show( "authMessage", "Creating account..." ); try{
-const { data, error }= await supabaseClient .auth .signUp({ email, password }); if(error){ show( "authMessage",
-error.message, "error" ); return; } if(data.session){ currentUser = data.session.user; await startApp(); return; } show(
-"authMessage", "Registration successful. Please login.", "success" ); }catch(error){ show( "authMessage",
+ludoState = null; /* ========================= HELPERS
+========================= */
+function show(id,message,type=""){ const element = document.getElementById(id); if(!element){ return;
+} element.textContent = message; element.className = "status " + type;
+} f u n c t i o n w a i t ( m s ) { r e t u r n n e w P r o m i s e ( r e s o l v e = > s e t T i m e o u t ( r e s o l v e , m s ) ) ; } / *
+========================= UI
+========================= */ function setLoggedInUI(loggedIn){ document .getElementById("authBox")
+.classList .toggle("hidden",loggedIn); document .getElementById("app") .classList .toggle("hidden",!loggedIn);
+d o c u m e n t . g e t E l e m e n t B y I d ( " l o g o u t B t n " ) . c l a s s L i s t . t o g g l e ( " h i d d e n " , ! l o g g e d I n ) ; d o c u m e n t
+.getElementById("depositTopBtn") .classList .toggle("hidden",!loggedIn); } /* =========================
+REGISTER
+========================= */ async function register(){
+c o n s t e m a i l = d o c u m e n t . g e t E l e m e n t B y I d ( " e m a i l " ) . v a l u e . t r i m ( ) ; c o n s t p a s s w o r d = d o c u m e n t
+.getElementById("password") .value; if(!email){ show( "authMessage", "Please enter your email.", "error" ); return;
+} if(!password){ show( "authMessage", "Please enter your password.", "error" ); return;
+} if(password.length < 6){ show( "authMessage", "Password must be at least 6 characters.", "error" ); return;
+} const button = document.getElementById( "registerBtn" ); button.disabled = true; show( "authMessage", "Creating
+account..."
+); try{ const { data, error
+}= await supabaseClient .auth .signUp({ email, password }); if(error){ show( "authMessage", error.message, "error" );
+return;
+} if(data.session){ currentUser = data.session.user; await startApp(); return;
+}
+show( "authMessage", "Registration successful. Please login.", "success" ); }catch(error){ show( "authMessage",
 error.message, "error" ); }finally{ button.disabled = false; } } /* ========================= LOGIN
 = = = = = = = = = = = = = = = = = = = = = = = = = * / a s y n c f u n c t i o n l o g i n ( ) { c o n s t e m a i l =
 document.getElementById("email").value.trim(); const password = document.getElementById("password").value;
@@ -217,80 +435,95 @@ document.getElementById("loginBtn"); button.disabled = true; show("authMessage",
 = await withTimeout( supabaseClient.auth.signInWithPassword({ email, password }), 15000, "Login request timed
 out. Please check your internet connection and try again." ); const { data, error } = result; if(error){
 show("authMessage",error.message,"error"); return; } if(!data || !data.user){ show("authMessage","Login failed. No
-user session was returned.","error"); return; } currentUser = data.user; /* Open the app immediately. Database loading
-must never keep the login screen stuck.*/ setLoggedInUI(true); createNumbers(); show("authMessage","Login
-successful.","success"); /* Load balance/deposits/admin data in the background.*/ startApp().catch(error =>
+user session was returned.","error"); return; } currentUser = data.user; // Open the app immediately. Database loading
+must never keep the login screen stuck. setLoggedInUI(true); createNumbers(); show("authMessage","Login
+successful.","success"); // Load balance/deposits/admin data in the background. startApp().catch(error =>
 console.log("App startup error:", error)); }catch(error){ show("authMessage",error.message || "Unable to
-login.","error"); }finally{ button.disabled = false; } } /* ========================= START APP
-========================= */ async function startApp(){ setLoggedInUI(true); createNumbers(); /* These
-requests are intentionally independent so a database/RLS problem*/ /* cannot prevent the main app from opening
-after login.*/ try{ await withTimeout(loadBalance(),8000,"Balance request timed out"); }catch(error){
-console.log("Balance error:",error); } try{ await withTimeout(loadDeposits(),8000,"Deposits request timed out");
-}catch(error){ console.log("Deposit error:",error); } try{ await withTimeout(checkAdmin(),8000,"Admin request
-timed out"); }catch(error){ console.log("Admin error:",error); } } /* ========================= LOGOUT
+login.","error"); }finally{ button.disabled = false; }
+} /* ========================= START APP
+========================= */ async function startApp(){ setLoggedInUI(true); createNumbers(); // These
+requests are intentionally independent so a database/RLS problem // cannot prevent the main app from opening after
+login. try{ await withTimeout(loadBalance(),8000,"Balance request timed out"); }catch(error){ console.log("Balance
+error:",error); } try{ await withTimeout(loadDeposits(),8000,"Deposits request timed out"); }catch(error){
+console.log("Deposit error:",error); } try{ await withTimeout(checkAdmin(),8000,"Admin request timed out");
+}catch(error){ console.log("Admin error:",error); }
+} /* ========================= LOGOUT
 ========================= */ async function logout(){ try{ await supabaseClient .auth .signOut();
 } c a t c h ( e r r o r ) { c o n s o l e . l o g ( e r r o r ) ; } c u r r e n t U s e r = n u l l ; s e t L o g g e d I n U I ( f a l s e ) ; d o c u m e n t
 .getElementById("depositBox") .classList .add("hidden"); document .getElementById("email") .value = ""; document
-. g e t E l e m e n t B y I d ( " p a s s w o r d " ) . v a l u e = " " ; } / * = = = = = = = = = = = = = = = = = = = = = = = = = B A L A N C E
+.getElementById("password") .value = ""; } /* ========================= BALANCE
 ========================= */ async function loadBalance(){ if(!currentUser){ return; } const { data, error }=
 await supabaseClient .from("profiles") .select("balance") .eq( "id", currentUser.id ) .maybeSingle(); if(error){
 console.log( "Balance database error:", error ); return; } const balance = Number( data?.balance || 0 ); document
 .getElementById("balance") .textContent = balance.toFixed(2) + " ETB"; } /* =========================
-DEPOSIT ========================= */ function showDeposit(){ if(!currentUser){ show( "authMessage",
-"Please login first.", "error" ); return; } document .getElementById("depositBox") .classList .remove("hidden");
-document .getElementById("depositBox") .scrollIntoView({ behavior:"smooth" }); } function hideDeposit(){
-document .getElementById("depositBox") .classList .add("hidden"); } async function makeDeposit(){
-if(!currentUser){ show( "depositMessage", "Please login first.", "error" ); return; } const amount = Number( document
+DEPOSIT
+========================= */ function showDeposit(){ if(!currentUser){ show( "authMessage", "Please login
+first.", "error" ); return; } document .getElementById("depositBox") .classList .remove("hidden"); document
+.getElementById("depositBox") .scrollIntoView({ behavior:"smooth" }); } function hideDeposit(){ document
+.getElementById("depositBox") .classList .add("hidden"); } async function makeDeposit(){ if(!currentUser){ show(
+" d e p o s i t M e s s a g e " , " P l e a s e l o g i n f i r s t . " , " e r r o r " ) ; r e t u r n ; } c o n s t a m o u n t = N u m b e r ( d o c u m e n t
 .getElementById("depositAmount") .value ); const method = document .getElementById("depositMethod") .value;
 const phone = document .getElementById("depositPhone") .value .trim(); const reference = document
 .getElementById("depositReference") .value .trim(); if(!amount || amount <= 0){ show( "depositMessage", "Enter a
-valid amount.", "error" ); return; } if(!phone){ show( "depositMessage", "Enter phone or bank account.", "error" );
-return; } if(!reference){ show( "depositMessage", "Enter transaction reference.", "error" ); return; } show(
-"depositMessage", "Submitting..." ); const fullReference = "Phone/Bank: " + phone + " | Ref: " + reference; const {
-error }= await supabaseClient .from("deposits") .insert({ user_id:currentUser.id, amount:amount, method:method,
+valid amount.", "error" ); return;
+} if(!phone){ show( "depositMessage", "Enter phone or bank account.", "error" ); return;
+} if(!reference){ show( "depositMessage", "Enter transaction reference.", "error" ); return;
+} show( "depositMessage", "Submitting..."
+); const fullReference = "Phone/Bank: " + phone + " | Ref: " + reference; const { error
+}= await supabaseClient .from("deposits") .insert({ user_id:currentUser.id, amount:amount, method:method,
 reference:fullReference, status:"pending" }); if(error){ show( "depositMessage", error.message, "error" ); return; }
 show( "depositMessage", "Deposit submitted. Waiting for admin approval.", "success" ); document
 .getElementById("depositAmount") .value = ""; document .getElementById("depositPhone") .value = ""; document
-.getElementById("depositReference") .value = ""; await loadDeposits(); } /* ========================= MY
-DEPOSITS ========================= */ async function loadDeposits(){ if(!currentUser){ return; } const {
-data, error }= await supabaseClient .from("deposits") .select("*") .eq( "user_id", currentUser.id ) .order( "created_at",
-{ a s c e n d i n g : f a l s e } ) ; i f ( e r r o r ) { c o n s o l e . l o g ( " D e p o s i t s e r r o r : " , e r r o r ) ; r e t u r n ; } c o n s t l i s t =
-document.getElementById( "depositList" ); list.innerHTML = ""; (data || []).forEach( item => { const tr =
-document.createElement("tr"); tr.innerHTML = ` <td> ${Number(item.amount).toFixed(2)} ETB </td> <td>
-${item.method || ""} </td> <td class="${item.status || "pending"}"> ${item.status || "pending"} </td> `;
-list.appendChild(tr); } ); } /* ========================= GAMES ========================= */
-function openGame(game){ document .getElementById("kenoGame") .classList .add("hidden"); document
-.getElementById("otherGame") .classList .add("hidden"); document .getElementById("ludoGame") .classList
-.add("hidden"); if(game === "ludo"){ ludoOpen(); return; } if(game === "keno"){ resetKenoAnimation(); document
-.getElementById("kenoGame") .classList .remove("hidden"); document .getElementById("kenoGame")
-.scrollIntoView({ behavior:"smooth" }); const video = document.getElementById( "kenoVideo" ); if(video){
-video.currentTime = 0; video.play().catch( () => {} ); } return; } const names = { bingo:" BINGO", conquer:"
-CONQUER", fastbingo:" FAST BINGO", crazy8:" CRAZY 8", soccer:" TRACE SOCCER", night:" NIGHT
-HUNTER", memory:" MEMORY GAME", latlat:" LAT LAT", rps:" ROCK PAPER SCISSORS", uno:" UNO",
-connect4:" CONNECT 4" }; document .getElementById("otherGameTitle") .textContent = names[game] || "Game";
-document .getElementById("otherGameMessage") .textContent = "This game area is ready. The game can be built
-n e x t . " ; d o c u m e n t . g e t E l e m e n t B y I d ( " o t h e r G a m e " ) . c l a s s L i s t . r e m o v e ( " h i d d e n " ) ; d o c u m e n t
-.getElementById("otherGame") .scrollIntoView({ behavior:"smooth" }); } function closeOtherGame(){ document
-.getElementById("otherGame") .classList .add("hidden"); } /* ========================= KENO NUMBERS
-========================= */ function createNumbers(){ const grid = document.getElementById(
-"numberGrid" ); if(!grid){ return; } grid.innerHTML = ""; selectedNumbers = []; for( let i = 1; i <= 80; i++ ){ const
-button = document.createElement( "button" ); button.className = "num"; button.textContent = i; button.onclick = ()
-=> { if(isDrawing){ return; } if( selectedNumbers.includes(i) ){ selectedNumbers = selectedNumbers.filter( n => n
-!== i ); button.classList.remove( "selected" ); return; } if( selectedNumbers.length >= 10 ){ show( "gameMessage",
-"Maximum 10 numbers.", "error" ); return; } selectedNumbers.push(i); button.classList.add( "selected" ); };
-grid.appendChild(button); } } /* ========================= KENO ANIMATION ENGINE
-========================= */ let kenoAnimationRunning=false; let kenoAnimationTimer=null; function
-i n i t K e n o A n i m a t i o n ( ) { c o n s t g r i d = d o c u m e n t . g e t E l e m e n t B y I d ( " k a G r i d " ) ; c o n s t
+.getElementById("depositReference") .value = ""; await loadDeposits(); }
+/* ========================= MY DEPOSITS
+========================= */ async function loadDeposits(){ if(!currentUser){ return;
+} const { data, error
+}= await supabaseClient .from("deposits") .select("*") .eq( "user_id", currentUser.id ) .order( "created_at", {
+ascending:false } ); if(error){ console.log( "Deposits error:", error ); return;
+}
+const list = document.getElementById( "depositList" ); list.innerHTML = ""; (data || []).forEach( item => { const tr =
+document.createElement("tr"); tr.innerHTML = ` <td> ${Number(item.amount).toFixed(2)} ETB </td><td>
+${item.method || ""} </td><td class="${item.status || "pending"}"> ${item.status || "pending"} </td> `;
+list.appendChild(tr); } ); } /* ========================= GAMES
+========================= */ function openGame(game){ document .getElementById("kenoGame")
+.classList .add("hidden"); document .getElementById("otherGame") .classList .add("hidden"); document
+.getElementById("ludoGame") .classList .add("hidden"); if(game === "ludo"){ ludoOpen(); return; }
+if(game === "keno"){ resetKenoAnimation(); document .getElementById("kenoGame") .classList .remove("hidden");
+d o c u m e n t . g e t E l e m e n t B y I d ( " k e n o G a m e " ) . s c r o l l I n t o V i e w ( { b e h a v i o r : " s m o o t h " } ) ; c o n s t v i d e o =
+document.getElementById( "kenoVideo" ); if(video){ video.currentTime = 0; video.play().catch( () => {} ); } return;
+} const names = { bingo:" BINGO", conquer:" CONQUER", fastbingo:" FAST BINGO", crazy8:" CRAZY 8",
+soccer:" TRACE SOCCER", night:" NIGHT HUNTER", memory:" MEMORY GAME", latlat:" LAT LAT", rps:"
+R O C K P A P E R S C I S S O R S " , u n o : " U N O " , c o n n e c t 4 : " C O N N E C T 4 " } ; d o c u m e n t
+. g e t E l e m e n t B y I d ( " o t h e r G a m e T i t l e " ) . t e x t C o n t e n t = n a m e s [ g a m e ] | | " G a m e " ; d o c u m e n t
+.getElementById("otherGameMessage") .textContent = "This game area is ready. The game can be built next.";
+document .getElementById("otherGame") .classList .remove("hidden"); document .getElementById("otherGame")
+.scrollIntoView({ behavior:"smooth" }); } function closeOtherGame(){ document .getElementById("otherGame")
+.classList .add("hidden"); } /* ========================= KENO NUMBERS
+========================= */
+function createNumbers(){ const grid = document.getElementById( "numberGrid" );
+if(!grid){ return;
+} grid.innerHTML = ""; selectedNumbers = []; for( let i = 1; i <= 80; i++
+){ const button = document.createElement( "button" ); button.className = "num"; button.textContent = i;
+button.onclick = () => { if(isDrawing){ return;
+} if( selectedNumbers.includes(i)
+){ selectedNumbers = selectedNumbers.filter( n => n !== i ); button.classList.remove( "selected" ); return; } if(
+selectedNumbers.length >= 10 ){ show( "gameMessage", "Maximum 10 numbers.", "error" ); return; }
+s e l e c t e d N u m b e r s . p u s h ( i ) ; b u t t o n . c l a s s L i s t . a d d ( " s e l e c t e d " ) ; } ; g r i d . a p p e n d C h i l d ( b u t t o n ) ; } } / *
+========================= KENO ANIMATION ENGINE
+========================= */
+let kenoAnimationRunning=false;
+let kenoAnimationTimer=null; function initKenoAnimation(){ const grid=document.getElementById("kaGrid"); const
 slots=document.getElementById("kaSlots"); if(!grid || !slots || grid.children.length) return; for(let n=1;n<=80;n++){
 const c=document.createElement("div"); c.className="ka-cell"; c.id="kaCell"+n; c.textContent=n;
 grid.appendChild(c); } for(let i=1;i<=20;i++){ const s=document.createElement("div"); s.className="ka-slot";
-s . i d = " k a S l o t " + i ; s l o t s . a p p e n d C h i l d ( s ) ; } } f u n c t i o n m a k e K e n o M i x B a l l s ( ) { c o n s t
-glass=document.getElementById("kaMixGlass"); if(!glass) return; glass.innerHTML=""; for(let i=0;i<18;i++){ const
-b=document.createElement("div"); b.className="ka-ball"; b.textContent=Math.floor(Math.random()*80)+1;
-b.style.left=(10+Math.random()*72)+"%"; b.style.top=(12+Math.random()*72)+"%"; b.style.setProperty("--
-x " , ( M a t h . r a n d o m ( ) * 7 0 - 3 5 ) + " p x " ) ; b . s t y l e . s e t P r o p e r t y ( " - - y " , ( M a t h . r a n d o m ( ) * 7 0 - 3 5 ) + " p x " ) ;
-b.style.animationDelay=(Math.random()*-.9)+"s"; glass.appendChild(b); } } function resetKenoAnimation(){
-c l e a r T i m e o u t ( k e n o A n i m a t i o n T i m e r ) ; k e n o A n i m a t i o n R u n n i n g = f a l s e ; c o n s t
+s.id="kaSlot"+i; slots.appendChild(s); }
+} function makeKenoMixBalls(){ const glass=document.getElementById("kaMixGlass"); if(!glass) return;
+glass.innerHTML=""; for(let i=0;i<18;i++){ const b=document.createElement("div"); b.className="ka-ball";
+b . t e x t C o n t e n t = M a t h . f l o o r ( M a t h . r a n d o m ( ) * 8 0 ) + 1 ; b . s t y l e . l e f t = ( 1 0 + M a t h . r a n d o m ( ) * 7 2 ) + " % " ;
+b . s t y l e . t o p = ( 1 2 + M a t h . r a n d o m ( ) * 7 2 ) + " % " ; b . s t y l e . s e t P r o p e r t y ( " - - x " , ( M a t h . r a n d o m ( ) * 7 0 - 3 5 ) + " p x " ) ;
+b.style.setProperty("--y",(Math.random()*70-35)+"px"); b.style.animationDelay=(Math.random()*-.9)+"s";
+glass.appendChild(b); }
+} function resetKenoAnimation(){ clearTimeout(kenoAnimationTimer); kenoAnimationRunning=false; const
 stage=document.getElementById("kenoAnimationStage"); const intro=document.getElementById("kaIntro"); const
 mix=document.getElementById("kaMix"); const draw=document.getElementById("kaDraw"); if(stage)
 stage.classList.add("hidden"); if(intro) intro.classList.remove("ka-hidden"); if(mix) mix.classList.add("ka-hidden");
@@ -299,135 +532,183 @@ timer.textContent="00:08"; const out=document.getElementById("kaOutball"); if(ou
 c o u n t = d o c u m e n t . g e t E l e m e n t B y I d ( " k a C o u n t " ) ; i f ( c o u n t ) c o u n t . t e x t C o n t e n t = " 0 / 2 0 " ; c o n s t
 s l o t s = d o c u m e n t . g e t E l e m e n t B y I d ( " k a S l o t s " ) ; i f ( s l o t s )
 A r r a y . f r o m ( s l o t s . c h i l d r e n ) . f o r E a c h ( s = > { s . t e x t C o n t e n t = " " ; s . c l a s s L i s t . r e m o v e ( " o n " ) } ) ;
-d o c u m e n t . q u e r y S e l e c t o r A l l ( " . k a - c e l l . h i t " ) . f o r E a c h ( c = > c . c l a s s L i s t . r e m o v e ( " h i t " ) ) ; } f u n c t i o n
-runKenoAnimation(numbers){ return new Promise(resolve=>{ initKenoAnimation(); resetKenoAnimation(); const
-clean = Array.from(new Set( (numbers || []) .map(Number) .filter(n => Number.isInteger(n) && n >= 1 && n <= 80)
-)).slice(0, 20); if(!clean.length){resolve();return;} const stage=document.getElementById("kenoAnimationStage");
-const intro=document.getElementById("kaIntro"); const mix=document.getElementById("kaMix"); const
-draw=document.getElementById("kaDraw"); const timer=document.getElementById("kaTimer"); const
-count=document.getElementById("kaCount"); const out=document.getElementById("kaOutball"); const
-slots=document.getElementById("kaSlots"); if(!stage){resolve();return;} kenoAnimationRunning=true;
-stage.classList.remove("hidden"); let sec=8; timer.textContent="00:08"; const countdown=setInterval(()=>{ sec--;
-if(sec<0){clearInterval(countdown);return;} timer.textContent="00:"+String(sec).padStart(2,"0"); },1000);
-kenoAnimationTimer=setTimeout(()=>{ clearInterval(countdown); intro.classList.add("ka-hidden");
-m i x . c l a s s L i s t . r e m o v e ( " k a - h i d d e n " ) ; m a k e K e n o M i x B a l l s ( ) ; k e n o A n i m a t i o n T i m e r = s e t T i m e o u t ( ( ) = > {
-mix.classList.add("ka-hidden"); draw.classList.remove("ka-hidden"); let i=0; const one=()=>{ if(i>=clean.length){
-k e n o A n i m a t i o n R u n n i n g = f a l s e ;
+document.querySelectorAll(".ka-cell.hit").forEach(c=>c.classList.remove("hit"));
+} f u n c t i o n r u n K e n o A n i m a t i o n ( n u m b e r s ) { r e t u r n n e w P r o m i s e ( r e s o l v e = > { i n i t K e n o A n i m a t i o n ( ) ;
+resetKenoAnimation(); const clean = Array.from(new Set( (numbers || []) .map(Number) .filter(n =>
+Number.isInteger(n) && n >= 1 && n <= 80) )).slice(0, 20); if(!clean.length){resolve();return;} const
+stage=document.getElementById("kenoAnimationStage"); const intro=document.getElementById("kaIntro"); const
+mix=document.getElementById("kaMix"); const draw=document.getElementById("kaDraw"); const
+timer=document.getElementById("kaTimer"); const count=document.getElementById("kaCount"); const
+o u t = d o c u m e n t . g e t E l e m e n t B y I d ( " k a O u t b a l l " ) ; c o n s t s l o t s = d o c u m e n t . g e t E l e m e n t B y I d ( " k a S l o t s " ) ;
+if(!stage){resolve();return;} kenoAnimationRunning=true; stage.classList.remove("hidden"); let sec=8;
+timer.textContent="00:08"; const countdown=setInterval(()=>{ sec--; if(sec<0){clearInterval(countdown);return;}
+timer.textContent="00:"+String(sec).padStart(2,"0"); },1000); kenoAnimationTimer=setTimeout(()=>{
+c l e a r I n t e r v a l ( c o u n t d o w n ) ; i n t r o . c l a s s L i s t . a d d ( " k a - h i d d e n " ) ; m i x . c l a s s L i s t . r e m o v e ( " k a - h i d d e n " ) ;
+m a k e K e n o M i x B a l l s ( ) ; k e n o A n i m a t i o n T i m e r = s e t T i m e o u t ( ( ) = > { m i x . c l a s s L i s t . a d d ( " k a - h i d d e n " ) ;
+draw.classList.remove("ka-hidden"); let i=0; const one=()=>{ if(i>=clean.length){ kenoAnimationRunning=false;
 kenoAnimationTimer=setTimeout(()=>{stage.classList.add("hidden");resolve();},800); return; } const n=clean[i];
 c o n s t c e l l = d o c u m e n t . g e t E l e m e n t B y I d ( " k a C e l l " + n ) ; i f ( c e l l ) c e l l . c l a s s L i s t . a d d ( " h i t " ) ; c o n s t
 slot=document.getElementById("kaSlot"+(i+1)); if(slot){slot.textContent=n;slot.classList.add("on");} if(out)
 o u t . t e x t C o n t e n t = n ; i f ( c o u n t ) c o u n t . t e x t C o n t e n t = ( i + 1 ) + " / " + c l e a n . l e n g t h ; i + + ;
-kenoAnimationTimer=setTimeout(one,700); }; kenoAnimationTimer=setTimeout(one,400); },3500); },8000); }); } /*
-========================= LIVE KENO DRAW ========================= */ async function
-getLiveKenoDraw(){ const { data, error }= await supabaseClient .from("keno_draws") .select("*") .eq( "status",
-"open" ) .order( "created_at", { ascending:false } ) .limit(1) .maybeSingle(); if(error){ throw error; } return data; } /*
-========================= KENO PLAY ========================= */ async function playKeno(){
-if(isDrawing){ return; } if(!currentUser){ show( "gameMessage", "Please login first.", "error" ); return; } const bet =
-Number( document .getElementById("betAmount") .value ); if(!bet || bet <= 0){ show( "gameMessage", "Enter bet
-amount.", "error" ); return; } if( selectedNumbers.length < 1 ){ show( "gameMessage", "Select at least one number.",
-"error" ); return; } if( selectedNumbers.length > 10 ){ show( "gameMessage", "Maximum 10 numbers.", "error" );
-return; } /* BALANCE */ const { data:profile, error:profileError }= await supabaseClient .from("profiles")
-.select("balance") .eq( "id", currentUser.id ) .maybeSingle(); if(profileError){ show( "gameMessage",
-profileError.message, "error" ); return; } const balance = Number( profile?.balance || 0 ); if(balance < bet){ show(
-"gameMessage", "Insufficient balance.", "error" ); return; } isDrawing = true; document .getElementById("playBtn")
-. d i s a b l e d = t r u e ; d o c u m e n t . g e t E l e m e n t B y I d ( " r e s u l t N u m b e r s " ) . i n n e r H T M L = " " ; d o c u m e n t
-.getElementById("kenoTimer") .textContent = "LIVE"; /* VIDEO */ const video = document.getElementById(
-"kenoVideo" ); if(video){ video.currentTime = 0; video.play().catch( () => {} ); } show( "gameMessage",
-"Connecting to LIVE KENO..." ); /* GET DRAW */ let draw; try{ draw = await getLiveKenoDraw(); }catch(error){
-console.log( "Keno draw error:", error ); show( "gameMessage", "Unable to connect to LIVE KENO.", "error" );
-isDrawing = false; document .getElementById("playBtn") .disabled = false; return; } if(!draw){ show(
-" g a m e M e s s a g e " , " N o a c t i v e K E N O d r a w i s a v a i l a b l e . " , " e r r o r " ) ; i s D r a w i n g = f a l s e ; d o c u m e n t
-.getElementById("playBtn") .disabled = false; return; } /* WINNING NUMBERS */ let winningNumbers =
-draw.winning_numbers; if(typeof winningNumbers === "string"){ try{ winningNumbers = JSON.parse(
-winningNumbers ); }catch(error){ winningNumbers = winningNumbers .split(",") .map( n => Number(n.trim()) ); } }
-if(!Array.isArray(winningNumbers)){ show( "gameMessage", "Invalid KENO draw data.", "error" ); isDrawing =
-false; document .getElementById("playBtn") .disabled = false; return; } winningNumbers = winningNumbers .map( n
-=> Number(n) ) .filter( n => Number.isInteger(n) && n >= 1 && n <= 80 ); if( winningNumbers.length === 0 ){
-show( "gameMessage", "KENO draw has no valid numbers.", "error" ); isDrawing = false; document
-. g e t E l e m e n t B y I d ( " p l a y B t n " ) . d i s a b l e d = f a l s e ; r e t u r n ; } / * D R A W A N I M A T I O N * / a w a i t
-runKenoAnimation(winningNumbers); for( let i = 0; i < winningNumbers.length; i++ ){ show( "gameMessage",
-"LIVE DRAW " + (i + 1) + "/" + winningNumbers.length + "..." ); await wait(500); const ball =
-document.createElement( "div" ); ball.className = "result-ball"; if( selectedNumbers.includes( winningNumbers[i] )
-){ ball.classList.add( "hit" ); } ball.textContent = winningNumbers[i]; document .getElementById( "resultNumbers" )
-. a p p e n d C h i l d ( b a l l ) ; a w a i t w a i t ( 3 0 0 ) ; } / * H I T S * / c o n s t h i t s = s e l e c t e d N u m b e r s . f i l t e r ( n = >
-winningNumbers.includes(n) ).length; /* PAYTABLE */ const multipliers = { 0:0, 1:0, 2:1, 3:2, 4:5, 5:10, 6:20, 7:50,
-8:100, 9:250, 10:500 }; const multiplier = multipliers[hits] || 0; const payout = bet * multiplier; /* BALANCE */ const
-finalBalance = balance - bet + payout; const { error:balanceError }= await supabaseClient .from("profiles") .update({
-balance:finalBalance }) .eq( "id", currentUser.id ); if(balanceError){ console.log( "Balance update error:",
-balanceError ); show( "gameMessage", "Could not update balance.", "error" ); isDrawing = false; document
-.getElementById("playBtn") .disabled = false; return; } show( "gameMessage", "Hits: " + hits + " | Payout: " +
-payout.toFixed(2) + " ETB", "success" ); await loadBalance(); document .getElementById("kenoTimer") .textContent
-= " R E S U L T " ; i s D r a w i n g = f a l s e ; d o c u m e n t . g e t E l e m e n t B y I d ( " p l a y B t n " ) . d i s a b l e d = f a l s e ; } / *
-========================= ADMIN ========================= */ async function checkAdmin(){
-if(!currentUser){ return; } const { data, error }= await supabaseClient .from("profiles") .select("role") .eq( "id",
-currentUser.id ) .maybeSingle(); if(error){ console.log( "Admin check:", error ); return; } if( data?.role === "admin"
-){ document .getElementById("adminPanel") .classList .remove("hidden"); await loadAdminDeposits(); } } async
-function loadAdminDeposits(){ const { data, error }= await supabaseClient .from("deposits") .select("*") .eq( "status",
-"pending" ) .order( "created_at", { ascending:false } ); if(error){ console.log( "Admin deposits:", error ); return; }
-const list = document.getElementById( "adminDeposits" ); list.innerHTML = ""; (data || []).forEach( item => { const
-t r = d o c u m e n t . c r e a t e E l e m e n t ( " t r " ) ; t r . i n n e r H T M L = ` < t d > $ { i t e m . u s e r _ i d } < / t d > < t d >
-${Number(item.amount).toFixed(2)} ETB </td> <td> ${item.method || ""} </td> <td class="pending"> pending </td>
-<td> <button onclick=" approveDeposit( '${item.id}', ${Number(item.amount)}, '${item.user_id}' ) "> APPROVE
-</button> <button class="danger" onclick=" rejectDeposit( '${item.id}' ) "> REJECT </button> </td> `;
-list.appendChild(tr); } ); } async function approveDeposit( depositId, amount, userId ){ const { error:updateError }=
-await supabaseClient .from("deposits") .update({ status:"approved" }) .eq( "id", depositId ); if(updateError){ alert(
-updateError.message ); return; } const { data:profile, error:profileError }= await supabaseClient .from("profiles")
-.select("balance") .eq( "id", userId ) .maybeSingle(); if(profileError){ alert( profileError.message ); return; } const
-newBalance = Number( profile?.balance || 0 )+ Number(amount); const { error:balanceError }= await supabaseClient
-.from("profiles") .update({ balance:newBalance }) .eq( "id", userId ); if(balanceError){ alert( balanceError.message );
-return; } alert( "Deposit approved successfully." ); await loadAdminDeposits(); } async function rejectDeposit(id){ if(
-!confirm( "Reject this deposit?" ) ){ return; } const { error }= await supabaseClient .from("deposits") .update({
-status:"rejected" }) .eq( "id", id ); if(error){ alert( error.message ); return; } alert( "Deposit rejected." ); await
-loadAdminDeposits(); } /* ========================= LUDO ========================= */ const
-LUDO_COLORS = [ "red", "green", "yellow", "blue" ]; const LUDO_NAMES = [ "Red", "Green", "Yellow", "Blue"
+kenoAnimationTimer=setTimeout(one,700); }; kenoAnimationTimer=setTimeout(one,400); },3500); },8000); });
+}
+/* ========================= LIVE KENO DRAW
+========================= */ async function getLiveKenoDraw(){ const { data, error }= await supabaseClient
+.from("keno_draws") .select("*") .eq( "status", "open" ) .order( "created_at", { ascending:false } ) .limit(1)
+.maybeSingle(); if(error){ throw error; } return data;
+} /* ========================= KENO PLAY
+========================= */ async function playKeno(){
+if(isDrawing){ return;
+} if(!currentUser){ show( "gameMessage", "Please login first.", "error" ); return;
+} const bet = Number( document .getElementById("betAmount") .value ); if(!bet || bet <= 0){ show( "gameMessage",
+"Enter bet amount.", "error" ); return;
+} if( selectedNumbers.length < 1
+){ show( "gameMessage", "Select at least one number.", "error" ); return;
+} if( selectedNumbers.length > 10
+){ show( "gameMessage", "Maximum 10 numbers.", "error" ); return;
+} /* BALANCE */ const { data:profile, error:profileError
+}= await supabaseClient .from("profiles") .select("balance") .eq( "id", currentUser.id ) .maybeSingle();
+if(profileError){ show( "gameMessage", profileError.message, "error" ); return;
+} const balance = Number( profile?.balance || 0 ); if(balance < bet){ show( "gameMessage", "Insufficient balance.",
+"error" ); return;
+} i s D r a w i n g = t r u e ; d o c u m e n t . g e t E l e m e n t B y I d ( " p l a y B t n " ) . d i s a b l e d = t r u e ; d o c u m e n t
+.getElementById("resultNumbers") .innerHTML = "";
+d o c u m e n t . g e t E l e m e n t B y I d ( " k e n o T i m e r " ) . t e x t C o n t e n t = " L I V E " ; / * V I D E O * / c o n s t v i d e o =
+document.getElementById( "kenoVideo" ); if(video){ video.currentTime = 0; video.play().catch( () => {} ); } show(
+"gameMessage", "Connecting to LIVE KENO..."
+); /* GET DRAW */ let draw; try{ draw = await getLiveKenoDraw();
+}catch(error){ console.log( "Keno draw error:", error ); show( "gameMessage", "Unable to connect to LIVE KENO.",
+"error" ); isDrawing = false; document .getElementById("playBtn") .disabled = false; return;
+} if(!draw){ show( "gameMessage", "No active KENO draw is available.", "error" ); isDrawing = false; document
+.getElementById("playBtn") .disabled = false; return;
+} /* WINNING NUMBERS */ let winningNumbers = draw.winning_numbers; if(typeof winningNumbers ===
+"string"){ try{ winningNumbers = JSON.parse( winningNumbers ); }catch(error){ winningNumbers =
+winningNumbers .split(",") .map( n => Number(n.trim()) ); } } if(!Array.isArray(winningNumbers)){ show(
+"gameMessage", "Invalid KENO draw data.", "error" ); isDrawing = false; document .getElementById("playBtn")
+.disabled = false; return;
+} winningNumbers =
+winningNumbers .map( n => Number(n) ) .filter( n => Number.isInteger(n) && n >= 1 && n <= 80 ); if(
+winningNumbers.length === 0
+){ show( "gameMessage", "KENO draw has no valid numbers.", "error" ); isDrawing = false; document
+.getElementById("playBtn") .disabled = false; return;
+} /* DRAW ANIMATION */ await runKenoAnimation(winningNumbers); for( let i = 0; i < winningNumbers.length;
+i++
+){ show( "gameMessage", "LIVE DRAW " + (i + 1) + "/" + winningNumbers.length + "..." ); await wait(500); const
+ball = document.createElement( "div" ); ball.className = "result-ball"; if( selectedNumbers.includes(
+winningNumbers[i] ) ){ ball.classList.add( "hit" ); } ball.textContent = winningNumbers[i]; document
+.getElementById( "resultNumbers" ) .appendChild(ball); await wait(300); } /* HITS */
+const hits = selectedNumbers.filter( n => winningNumbers.includes(n) ).length; /* PAYTABLE */ const multipliers =
+{ 0:0,
+1:0,
+2:1,
+3:2,
+4:5,
+5:10,
+6:20,
+7:50,
+8:100,
+9:250,
+10:500 }; const multiplier = multipliers[hits] || 0; const payout = bet * multiplier; /* BALANCE */ const finalBalance
+= balance - bet + payout; const { error:balanceError
+}= await supabaseClient .from("profiles") .update({ balance:finalBalance }) .eq( "id", currentUser.id );
+if(balanceError){ console.log( "Balance update error:", balanceError ); show( "gameMessage", "Could not update
+balance.", "error" ); isDrawing = false; document .getElementById("playBtn") .disabled = false; return;
+} show( "gameMessage", "Hits: " + hits + " | Payout: " + payout.toFixed(2) + " ETB", "success"
+); await loadBalance(); document .getElementById("kenoTimer") .textContent = "RESULT"; isDrawing = false;
+document .getElementById("playBtn") .disabled = false; } /* ========================= ADMIN
+========================= */ async function checkAdmin(){ if(!currentUser){ return; } const { data, error }=
+await supabaseClient .from("profiles") .select("role") .eq( "id", currentUser.id ) .maybeSingle(); if(error){ console.log(
+"Admin check:", error ); return; } if( data?.role === "admin" ){ document .getElementById("adminPanel") .classList
+.remove("hidden"); await loadAdminDeposits(); } } async function loadAdminDeposits(){ const { data, error }= await
+supabaseClient .from("deposits") .select("*") .eq( "status", "pending" ) .order( "created_at", { ascending:false } );
+if(error){ console.log( "Admin deposits:", error ); return; } const list = document.getElementById( "adminDeposits" );
+list.innerHTML = ""; (data || []).forEach( item => {
+const tr = document.createElement("tr"); tr.innerHTML = ` <td>
+${item.user_id}
+</td><td>
+${Number(item.amount).toFixed(2)} ETB
+</td><td>
+${item.method || ""}
+</td><td class="pending">
+pending
+</td><td><button onclick=" approveDeposit( '${item.id}', ${Number(item.amount)}, '${item.user_id}' ) ">
+APPROVE </button><button class="danger" onclick=" rejectDeposit( '${item.id}' ) "> REJECT </button></td> `;
+list.appendChild(tr); } ); } async function approveDeposit( depositId, amount, userId
+){ const { error:updateError }= await supabaseClient .from("deposits") .update({ status:"approved" }) .eq( "id",
+depositId ); if(updateError){ alert( updateError.message ); return; } const { data:profile, error:profileError }= await
+supabaseClient .from("profiles") .select("balance") .eq( "id", userId ) .maybeSingle(); if(profileError){ alert(
+profileError.message ); return;
+} const newBalance = Number( profile?.balance || 0 )+ Number(amount); const { error:balanceError
+}= await supabaseClient .from("profiles") .update({ balance:newBalance }) .eq( "id", userId ); if(balanceError){ alert(
+balanceError.message ); return;
+} alert( "Deposit approved successfully."
+);
+await loadAdminDeposits();
+} async function rejectDeposit(id){ if( !confirm( "Reject this deposit?" ) ){ return; } const { error }= await
+supabaseClient .from("deposits") .update({ status:"rejected" }) .eq( "id", id ); if(error){ alert( error.message ); return; }
+alert( "Deposit rejected." ); await loadAdminDeposits(); } /* ========================= LUDO
+========================= */ const LUDO_COLORS = [ "red", "green", "yellow", "blue"
+]; const LUDO_NAMES = [ "Red", "Green", "Yellow", "Blue"
 ]; function ludoOpen(){ document .getElementById("kenoGame") .classList .add("hidden"); document
 .getElementById("otherGame") .classList .add("hidden"); document .getElementById("ludoGame") .classList
 .remove("hidden"); document .getElementById("ludoGame") .scrollIntoView({ behavior:"smooth" });
 ludoNewGame(); } function ludoNewGame(){ ludoState = { turn:0, dice:null, rolled:false, winner:null, pawns:
 LUDO_COLORS.map( () => [ -1, -1, -1, -1 ] ), logs:[ "Ludo started. Red plays first." ] }; ludoRender(); } function
 ludoRoll(){ if( !ludoState || ludoState.winner ){ return; } if( ludoState.rolled ){ show( "ludoMessage", "Move a
-highlighted pawn first.", "error" ); return; } const n = Math.floor( Math.random() * 6 ) + 1; ludoState.dice = n;
-ludoState.rolled = true; const color = LUDO_NAMES[ ludoState.turn ]; ludoLog( color + " rolled " + n ); const
-movable = ludoMovable(); if(!movable.length){ ludoLog( color + " has no legal move." ); ludoState.rolled = false;
-if(n !== 6){ ludoNextTurn(); }else{ show( "ludoMessage", color + " rolled 6 but has no move. Roll again." ); }
+highlighted pawn first.", "error" ); return;
+} const n = Math.floor( Math.random() * 6
+) + 1; ludoState.dice = n; ludoState.rolled = true; const color = LUDO_NAMES[ ludoState.turn ]; ludoLog( color + "
+rolled " + n
+); const movable = ludoMovable(); if(!movable.length){ ludoLog( color + " has no legal move." ); ludoState.rolled =
+false; if(n !== 6){ ludoNextTurn(); }else{ show( "ludoMessage", color + " rolled 6 but has no move. Roll again." ); }
 ludoRender(); return; } show( "ludoMessage", color + " rolled " + n+ ". Choose a highlighted pawn." ); ludoRender();
 } function ludoMovable(){ if( !ludoState || ludoState.dice === null ){ return []; } return ludoState .pawns[
 ludoState.turn ] .map( (p,i) => { if(p === 57){ return false; } if(p === -1){ return ( ludoState.dice === 6 ); } return (
-p+ ludoState.dice <= 57 ); } ) .map( (value,index) => value ? index : -1 ) .filter( index => index >= 0 ); } function
-ludoMove(i){ if( !ludoState || !ludoState.rolled || ludoState.winner ){ return; } if( !ludoMovable() .includes(i) ){
-return; } const colorIndex = ludoState.turn; const dice = ludoState.dice; let position = ludoState .pawns[ colorIndex
-][i]; position = position === -1 ?1 : position + dice; ludoState .pawns[ colorIndex ][i] = position; ludoLog(
-LUDO_NAMES[colorIndex] + " moved pawn " + (i + 1) ); if( position === 57 && ludoState .pawns[ colorIndex ]
-.every( x => x === 57 ) ){ ludoState.winner = colorIndex; ludoState.rolled = false; ludoRender(); show(
-"ludoMessage", LUDO_NAMES[colorIndex] + " wins!", "success" ); ludoLog( LUDO_NAMES[colorIndex] + " wins
-the game." ); return; } const extra = dice === 6; ludoState.rolled = false; ludoState.dice = null; if(extra){ show(
-"ludoMessage", LUDO_NAMES[colorIndex] + " gets another turn!" ); }else{ ludoNextTurn(); } ludoRender(); }
-function ludoNextTurn(){ ludoState.turn = ( ludoState.turn + 1 ) % 4; show( "ludoMessage", LUDO_NAMES[
-ludoState.turn ]+ "'s turn." ); } function ludoLog(text){ if(!ludoState){ return; } ludoState.logs .unshift(text);
-ludoState.logs = ludoState.logs .slice(0,20); } function ludoRender(){ const board = document.getElementById(
-"ludoBoard" ); if( !board || !ludoState ){ return; } board.innerHTML = ""; for( let r = 0; r < 15; r++ ){ for( let c = 0; c
-< 15; c++ ){ const cell = document.createElement( "div" ); cell.className = "ludo-cell"; if( ( r === 7 && c >= 6 &&
-c <= 8 ) || ( c === 7 && r >= 6 && r <= 8 ) ){ cell.classList .add( "ludo-safe" ); } if( r >= 6 && r <= 8 && c >= 6 &&
-c <= 8 ){ cell.classList .add( "ludo-center" ); } board.appendChild( cell ); } } const homes = [ ["red",1,1],
-["green",1,10], ["yellow",10,1], ["blue",10,10] ]; homes.forEach( ([color,row,col],ci) => { const home =
-document.createElement( "div" ); home.className = "ludo-home " + color; home.style.gridRow = row + "/span 5";
-home.style.gridColumn = col + "/span 5"; for( let i = 0; i < 4; i++ ){ const yard = document.createElement( "div" );
-yard.className = "ludo-yard"; const pawn = document.createElement( "div" ); pawn.className = "ludo-pawn " +
-color; pawn.title = LUDO_NAMES[ci] + " pawn " + (i + 1); if( ci === ludoState.turn && ludoState.rolled &&
-ludoMovable() .includes(i) ){ pawn.style.outline = "4px solid #20c878"; pawn.onclick = () => ludoMove(i); }
-yard.appendChild( pawn ); home.appendChild( yard ); } board.appendChild( home ); } ); document .getElementById(
-"ludoDice" ) .textContent = ludoState.dice || "—"; document .getElementById( "ludoPlayers" ) .innerHTML =
-LUDO_NAMES .map( (name,index) => { const active = index === ludoState.turn && !ludoState.winner ? "active" :
-""; const finished = ludoState .pawns[index] .filter( x => x === 57 ) .length; return ` <div class="ludo-player
-${active}"> ${name} — ${finished}/4 </div> `; } ) .join(""); document .getElementById( "ludoLog" ) .innerHTML =
-ludoState.logs .map( x => "• " + x ) .join("\n"); document .getElementById( "ludoRollBtn" ) .disabled =
-!!ludoState.rolled || !!ludoState.winner; } function closeLudo(){ document .getElementById( "ludoGame" ) .classList
-. a d d ( " h i d d e n " ) ; l u d o S t a t e = n u l l ; } / * = = = = = = = = = = = = = = = = = = = = = = = = = S E S S I O N C H E C K
+p+ ludoState.dice <= 57 ); } ) .map( (value,index) => value ? index : -1 ) .filter( index => index >= 0 ); }
+function ludoMove(i){ if( !ludoState || !ludoState.rolled || ludoState.winner ){ return; } if( !ludoMovable() .includes(i)
+){ return; }
+const colorIndex = ludoState.turn; const dice = ludoState.dice; let position = ludoState .pawns[ colorIndex ][i];
+position = position === -1 ?1 : position + dice; ludoState
+.pawns[ colorIndex
+][i] = position; ludoLog( LUDO_NAMES[colorIndex] + " moved pawn " + (i + 1)
+); if( position === 57 && ludoState .pawns[ colorIndex ] .every( x => x === 57 )
+) { l u d o S t a t e . w i n n e r = c o l o r I n d e x ; l u d o S t a t e . r o l l e d = f a l s e ; l u d o R e n d e r ( ) ; s h o w ( " l u d o M e s s a g e " ,
+LUDO_NAMES[colorIndex] + " wins!", "success" ); ludoLog( LUDO_NAMES[colorIndex] + " wins the game." );
+return; } const extra = dice === 6; ludoState.rolled = false; ludoState.dice = null; if(extra){ show( "ludoMessage",
+LUDO_NAMES[colorIndex] + " gets another turn!" ); }else{ ludoNextTurn(); } ludoRender(); } function
+ludoNextTurn(){ ludoState.turn = ( ludoState.turn + 1 ) % 4; show( "ludoMessage", LUDO_NAMES[ ludoState.turn
+]+ "'s turn." ); } function ludoLog(text){ if(!ludoState){ return; } ludoState.logs .unshift(text); ludoState.logs =
+ludoState.logs .slice(0,20); } function ludoRender(){ const board = document.getElementById( "ludoBoard" ); if(
+!board || !ludoState ){ return; }
+board.innerHTML = ""; for( let r = 0; r < 15; r++
+){ for( let c = 0; c < 15; c++
+){ const cell = document.createElement( "div" ); cell.className = "ludo-cell"; if( ( r === 7 && c >= 6 && c <= 8 ) || (
+c === 7 && r >= 6 && r <= 8 ) ){ cell.classList .add( "ludo-safe" ); } if( r >= 6 && r <= 8 && c >= 6 && c <= 8 ){
+cell.classList .add( "ludo-center" ); } board.appendChild( cell ); } } const homes = [ ["red",1,1], ["green",1,10],
+["yellow",10,1], ["blue",10,10]
+]; homes.forEach( ([color,row,col],ci) => { const home = document.createElement( "div" ); home.className = "ludo-
+home " + color; home.style.gridRow = row + "/span 5"; home.style.gridColumn = col + "/span 5";
+for( let i = 0; i < 4; i++
+){ const yard = document.createElement( "div" ); yard.className = "ludo-yard"; const pawn =
+document.createElement( "div"
+); pawn.className = "ludo-pawn " + color; pawn.title = LUDO_NAMES[ci] + " pawn " + (i + 1); if( ci ===
+ludoState.turn && ludoState.rolled && ludoMovable() .includes(i)
+){ pawn.style.outline = "4px solid #20c878"; pawn.onclick = () => ludoMove(i); } yard.appendChild( pawn );
+home.appendChild( yard ); } board.appendChild( home ); }
+); document .getElementById( "ludoDice" ) .textContent = ludoState.dice || "—"; document .getElementById(
+"ludoPlayers" ) .innerHTML = LUDO_NAMES .map( (name,index) => { const active = index === ludoState.turn &&
+!ludoState.winner ? "active" : ""; const finished = ludoState .pawns[index] .filter( x => x === 57 ) .length; return `
+<div class="ludo-player ${active}"> ${name} — ${finished}/4 </div> `; } ) .join(""); document .getElementById(
+"ludoLog" ) .innerHTML = ludoState.logs .map( x => "• " + x ) .join("\n"); document .getElementById(
+"ludoRollBtn" ) .disabled = !!ludoState.rolled || !!ludoState.winner; } function closeLudo(){ document
+.getElementById( "ludoGame" ) .classList .add("hidden"); ludoState = null;
+} /* ========================= SESSION CHECK
 ========================= */ async function checkSession(){ try{ const { data, error }= await supabaseClient
 .auth .getSession(); if(error){ console.log( "Session error:", error ); return; } if( data && data.session &&
 data.session.user ){ currentUser = data.session.user; setLoggedInUI(true); startApp().catch(error =>
 console.log("Startup error:", error)); }else{ setLoggedInUI(false); } }catch(error){ console.log( "Session error:", error
-); setLoggedInUI(false); } } /* ========================= START ========================= */
-document.addEventListener( "DOMContentLoaded", () => { initKenoAnimation(); checkSession().catch(error =>
-console.log("Session startup error:", error)); } ); </script> </body> </html>
-10 / 10
+); setLoggedInUI(false); } } /* ========================= START
+= = = = = = = = = = = = = = = = = = = = = = = = = * / d o c u m e n t . a d d E v e n t L i s t e n e r ( " D O M C o n t e n t L o a d e d " , ( ) = > {
+initKenoAnimation(); checkSession().catch(error => console.log("Session startup error:", error)); }
+); </script></body></html>
+16 / 16
