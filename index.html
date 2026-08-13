@@ -2512,7 +2512,7 @@ if(intro) intro.classList.remove("ka-hidden");
 if(mix) mix.classList.add("ka-hidden");
 if(draw) draw.classList.add("ka-hidden");
 const timer=document.getElementById("kaTimer");
-if(timer) timer.textContent="00:08";
+if(timer) timer.textContent="01:00";
 const out=document.getElementById("kaOutball");
 if(out) out.textContent="--";
 const count=document.getElementById("kaCount");
@@ -2619,13 +2619,12 @@ function runKenoAnimation(numbers){
 return new Promise(resolve=>{
 initKenoAnimation();
 resetKenoAnimation();
-const clean = Array.from(new Set(
-(numbers || [])
+const clean = Array.from(new Set((numbers || [])
 .map(Number)
 .filter(n => Number.isInteger(n) && n >= 1 && n <= 80)
-
-)).slice(0, 20);
+)).slice(0,20);
 if(!clean.length){resolve();return;}
+
 const stage=document.getElementById("kenoAnimationStage");
 const intro=document.getElementById("kaIntro");
 const mix=document.getElementById("kaMix");
@@ -2635,46 +2634,78 @@ const count=document.getElementById("kaCount");
 const out=document.getElementById("kaOutball");
 const slots=document.getElementById("kaSlots");
 if(!stage){resolve();return;}
+
 kenoAnimationRunning=true;
 clearTimeout(kenoPreviewTimer);
 clearInterval(kenoAnimationInterval);
 stage.classList.remove("hidden");
-let sec=8;
-timer.textContent="00:08";
+intro.classList.remove("ka-hidden");
+mix.classList.add("ka-hidden");
+draw.classList.add("ka-hidden");
+
+// Full one-minute countdown before the draw starts.
+let sec=60;
+if(timer) timer.textContent="01:00";
 kenoAnimationInterval=setInterval(()=>{
 sec--;
 if(sec<0){clearInterval(kenoAnimationInterval);return;}
-timer.textContent="00:"+String(sec).padStart(2,"0");
+const m=Math.floor(sec/60);
+const ss=sec%60;
+if(timer) timer.textContent=String(m).padStart(2,"0")+":"+String(ss).padStart(2,"0");
 },1000);
+
 kenoAnimationTimer=setTimeout(()=>{
 clearInterval(kenoAnimationInterval);
+if(timer) timer.textContent="00:00";
 intro.classList.add("ka-hidden");
 mix.classList.remove("ka-hidden");
+draw.classList.add("ka-hidden");
 makeKenoMixBalls();
+
+// Slow, clear ball-draw sequence.
 kenoAnimationTimer=setTimeout(()=>{
 mix.classList.add("ka-hidden");
 draw.classList.remove("ka-hidden");
 let i=0;
+const DRAW_INTERVAL=3000;
+
 const one=()=>{
 if(i>=clean.length){
 kenoAnimationRunning=false;
-kenoAnimationTimer=setTimeout(()=>{stage.classList.add("hidden");resolve();},800);
+// Keep the completed numbers visible instead of hiding the KENO board.
+if(timer) timer.textContent="00:00";
+resolve();
 return;
 }
+
 const n=clean[i];
 const cell=document.getElementById("kaCell"+n);
 if(cell) cell.classList.add("hit");
+
+// Keep every drawn number seated in the bottom KENO slots.
 const slot=document.getElementById("kaSlot"+(i+1));
 if(slot){slot.textContent=n;slot.classList.add("on");}
 if(out) out.textContent=n;
 if(count) count.textContent=(i+1)+"/"+clean.length;
-i++;
-kenoAnimationTimer=setTimeout(one,700);
-};
-kenoAnimationTimer=setTimeout(one,400);
 
-},3500);
-},8000);
+// Also update the existing result strip immediately, not only after the animation.
+const result=document.getElementById("resultNumbers");
+if(result){
+const ball=document.createElement("div");
+ball.className="result-ball";
+if(selectedNumbers.includes(n)) ball.classList.add("hit");
+ball.textContent=n;
+result.appendChild(ball);
+}
+
+i++;
+kenoAnimationTimer=setTimeout(one,DRAW_INTERVAL);
+};
+
+// First number appears after a short pause.
+kenoAnimationTimer=setTimeout(one,1500);
+},5000);
+},60000);
 });
 }
 /* =========================
@@ -2710,7 +2741,6 @@ if(error){
 throw error;
 }
 
-
 return data;
 }
 
@@ -2741,6 +2771,7 @@ if(selectedNumbers.length > 10){
 show("gameMessage","Maximum 10 numbers.","error");
 return;
 }
+
 const playBtn=document.getElementById("playBtn");
 try{
 const {data:profile,error:profileError}=await withTimeout(
@@ -2755,7 +2786,6 @@ if(balance < bet){
 show("gameMessage","Insufficient balance.","error");
 return;
 }
-
 isDrawing=true;
 if(playBtn) playBtn.disabled=true;
 document.getElementById("resultNumbers").innerHTML="";
@@ -2793,16 +2823,7 @@ throw new Error("KENO draw has no valid numbers.");
 // The animation receives the exact winning numbers from the LIVE KENO draw.
 await runKenoAnimation(winningNumbers);
 
-for(let i=0;i<winningNumbers.length;i++){
-show("gameMessage",`LIVE DRAW ${i+1}/${winningNumbers.length}...`);
-await wait(250);
-const ball=document.createElement("div");
-ball.className="result-ball";
-if(selectedNumbers.includes(winningNumbers[i])) ball.classList.add("hit");
-ball.textContent=winningNumbers[i];
-document.getElementById("resultNumbers").appendChild(ball);
-await wait(150);
-}
+show("gameMessage",`LIVE DRAW complete — ${winningNumbers.length} numbers displayed.`);
 
 const hits=selectedNumbers.filter(n=>winningNumbers.includes(n)).length;
 const multipliers={0:0,1:0,2:1,3:2,4:5,5:10,6:20,7:50,8:100,9:250,10:500};
@@ -2856,7 +2877,6 @@ currentUser.id
 )
 .maybeSingle();
 
-
 if(error){
 
 
@@ -2877,6 +2897,7 @@ document
 .classList
 .remove("hidden");
 await loadAdminDeposits();
+
 
 }
 
@@ -2924,6 +2945,7 @@ document.getElementById(
 
 list.innerHTML = "";
 
+
 (data || []).forEach(
 item => {
 const tr =
@@ -2967,6 +2989,7 @@ ${Number(item.amount)},
 ">
 APPROVE
 </button>
+
 
 <button
 class="danger"
@@ -3013,6 +3036,7 @@ status:"approved"
 "id",
 depositId
 );
+
 
 if(updateError){
 
@@ -3104,6 +3128,7 @@ if(
 return;
 }
 
+
 const {
 error
 }=
@@ -3150,6 +3175,7 @@ const LUDO_COLORS = [
 "blue"
 ];
 
+
 const LUDO_NAMES = [
 "Red",
 "Green",
@@ -3195,6 +3221,7 @@ function ludoNewGame(){
 ludoState = {
 turn:0,
 
+
 dice:null,
 
 
@@ -3218,7 +3245,6 @@ logs:[
 "Ludo started. Red plays first."
 ]
 
-
 };
 
 
@@ -3239,6 +3265,7 @@ ludoState.winner
 
 return;
 }
+
 
 if(
 ludoState.rolled
@@ -3262,7 +3289,6 @@ Math.floor(
 Math.random() * 6
 ) + 1;
 
-
 ludoState.dice = n;
 
 
@@ -3284,6 +3310,7 @@ n
 
 const movable =
 ludoMovable();
+
 
 if(!movable.length){
 
@@ -3329,6 +3356,7 @@ color +
 n+
 ". Choose a highlighted pawn."
 );
+
 
 ludoRender();
 
@@ -3490,7 +3518,6 @@ return;
 const extra =
 dice === 6;
 
-
 ludoState.rolled =
 false;
 
@@ -3650,6 +3677,7 @@ cell
 
 }
 
+
 }
 
 
@@ -3741,6 +3769,7 @@ pawn.onclick =
 yard.appendChild(
 pawn
 );
+
 
 home.appendChild(
 yard
