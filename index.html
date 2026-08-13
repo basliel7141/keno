@@ -8,6 +8,12 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* CDN fallback: if jsDelivr is unavailable, load Supabase from unpkg. */
+if(!window.supabase){
+document.write('<script src="https://unpkg.com/@supabase/supabase-js@2"><\/script>');
+}
+</script>
 
 
 <style>
@@ -84,11 +90,11 @@ button:hover{
 opacity:.9;
 }
 
-
 button:disabled{
 opacity:.5;
 cursor:not-allowed;
 }
+
 
 .secondary{
 background:#263044;
@@ -174,12 +180,12 @@ padding:10px;
 min-width:0;
 }
 
-
 .game-icon{
 font-size:32px;
 margin-bottom:5px;
 text-align:center;
 }
+
 
 .game-name{
 font-size:15px;
@@ -363,6 +369,7 @@ color:#ff6b6b;
 .top-actions{
 display:flex;
 align-items:center;
+
 gap:8px;
 }
 
@@ -448,7 +455,6 @@ background:#6ee7a8;
 background:#ffe66d;
 
 }
-
 
 .ludo-home.blue{
 background:#74a7ff;
@@ -593,6 +599,7 @@ align-items:stretch;
 grid-template-columns:repeat(8,1fr);
 }
 
+
 .row{
 flex-direction:column;
 }
@@ -684,6 +691,7 @@ onclick="showDeposit()">
 Deposit
 </button>
 
+
 <button
 id="logoutBtn"
 class="secondary hidden"
@@ -769,7 +777,6 @@ Your Balance
 
 </div>
 
-
 </div>
 
 
@@ -813,7 +820,6 @@ Ludo
 <div class="game-description">
 Classic multiplayer Ludo.
 </div>
-
 
 <div
 style="
@@ -860,11 +866,11 @@ Pick numbers and play LIVE Keno.
 PLAY
 </button>
 
-
 </div>
 
 
 <!-- BINGO -->
+
 
 <div class="game-card">
 
@@ -997,7 +1003,6 @@ PLAY
 
 <div class="game-card">
 
-
 <div class="game-icon"></div>
 
 
@@ -1043,11 +1048,11 @@ PLAY
 
 <!-- LAT LAT -->
 
-
 <div class="game-card">
 
 
 <div class="game-icon"></div>
+
 
 <div class="game-name">
 Lat Lat
@@ -1087,7 +1092,6 @@ PLAY
 
 
 </div>
-
 
 <!-- UNO -->
 
@@ -1140,6 +1144,7 @@ PLAY
 </div>
 </div>
 
+
 <!-- DETAILS -->
 
 
@@ -1178,7 +1183,6 @@ id="depositAmount"
 type="number"
 min="1"
 placeholder="Amount (ETB)">
-
 
 <select id="depositMethod">
 
@@ -1369,6 +1373,7 @@ class="result-numbers">
 <!-- LUDO -->
 <div id="ludoGame" class="card hidden">
 
+
 <div class="games-title">
 
 
@@ -1414,6 +1419,7 @@ id="ludoRollBtn"
 onclick="ludoRoll()">
 ROLL DICE
 </button>
+
 <div
 id="ludoDice"
 class="ludo-dice">
@@ -1459,6 +1465,7 @@ BACK TO GAMES
 
 </div>
 
+
 <!-- ADMIN -->
 
 
@@ -1499,10 +1506,10 @@ BACK TO GAMES
 </div>
 <script>
 
-
 /* =========================
 SUPABASE
 ========================= */
+
 
 const SUPABASE_URL =
 "https://eizpxgwkottliyvvhlar.supabase.co";
@@ -1544,10 +1551,10 @@ function show(id,message,type=""){
 const element =
 document.getElementById(id);
 
-
 if(!element){
 return;
 }
+
 
 element.textContent =
 message;
@@ -1589,11 +1596,11 @@ document
 .classList
 .toggle("hidden",loggedIn);
 
-
 document
 .getElementById("app")
 .classList
 .toggle("hidden",!loggedIn);
+
 
 document
 .getElementById("logoutBtn")
@@ -1638,6 +1645,7 @@ show(
 "Please enter your email.",
 "error"
 );
+
 
 return;
 }
@@ -1730,6 +1738,7 @@ show(
 "success"
 );
 
+
 }catch(error){
 
 
@@ -1759,65 +1768,48 @@ LOGIN
 async function login(){
 const email = document.getElementById("email").value.trim();
 const password = document.getElementById("password").value;
-
-
-if(!email){
-show("authMessage","Please enter your email.","error");
-return;
-}
-if(!password){
-show("authMessage","Please enter your password.","error");
-return;
-}
-
-
 const button = document.getElementById("loginBtn");
+
+if(!email){ show("authMessage","Please enter your email.","error"); return; }
+if(!password){ show("authMessage","Please enter your password.","error"); return; }
+if(!window.supabase || !supabaseClient){
+show("authMessage","Login system is not loaded. Please refresh the page and try again.","error");
+return;
+}
+
 button.disabled = true;
 show("authMessage","Logging in...");
 
 try{
-const result = await withTimeout(
-supabaseClient.auth.signInWithPassword({ email, password }),
-15000,
-"Login request timed out. Please check your internet connection and try again."
+const {data,error} = await withTimeout(
+supabaseClient.auth.signInWithPassword({email,password}),
+12000,
+"Login is taking too long. Please check your internet connection."
 );
-
-
-const { data, error } = result;
-
 
 if(error){
 show("authMessage",error.message,"error");
 return;
 }
-
-
 if(!data || !data.user){
 show("authMessage","Login failed. No user session was returned.","error");
 return;
 }
 
-
 currentUser = data.user;
-
-// Open the app immediately. Database loading must never keep the login screen stuck.
 setLoggedInUI(true);
 createNumbers();
 show("authMessage","Login successful.","success");
 
-
-// Load balance/deposits/admin data in the background.
-startApp().catch(error => console.log("App startup error:", error));
-
-
+/* Do NOT wait for balance/deposits/admin queries. */
+Promise.resolve().then(() => startApp()).catch(err => console.error("Startup error:",err));
 }catch(error){
-show("authMessage",error.message || "Unable to login.","error");
+console.error("Login error:",error);
+show("authMessage",error?.message || "Unable to login. Please try again.","error");
 }finally{
 button.disabled = false;
 }
 }
-
-
 /* =========================
 START APP
 ========================= */
@@ -1866,6 +1858,7 @@ await supabaseClient
 .auth
 .signOut();
 
+
 }catch(error){
 
 
@@ -1876,7 +1869,6 @@ console.log(error);
 
 
 currentUser = null;
-
 
 setLoggedInUI(false);
 
@@ -1910,6 +1902,7 @@ async function loadBalance(){
 if(!currentUser){
 return;
 }
+
 
 const {
 data,
@@ -1956,6 +1949,7 @@ balance.toFixed(2) +
 /* =========================
 DEPOSIT
 ========================= */
+
 
 function showDeposit(){
 
@@ -2093,6 +2087,7 @@ phone +
 " | Ref: " +
 reference;
 
+
 const {
 error
 }=
@@ -2137,6 +2132,7 @@ document
 document
 .getElementById("depositPhone")
 .value = "";
+
 
 document
 .getElementById("depositReference")
@@ -2196,7 +2192,6 @@ document.getElementById(
 "depositList"
 );
 
-
 list.innerHTML = "";
 
 (data || []).forEach(
@@ -2229,6 +2224,7 @@ list.appendChild(tr);
 
 }
 );
+
 
 }
 
@@ -2286,7 +2282,6 @@ return;
 }
 
 const names = {
-
 
 bingo:" BINGO",
 conquer:" CONQUER",
@@ -2413,6 +2408,7 @@ button.classList.remove(
 "selected"
 );
 
+
 return;
 }
 
@@ -2456,6 +2452,7 @@ KENO ANIMATION ENGINE
 let kenoAnimationRunning=false;
 let kenoAnimationTimer=null;
 let kenoAnimationInterval=null;
+
 
 function initKenoAnimation(){
 const grid=document.getElementById("kaGrid");
@@ -2607,7 +2604,6 @@ ascending:false
 .limit(1)
 .maybeSingle();
 
-
 if(error){
 throw error;
 }
@@ -2652,7 +2648,6 @@ supabaseClient.from("profiles").select("balance").eq("id",currentUser.id).maybeS
 "Balance request timed out."
 );
 if(profileError) throw profileError;
-
 const balance=Number(profile?.balance || 0);
 if(balance < bet){
 show("gameMessage","Insufficient balance.","error");
@@ -2732,6 +2727,7 @@ isDrawing=false;
 if(playBtn) playBtn.disabled=false;
 }
 }
+
 /* =========================
 ADMIN
 ========================= */
@@ -2743,7 +2739,6 @@ async function checkAdmin(){
 if(!currentUser){
 return;
 }
-
 
 const {
 data,
@@ -2789,7 +2784,6 @@ await loadAdminDeposits();
 
 async function loadAdminDeposits(){
 
-
 const {
 data,
 error
@@ -2824,6 +2818,7 @@ document.getElementById(
 "adminDeposits"
 );
 
+
 list.innerHTML = "";
 
 
@@ -2834,7 +2829,6 @@ document.createElement("tr");
 
 
 tr.innerHTML = `
-
 
 <td>
 ${item.user_id}
@@ -2926,7 +2920,6 @@ alert(
 updateError.message
 
 );
-
 
 return;
 }
@@ -3064,7 +3057,6 @@ const LUDO_NAMES = [
 "Blue"
 ];
 
-
 function ludoOpen(){
 
 
@@ -3098,6 +3090,7 @@ ludoNewGame();
 
 function ludoNewGame(){
 
+
 ludoState = {
 turn:0,
 
@@ -3109,7 +3102,6 @@ rolled:false,
 
 
 winner:null,
-
 
 pawns:
 LUDO_COLORS.map(
@@ -3142,6 +3134,7 @@ if(
 !ludoState ||
 ludoState.winner
 ){
+
 
 return;
 }
@@ -3188,6 +3181,7 @@ color +
 n
 );
 
+
 const movable =
 ludoMovable();
 
@@ -3198,7 +3192,6 @@ ludoLog(
 color +
 " has no legal move."
 );
-
 
 ludoState.rolled =
 false;
@@ -3245,7 +3238,6 @@ ludoRender();
 
 
 function ludoMovable(){
-
 
 if(
 !ludoState ||
@@ -3326,6 +3318,7 @@ return;
 const colorIndex =
 ludoState.turn;
 
+
 const dice =
 ludoState.dice;
 
@@ -3335,7 +3328,6 @@ ludoState
 .pawns[
 colorIndex
 ][i];
-
 
 position =
 position === -1
@@ -3370,6 +3362,7 @@ x => x === 57
 
 ludoState.winner =
 colorIndex;
+
 
 ludoState.rolled =
 false;
@@ -3427,7 +3420,6 @@ ludoNextTurn();
 ludoRender();
 
 }
-
 
 function ludoNextTurn(){
 ludoState.turn =
@@ -3552,6 +3544,7 @@ cell.classList
 board.appendChild(
 cell
 );
+
 
 }
 
@@ -3736,6 +3729,7 @@ document
 
 
 function closeLudo(){
+
 document
 .getElementById(
 "ludoGame"
@@ -3746,7 +3740,6 @@ document
 
 ludoState = null;
 }
-
 
 /* =========================
 SESSION CHECK
@@ -3781,6 +3774,7 @@ error
 return;
 }
 
+
 if(
 data &&
 data.session &&
@@ -3792,7 +3786,6 @@ data.session.user;
 
 setLoggedInUI(true);
 startApp().catch(error => console.log("Startup error:", error));
-
 
 }else{
 
@@ -3827,6 +3820,7 @@ document.addEventListener(
 "DOMContentLoaded",
 () => {
 
+
 initKenoAnimation();
 checkSession().catch(error => console.log("Session startup error:", error));
 }
@@ -3838,4 +3832,4 @@ checkSession().catch(error => console.log("Session startup error:", error));
 
 </body>
 </html>
-85 / 85
+84 / 85
