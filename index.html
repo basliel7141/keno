@@ -208,6 +208,161 @@ button:disabled{
   color:#06130b;
 }
 
+/* =========================
+   KENO ANIMATION
+========================= */
+
+.keno-animation-stage{
+  position:relative;
+  width:100%;
+  height:180px;
+  margin-top:14px;
+  border-radius:14px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at center,#263a57 0%,#101827 45%,#070b12 100%);
+  border:1px solid #263044;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.keno-animation-stage::before{
+  content:"";
+  position:absolute;
+  inset:-50%;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent,
+      rgba(32,200,120,.08),
+      transparent,
+      rgba(54,227,139,.08),
+      transparent
+    );
+  animation:kenoRotate 4s linear infinite;
+}
+
+@keyframes kenoRotate{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.keno-light{
+  position:absolute;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(54,227,139,.35) 0%,
+    rgba(32,200,120,.12) 35%,
+    transparent 70%
+  );
+  animation:kenoGlow 1.2s ease-in-out infinite;
+}
+
+@keyframes kenoGlow{
+  0%,100%{
+    transform:scale(.85);
+    opacity:.55;
+  }
+  50%{
+    transform:scale(1.15);
+    opacity:1;
+  }
+}
+
+.keno-draw-ball{
+  position:relative;
+  z-index:5;
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  font-weight:bold;
+  color:white;
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #ffffff 0%,
+      #d9e1ea 5%,
+      #3d4b60 35%,
+      #111827 70%
+    );
+  border:3px solid #53627a;
+  box-shadow:
+    0 0 20px rgba(32,200,120,.35),
+    inset -10px -12px 20px rgba(0,0,0,.45);
+  animation:ballDrop .55s cubic-bezier(.2,.8,.3,1);
+}
+
+.keno-draw-ball.hit{
+  border-color:#20c878;
+  box-shadow:
+    0 0 15px #20c878,
+    0 0 35px rgba(32,200,120,.6),
+    inset -10px -12px 20px rgba(0,0,0,.35);
+}
+
+@keyframes ballDrop{
+  0%{
+    transform:translateY(-100px) scale(.2) rotate(-180deg);
+    opacity:0;
+  }
+  60%{
+    transform:translateY(12px) scale(1.08) rotate(20deg);
+    opacity:1;
+  }
+  100%{
+    transform:translateY(0) scale(1) rotate(0);
+    opacity:1;
+  }
+}
+
+.keno-draw-label{
+  position:absolute;
+  left:12px;
+  top:10px;
+  z-index:10;
+  font-size:11px;
+  color:#9ca3af;
+  letter-spacing:1px;
+}
+
+.keno-color-wave{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+}
+
+.keno-color-wave.active{
+  animation:colorWave .8s ease;
+}
+
+@keyframes colorWave{
+  0%{
+    opacity:0;
+    background:rgba(32,200,120,0);
+  }
+  30%{
+    opacity:1;
+    background:rgba(32,200,120,.15);
+  }
+  100%{
+    opacity:0;
+    background:rgba(32,200,120,0);
+  }
+}
+
 .result-numbers{
   display:flex;
   flex-wrap:wrap;
@@ -543,6 +698,16 @@ td{
   .ludo-players{
     grid-template-columns:repeat(2,1fr);
   }
+
+  .keno-animation-stage{
+    height:150px;
+  }
+
+  .keno-draw-ball{
+    width:72px;
+    height:72px;
+    font-size:25px;
+  }
 }
 </style>
 </head>
@@ -654,22 +819,14 @@ Choose a game
 <div class="games-grid">
 
 
-<!-- LUDO -->
-
 <div class="game-card">
-
 <div class="game-icon">🎲</div>
-
-<div class="game-name">
-Ludo
-</div>
-
+<div class="game-name">Ludo</div>
 <div class="game-description">
 Classic multiplayer Ludo.
 </div>
 
-<div
-style="
+<div style="
 background:#182235;
 border:1px solid #20c878;
 border-radius:8px;
@@ -685,20 +842,12 @@ FREE
 <button onclick="openGame('ludo')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- KENO -->
 
 <div class="game-card">
-
 <div class="game-icon">🎱</div>
-
-<div class="game-name">
-Keno
-</div>
-
+<div class="game-name">Keno</div>
 <div class="game-description">
 Pick numbers and play LIVE Keno.
 </div>
@@ -706,20 +855,12 @@ Pick numbers and play LIVE Keno.
 <button onclick="openGame('keno')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- BINGO -->
 
 <div class="game-card">
-
 <div class="game-icon">🎱</div>
-
-<div class="game-name">
-Bingo
-</div>
-
+<div class="game-name">Bingo</div>
 <div class="game-description">
 Pick numbers and play Bingo.
 </div>
@@ -727,20 +868,12 @@ Pick numbers and play Bingo.
 <button onclick="openGame('bingo')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- CONQUER -->
 
 <div class="game-card">
-
 <div class="game-icon">🃏</div>
-
-<div class="game-name">
-Conquer
-</div>
-
+<div class="game-name">Conquer</div>
 <div class="game-description">
 Fast card game battles.
 </div>
@@ -748,20 +881,12 @@ Fast card game battles.
 <button onclick="openGame('conquer')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- FAST BINGO -->
 
 <div class="game-card">
-
 <div class="game-icon">⚡</div>
-
-<div class="game-name">
-Fast Bingo
-</div>
-
+<div class="game-name">Fast Bingo</div>
 <div class="game-description">
 Quick Bingo rounds.
 </div>
@@ -769,20 +894,12 @@ Quick Bingo rounds.
 <button onclick="openGame('fastbingo')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- CRAZY 8 -->
 
 <div class="game-card">
-
 <div class="game-icon">♠️</div>
-
-<div class="game-name">
-Crazy 8
-</div>
-
+<div class="game-name">Crazy 8</div>
 <div class="game-description">
 Classic Crazy 8 card game.
 </div>
@@ -790,20 +907,12 @@ Classic Crazy 8 card game.
 <button onclick="openGame('crazy8')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- SOCCER -->
 
 <div class="game-card">
-
 <div class="game-icon">⚽</div>
-
-<div class="game-name">
-Trace Soccer
-</div>
-
+<div class="game-name">Trace Soccer</div>
 <div class="game-description">
 Soccer challenge game.
 </div>
@@ -811,20 +920,12 @@ Soccer challenge game.
 <button onclick="openGame('soccer')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- NIGHT -->
 
 <div class="game-card">
-
 <div class="game-icon">🌃</div>
-
-<div class="game-name">
-Night Hunter
-</div>
-
+<div class="game-name">Night Hunter</div>
 <div class="game-description">
 Night-time adventure.
 </div>
@@ -832,20 +933,12 @@ Night-time adventure.
 <button onclick="openGame('night')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- MEMORY -->
 
 <div class="game-card">
-
 <div class="game-icon">🧠</div>
-
-<div class="game-name">
-Memory Game
-</div>
-
+<div class="game-name">Memory Game</div>
 <div class="game-description">
 Test your memory skills.
 </div>
@@ -853,20 +946,12 @@ Test your memory skills.
 <button onclick="openGame('memory')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- LAT LAT -->
 
 <div class="game-card">
-
 <div class="game-icon">🎯</div>
-
-<div class="game-name">
-Lat Lat
-</div>
-
+<div class="game-name">Lat Lat</div>
 <div class="game-description">
 Simple quick-play game.
 </div>
@@ -874,20 +959,12 @@ Simple quick-play game.
 <button onclick="openGame('latlat')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- RPS -->
 
 <div class="game-card">
-
 <div class="game-icon">✋</div>
-
-<div class="game-name">
-Rock Paper Scissors
-</div>
-
+<div class="game-name">Rock Paper Scissors</div>
 <div class="game-description">
 Rock, paper or scissors.
 </div>
@@ -895,20 +972,12 @@ Rock, paper or scissors.
 <button onclick="openGame('rps')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- UNO -->
 
 <div class="game-card">
-
 <div class="game-icon">🃏</div>
-
-<div class="game-name">
-Uno
-</div>
-
+<div class="game-name">Uno</div>
 <div class="game-description">
 Match cards and win.
 </div>
@@ -916,20 +985,12 @@ Match cards and win.
 <button onclick="openGame('uno')">
 PLAY
 </button>
-
 </div>
 
-
-<!-- CONNECT 4 -->
 
 <div class="game-card">
-
 <div class="game-icon">🔴</div>
-
-<div class="game-name">
-Connect 4
-</div>
-
+<div class="game-name">Connect 4</div>
 <div class="game-description">
 Connect four to win.
 </div>
@@ -937,7 +998,6 @@ Connect four to win.
 <button onclick="openGame('connect4')">
 PLAY
 </button>
-
 </div>
 
 </div>
@@ -1023,17 +1083,14 @@ CLOSE
 <table>
 
 <thead>
-
 <tr>
 <th>Amount</th>
 <th>Method</th>
 <th>Status</th>
 </tr>
-
 </thead>
 
-<tbody id="depositList">
-</tbody>
+<tbody id="depositList"></tbody>
 
 </table>
 
@@ -1067,6 +1124,32 @@ preload="auto"
 controls>
 Your browser does not support video.
 </video>
+
+
+<!-- ANIMATION STAGE -->
+
+<div
+id="kenoAnimationStage"
+class="keno-animation-stage">
+
+<div class="keno-draw-label">
+LIVE KENO DRAW
+</div>
+
+<div class="keno-light"></div>
+
+<div
+id="kenoColorWave"
+class="keno-color-wave">
+</div>
+
+<div
+id="kenoDrawBall"
+class="keno-draw-ball">
+—
+</div>
+
+</div>
 
 
 <div
@@ -1144,8 +1227,7 @@ Ludo is free to play. Balance is not required.
 Roll the dice to start.
 </div>
 
-<div id="ludoPlayers" class="ludo-players">
-</div>
+<div id="ludoPlayers" class="ludo-players"></div>
 
 <div class="ludo-board-wrap">
 
@@ -1178,8 +1260,7 @@ BACK
 
 </div>
 
-<div id="ludoLog" class="ludo-log status">
-</div>
+<div id="ludoLog" class="ludo-log status"></div>
 
 </div>
 
@@ -1192,8 +1273,7 @@ BACK
 Game
 </h2>
 
-<div id="otherGameMessage" class="status">
-</div>
+<div id="otherGameMessage" class="status"></div>
 
 <button
 class="secondary"
@@ -1213,7 +1293,6 @@ BACK TO GAMES
 <table>
 
 <thead>
-
 <tr>
 <th>User</th>
 <th>Amount</th>
@@ -1221,11 +1300,9 @@ BACK TO GAMES
 <th>Status</th>
 <th>Action</th>
 </tr>
-
 </thead>
 
-<tbody id="adminDeposits">
-</tbody>
+<tbody id="adminDeposits"></tbody>
 
 </table>
 
@@ -1259,11 +1336,8 @@ supabase.createClient(
 ========================= */
 
 let currentUser = null;
-
 let selectedNumbers = [];
-
 let isDrawing = false;
-
 let ludoState = null;
 
 
@@ -1293,6 +1367,125 @@ function wait(ms){
   return new Promise(
     resolve =>
       setTimeout(resolve,ms)
+  );
+
+}
+
+
+/* =========================
+   KENO ANIMATION
+========================= */
+
+function resetKenoAnimation(){
+
+  const ball =
+    document.getElementById(
+      "kenoDrawBall"
+    );
+
+  const wave =
+    document.getElementById(
+      "kenoColorWave"
+    );
+
+  if(ball){
+
+    ball.textContent = "—";
+
+    ball.classList.remove(
+      "hit"
+    );
+
+  }
+
+  if(wave){
+
+    wave.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+function animateKenoBall(number,isHit){
+
+  const ball =
+    document.getElementById(
+      "kenoDrawBall"
+    );
+
+  const wave =
+    document.getElementById(
+      "kenoColorWave"
+    );
+
+  if(!ball){
+    return;
+  }
+
+  ball.classList.remove(
+    "hit"
+  );
+
+  void ball.offsetWidth;
+
+  ball.textContent =
+    number;
+
+  if(isHit){
+
+    ball.classList.add(
+      "hit"
+    );
+
+  }
+
+  if(wave){
+
+    wave.classList.remove(
+      "active"
+    );
+
+    void wave.offsetWidth;
+
+    wave.classList.add(
+      "active"
+    );
+
+  }
+
+}
+
+
+function finishKenoAnimation(){
+
+  const ball =
+    document.getElementById(
+      "kenoDrawBall"
+    );
+
+  if(!ball){
+    return;
+  }
+
+  ball.classList.remove(
+    "hit"
+  );
+
+  ball.textContent = "✓";
+
+  ball.style.background =
+    "radial-gradient(circle at 30% 25%,#ffffff 0%,#36e38b 8%,#15803d 45%,#052e16 100%)";
+
+  setTimeout(
+    () => {
+
+      ball.style.background = "";
+
+    },
+    900
   );
 
 }
@@ -1563,6 +1756,8 @@ async function startApp(){
   setLoggedInUI(true);
 
   createNumbers();
+
+  resetKenoAnimation();
 
   try{
     await loadBalance();
@@ -1953,6 +2148,8 @@ function openGame(game){
         behavior:"smooth"
       });
 
+    resetKenoAnimation();
+
     const video =
       document.getElementById(
         "kenoVideo"
@@ -2207,8 +2404,6 @@ async function playKeno(){
   }
 
 
-  /* BALANCE */
-
   const {
     data:profile,
     error:profileError
@@ -2264,8 +2459,8 @@ async function playKeno(){
     .getElementById("kenoTimer")
     .textContent = "LIVE";
 
+  resetKenoAnimation();
 
-  /* VIDEO */
 
   const video =
     document.getElementById(
@@ -2289,8 +2484,6 @@ async function playKeno(){
   );
 
 
-  /* GET DRAW */
-
   let draw;
 
   try{
@@ -2307,1279 +2500,4 @@ async function playKeno(){
 
     show(
       "gameMessage",
-      "Unable to connect to LIVE KENO.",
-      "error"
-    );
-
-    isDrawing = false;
-
-    document
-      .getElementById("playBtn")
-      .disabled = false;
-
-    return;
-  }
-
-
-  if(!draw){
-
-    show(
-      "gameMessage",
-      "No active KENO draw is available.",
-      "error"
-    );
-
-    isDrawing = false;
-
-    document
-      .getElementById("playBtn")
-      .disabled = false;
-
-    return;
-  }
-
-
-  /* WINNING NUMBERS */
-
-  let winningNumbers =
-    draw.winning_numbers;
-
-
-  if(typeof winningNumbers === "string"){
-
-    try{
-
-      winningNumbers =
-        JSON.parse(
-          winningNumbers
-        );
-
-    }catch(error){
-
-      winningNumbers =
-        winningNumbers
-          .split(",")
-          .map(
-            n =>
-              Number(n.trim())
-          );
-
-    }
-
-  }
-
-
-  if(!Array.isArray(winningNumbers)){
-
-    show(
-      "gameMessage",
-      "Invalid KENO draw data.",
-      "error"
-    );
-
-    isDrawing = false;
-
-    document
-      .getElementById("playBtn")
-      .disabled = false;
-
-    return;
-  }
-
-
-  winningNumbers =
-    winningNumbers
-      .map(
-        n => Number(n)
-      )
-      .filter(
-        n =>
-          Number.isInteger(n) &&
-          n >= 1 &&
-          n <= 80
-      );
-
-
-  if(
-    winningNumbers.length === 0
-  ){
-
-    show(
-      "gameMessage",
-      "KENO draw has no valid numbers.",
-      "error"
-    );
-
-    isDrawing = false;
-
-    document
-      .getElementById("playBtn")
-      .disabled = false;
-
-    return;
-  }
-
-
-  /* DRAW ANIMATION */
-
-  for(
-    let i = 0;
-    i < winningNumbers.length;
-    i++
-  ){
-
-    show(
-      "gameMessage",
-      "LIVE DRAW " +
-      (i + 1) +
-      "/" +
-      winningNumbers.length +
-      "..."
-    );
-
-    await wait(500);
-
-    const ball =
-      document.createElement(
-        "div"
-      );
-
-    ball.className =
-      "result-ball";
-
-    if(
-      selectedNumbers.includes(
-        winningNumbers[i]
-      )
-    ){
-
-      ball.classList.add(
-        "hit"
-      );
-
-    }
-
-    ball.textContent =
-      winningNumbers[i];
-
-    document
-      .getElementById(
-        "resultNumbers"
-      )
-      .appendChild(ball);
-
-    await wait(300);
-
-  }
-
-
-  /* HITS */
-
-  const hits =
-    selectedNumbers.filter(
-      n =>
-        winningNumbers.includes(n)
-    ).length;
-
-
-  /* PAYTABLE */
-
-  const multipliers = {
-
-    0:0,
-    1:0,
-    2:1,
-    3:2,
-    4:5,
-    5:10,
-    6:20,
-    7:50,
-    8:100,
-    9:250,
-    10:500
-
-  };
-
-
-  const multiplier =
-    multipliers[hits] || 0;
-
-
-  const payout =
-    bet * multiplier;
-
-
-  /* BALANCE */
-
-  const finalBalance =
-    balance -
-    bet +
-    payout;
-
-
-  const {
-    error:balanceError
-  } =
-    await supabaseClient
-      .from("profiles")
-      .update({
-        balance:finalBalance
-      })
-      .eq(
-        "id",
-        currentUser.id
-      );
-
-
-  if(balanceError){
-
-    console.log(
-      "Balance update error:",
-      balanceError
-    );
-
-    show(
-      "gameMessage",
-      "Could not update balance.",
-      "error"
-    );
-
-    isDrawing = false;
-
-    document
-      .getElementById("playBtn")
-      .disabled = false;
-
-    return;
-  }
-
-
-  show(
-    "gameMessage",
-    "Hits: " +
-    hits +
-    " | Payout: " +
-    payout.toFixed(2) +
-    " ETB",
-    "success"
-  );
-
-
-  await loadBalance();
-
-
-  document
-    .getElementById("kenoTimer")
-    .textContent = "RESULT";
-
-
-  isDrawing = false;
-
-  document
-    .getElementById("playBtn")
-    .disabled = false;
-
-}
-
-
-/* =========================
-   ADMIN
-========================= */
-
-async function checkAdmin(){
-
-  if(!currentUser){
-    return;
-  }
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq(
-        "id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-  if(error){
-
-    console.log(
-      "Admin check:",
-      error
-    );
-
-    return;
-  }
-
-  if(
-    data?.role === "admin"
-  ){
-
-    document
-      .getElementById("adminPanel")
-      .classList
-      .remove("hidden");
-
-    await loadAdminDeposits();
-
-  }
-
-}
-
-
-async function loadAdminDeposits(){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("deposits")
-      .select("*")
-      .eq(
-        "status",
-        "pending"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-  if(error){
-
-    console.log(
-      "Admin deposits:",
-      error
-    );
-
-    return;
-  }
-
-  const list =
-    document.getElementById(
-      "adminDeposits"
-    );
-
-  list.innerHTML = "";
-
-  (data || []).forEach(
-    item => {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-
-        <td>
-          ${item.user_id}
-        </td>
-
-        <td>
-          ${Number(item.amount).toFixed(2)} ETB
-        </td>
-
-        <td>
-          ${item.method || ""}
-        </td>
-
-        <td class="pending">
-          pending
-        </td>
-
-        <td>
-
-          <button
-            onclick="
-              approveDeposit(
-                '${item.id}',
-                ${Number(item.amount)},
-                '${item.user_id}'
-              )
-            ">
-            APPROVE
-          </button>
-
-          <button
-            class="danger"
-            onclick="
-              rejectDeposit(
-                '${item.id}'
-              )
-            ">
-            REJECT
-          </button>
-
-        </td>
-
-      `;
-
-      list.appendChild(tr);
-
-    }
-  );
-
-}
-
-
-async function approveDeposit(
-  depositId,
-  amount,
-  userId
-){
-
-  const {
-    error:updateError
-  } =
-    await supabaseClient
-      .from("deposits")
-      .update({
-        status:"approved"
-      })
-      .eq(
-        "id",
-        depositId
-      );
-
-  if(updateError){
-
-    alert(
-      updateError.message
-    );
-
-    return;
-  }
-
-
-  const {
-    data:profile,
-    error:profileError
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("balance")
-      .eq(
-        "id",
-        userId
-      )
-      .maybeSingle();
-
-
-  if(profileError){
-
-    alert(
-      profileError.message
-    );
-
-    return;
-  }
-
-
-  const newBalance =
-    Number(
-      profile?.balance || 0
-    ) +
-    Number(amount);
-
-
-  const {
-    error:balanceError
-  } =
-    await supabaseClient
-      .from("profiles")
-      .update({
-        balance:newBalance
-      })
-      .eq(
-        "id",
-        userId
-      );
-
-
-  if(balanceError){
-
-    alert(
-      balanceError.message
-    );
-
-    return;
-  }
-
-
-  alert(
-    "Deposit approved successfully."
-  );
-
-  await loadAdminDeposits();
-
-}
-
-
-async function rejectDeposit(id){
-
-  if(
-    !confirm(
-      "Reject this deposit?"
-    )
-  ){
-
-    return;
-  }
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("deposits")
-      .update({
-        status:"rejected"
-      })
-      .eq(
-        "id",
-        id
-      );
-
-  if(error){
-
-    alert(
-      error.message
-    );
-
-    return;
-  }
-
-  alert(
-    "Deposit rejected."
-  );
-
-  await loadAdminDeposits();
-
-}
-
-
-/* =========================
-   LUDO
-========================= */
-
-const LUDO_COLORS = [
-  "red",
-  "green",
-  "yellow",
-  "blue"
-];
-
-const LUDO_NAMES = [
-  "Red",
-  "Green",
-  "Yellow",
-  "Blue"
-];
-
-
-function ludoOpen(){
-
-  document
-    .getElementById("kenoGame")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("otherGame")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("ludoGame")
-    .classList
-    .remove("hidden");
-
-  document
-    .getElementById("ludoGame")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-  ludoNewGame();
-
-}
-
-
-function ludoNewGame(){
-
-  ludoState = {
-
-    turn:0,
-
-    dice:null,
-
-    rolled:false,
-
-    winner:null,
-
-    pawns:
-      LUDO_COLORS.map(
-        () => [
-          -1,
-          -1,
-          -1,
-          -1
-        ]
-      ),
-
-    logs:[
-      "Ludo started. Red plays first."
-    ]
-
-  };
-
-  ludoRender();
-
-}
-
-
-function ludoRoll(){
-
-  if(
-    !ludoState ||
-    ludoState.winner
-  ){
-
-    return;
-  }
-
-  if(
-    ludoState.rolled
-  ){
-
-    show(
-      "ludoMessage",
-      "Move a highlighted pawn first.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const n =
-    Math.floor(
-      Math.random() * 6
-    ) + 1;
-
-
-  ludoState.dice = n;
-
-  ludoState.rolled = true;
-
-
-  const color =
-    LUDO_NAMES[
-      ludoState.turn
-    ];
-
-
-  ludoLog(
-    color +
-    " rolled " +
-    n
-  );
-
-
-  const movable =
-    ludoMovable();
-
-
-  if(!movable.length){
-
-    ludoLog(
-      color +
-      " has no legal move."
-    );
-
-    ludoState.rolled =
-      false;
-
-
-    if(n !== 6){
-
-      ludoNextTurn();
-
-    }else{
-
-      show(
-        "ludoMessage",
-        color +
-        " rolled 6 but has no move. Roll again."
-      );
-
-    }
-
-    ludoRender();
-
-    return;
-  }
-
-
-  show(
-    "ludoMessage",
-    color +
-    " rolled " +
-    n +
-    ". Choose a highlighted pawn."
-  );
-
-  ludoRender();
-
-}
-
-
-function ludoMovable(){
-
-  if(
-    !ludoState ||
-    ludoState.dice === null
-  ){
-
-    return [];
-  }
-
-
-  return ludoState
-    .pawns[
-      ludoState.turn
-    ]
-    .map(
-      (p,i) => {
-
-        if(p === 57){
-          return false;
-        }
-
-        if(p === -1){
-
-          return (
-            ludoState.dice === 6
-          );
-
-        }
-
-        return (
-          p +
-          ludoState.dice <=
-          57
-        );
-
-      }
-    )
-    .map(
-      (value,index) =>
-        value
-          ? index
-          : -1
-    )
-    .filter(
-      index =>
-        index >= 0
-    );
-
-}
-
-
-function ludoMove(i){
-
-  if(
-    !ludoState ||
-    !ludoState.rolled ||
-    ludoState.winner
-  ){
-
-    return;
-  }
-
-
-  if(
-    !ludoMovable()
-      .includes(i)
-  ){
-
-    return;
-  }
-
-
-  const colorIndex =
-    ludoState.turn;
-
-  const dice =
-    ludoState.dice;
-
-
-  let position =
-    ludoState
-      .pawns[
-        colorIndex
-      ][i];
-
-
-  position =
-    position === -1
-      ? 1
-      : position + dice;
-
-
-  ludoState
-    .pawns[
-      colorIndex
-    ][i] =
-      position;
-
-
-  ludoLog(
-    LUDO_NAMES[colorIndex] +
-    " moved pawn " +
-    (i + 1)
-  );
-
-
-  if(
-    position === 57 &&
-    ludoState
-      .pawns[
-        colorIndex
-      ]
-      .every(
-        x => x === 57
-      )
-  ){
-
-    ludoState.winner =
-      colorIndex;
-
-    ludoState.rolled =
-      false;
-
-    ludoRender();
-
-    show(
-      "ludoMessage",
-      LUDO_NAMES[colorIndex] +
-      " wins!",
-      "success"
-    );
-
-    ludoLog(
-      LUDO_NAMES[colorIndex] +
-      " wins the game."
-    );
-
-    return;
-  }
-
-
-  const extra =
-    dice === 6;
-
-
-  ludoState.rolled =
-    false;
-
-  ludoState.dice =
-    null;
-
-
-  if(extra){
-
-    show(
-      "ludoMessage",
-      LUDO_NAMES[colorIndex] +
-      " gets another turn!"
-    );
-
-  }else{
-
-    ludoNextTurn();
-
-  }
-
-
-  ludoRender();
-
-}
-
-
-function ludoNextTurn(){
-
-  ludoState.turn =
-    (
-      ludoState.turn + 1
-    ) % 4;
-
-  show(
-    "ludoMessage",
-    LUDO_NAMES[
-      ludoState.turn
-    ] +
-    "'s turn."
-  );
-
-}
-
-
-function ludoLog(text){
-
-  if(!ludoState){
-    return;
-  }
-
-  ludoState.logs
-    .unshift(text);
-
-  ludoState.logs =
-    ludoState.logs
-      .slice(0,20);
-
-}
-
-
-function ludoRender(){
-
-  const board =
-    document.getElementById(
-      "ludoBoard"
-    );
-
-  if(
-    !board ||
-    !ludoState
-  ){
-
-    return;
-  }
-
-
-  board.innerHTML = "";
-
-
-  for(
-    let r = 0;
-    r < 15;
-    r++
-  ){
-
-    for(
-      let c = 0;
-      c < 15;
-      c++
-    ){
-
-      const cell =
-        document.createElement(
-          "div"
-        );
-
-      cell.className =
-        "ludo-cell";
-
-
-      if(
-        (
-          r === 7 &&
-          c >= 6 &&
-          c <= 8
-        ) ||
-        (
-          c === 7 &&
-          r >= 6 &&
-          r <= 8
-        )
-      ){
-
-        cell.classList
-          .add(
-            "ludo-safe"
-          );
-
-      }
-
-
-      if(
-        r >= 6 &&
-        r <= 8 &&
-        c >= 6 &&
-        c <= 8
-      ){
-
-        cell.classList
-          .add(
-            "ludo-center"
-          );
-
-      }
-
-
-      board.appendChild(
-        cell
-      );
-
-    }
-
-  }
-
-
-  const homes = [
-
-    ["red",1,1],
-    ["green",1,10],
-    ["yellow",10,1],
-    ["blue",10,10]
-
-  ];
-
-
-  homes.forEach(
-    ([color,row,col],ci) => {
-
-      const home =
-        document.createElement(
-          "div"
-        );
-
-      home.className =
-        "ludo-home " +
-        color;
-
-      home.style.gridRow =
-        row +
-        "/span 5";
-
-      home.style.gridColumn =
-        col +
-        "/span 5";
-
-
-      for(
-        let i = 0;
-        i < 4;
-        i++
-      ){
-
-        const yard =
-          document.createElement(
-            "div"
-          );
-
-        yard.className =
-          "ludo-yard";
-
-
-        const pawn =
-          document.createElement(
-            "div"
-          );
-
-        pawn.className =
-          "ludo-pawn " +
-          color;
-
-        pawn.title =
-          LUDO_NAMES[ci] +
-          " pawn " +
-          (i + 1);
-
-
-        if(
-          ci ===
-          ludoState.turn &&
-          ludoState.rolled &&
-          ludoMovable()
-            .includes(i)
-        ){
-
-          pawn.style.outline =
-            "4px solid #20c878";
-
-          pawn.onclick =
-            () => ludoMove(i);
-
-        }
-
-
-        yard.appendChild(
-          pawn
-        );
-
-        home.appendChild(
-          yard
-        );
-
-      }
-
-
-      board.appendChild(
-        home
-      );
-
-    }
-  );
-
-
-  document
-    .getElementById(
-      "ludoDice"
-    )
-    .textContent =
-      ludoState.dice || "—";
-
-
-  document
-    .getElementById(
-      "ludoPlayers"
-    )
-    .innerHTML =
-      LUDO_NAMES
-        .map(
-          (name,index) => {
-
-            const active =
-              index ===
-              ludoState.turn &&
-              !ludoState.winner
-                ? "active"
-                : "";
-
-            const finished =
-              ludoState
-                .pawns[index]
-                .filter(
-                  x => x === 57
-                )
-                .length;
-
-            return `
-              <div
-                class="ludo-player ${active}">
-                ${name} —
-                ${finished}/4
-              </div>
-            `;
-
-          }
-        )
-        .join("");
-
-
-  document
-    .getElementById(
-      "ludoLog"
-    )
-    .innerHTML =
-      ludoState.logs
-        .map(
-          x => "• " + x
-        )
-        .join("<br>");
-
-
-  document
-    .getElementById(
-      "ludoRollBtn"
-    )
-    .disabled =
-      !!ludoState.rolled ||
-      !!ludoState.winner;
-
-}
-
-
-function closeLudo(){
-
-  document
-    .getElementById(
-      "ludoGame"
-    )
-    .classList
-    .add("hidden");
-
-  ludoState = null;
-
-}
-
-
-/* =========================
-   SESSION CHECK
-========================= */
-
-async function checkSession(){
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .auth
-        .getSession();
-
-    if(error){
-
-      console.log(
-        "Session error:",
-        error
-      );
-
-      return;
-    }
-
-    if(
-      data &&
-      data.session &&
-      data.session.user
-    ){
-
-      currentUser =
-        data.session.user;
-
-      await startApp();
-
-    }else{
-
-      setLoggedInUI(false);
-
-    }
-
-  }catch(error){
-
-    console.log(
-      "Session error:",
-      error
-    );
-
-    setLoggedInUI(false);
-
-  }
-
-}
-
-
-/* =========================
-   START
-========================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    checkSession();
-
-  }
-);
-
-</script>
-
-</body>
-</html>
+     
