@@ -2526,34 +2526,93 @@ document.querySelectorAll(".ka-cell.hit").forEach(c=>c.classList.remove("hit"));
 function showKenoPreview(){
 initKenoAnimation();
 clearTimeout(kenoPreviewTimer);
+clearTimeout(kenoAnimationTimer);
 clearInterval(kenoAnimationInterval);
+
 const stage=document.getElementById("kenoAnimationStage");
 const intro=document.getElementById("kaIntro");
 const mix=document.getElementById("kaMix");
 const draw=document.getElementById("kaDraw");
+const timer=document.getElementById("kaTimer");
+const count=document.getElementById("kaCount");
+const out=document.getElementById("kaOutball");
+const slots=document.getElementById("kaSlots");
+
 if(!stage || !intro || !mix || !draw) return;
+
+kenoAnimationRunning=false;
 stage.classList.remove("hidden");
+intro.classList.remove("ka-hidden");
+mix.classList.add("ka-hidden");
+draw.classList.add("ka-hidden");
+
+const demoNumbers=[7,14,22,31,38,44,51,57,63,69,73,76,9,18,27,35,48,55,66,79];
+
+const clearPreview=function(){
+clearTimeout(kenoPreviewTimer);
+clearInterval(kenoAnimationInterval);
+document.querySelectorAll(".ka-cell.hit").forEach(c=>c.classList.remove("hit"));
+if(slots) Array.from(slots.children).forEach(s=>{
+s.textContent="";
+s.classList.remove("on");
+});
+if(out) out.textContent="--";
+if(count) count.textContent="0/20";
+};
+
+const playCycle=function(){
+if(kenoAnimationRunning) return;
+clearPreview();
+
+// 1) INTRO / NEXT DRAW
+stage.classList.remove("hidden");
+intro.classList.remove("ka-hidden");
+mix.classList.add("ka-hidden");
+draw.classList.add("ka-hidden");
+if(timer) timer.textContent="01:00";
+
+let sec=60;
+kenoAnimationInterval=setInterval(()=>{
+sec--;
+if(timer) timer.textContent="00:"+String(Math.max(sec,0)).padStart(2,"0");
+if(sec<=0) clearInterval(kenoAnimationInterval);
+},1000);
+
+kenoPreviewTimer=setTimeout(()=>{
+// 2) MIXING BALLS
+clearInterval(kenoAnimationInterval);
 intro.classList.add("ka-hidden");
 mix.classList.remove("ka-hidden");
 draw.classList.add("ka-hidden");
 makeKenoMixBalls();
-let showIntro=false;
-const cycle=()=>{
-if(kenoAnimationRunning) return;
-showIntro=!showIntro;
-if(showIntro){
+
+kenoPreviewTimer=setTimeout(()=>{
+// 3) DRAW BOARD + BALLS ONE BY ONE
 mix.classList.add("ka-hidden");
-intro.classList.remove("ka-hidden");
-const timer=document.getElementById("kaTimer");
-if(timer) timer.textContent="NEXT DRAW";
-}else{
-intro.classList.add("ka-hidden");
-mix.classList.remove("ka-hidden");
-makeKenoMixBalls();
+draw.classList.remove("ka-hidden");
+
+let i=0;
+const showNext=function(){
+if(i>=demoNumbers.length){
+kenoPreviewTimer=setTimeout(playCycle,2500);
+return;
 }
-kenoPreviewTimer=setTimeout(cycle,3500);
+const n=demoNumbers[i];
+const cell=document.getElementById("kaCell"+n);
+const slot=document.getElementById("kaSlot"+(i+1));
+if(cell) cell.classList.add("hit");
+if(slot){ slot.textContent=n; slot.classList.add("on"); }
+if(out) out.textContent=n;
+if(count) count.textContent=(i+1)+"/"+demoNumbers.length;
+i++;
+kenoPreviewTimer=setTimeout(showNext,700);
 };
-kenoPreviewTimer=setTimeout(cycle,3500);
+showNext();
+},3500);
+},60000);
+};
+
+playCycle();
 }
 
 function runKenoAnimation(numbers){
@@ -2682,7 +2741,6 @@ if(selectedNumbers.length > 10){
 show("gameMessage","Maximum 10 numbers.","error");
 return;
 }
-
 const playBtn=document.getElementById("playBtn");
 try{
 const {data:profile,error:profileError}=await withTimeout(
@@ -2820,7 +2878,6 @@ document
 .remove("hidden");
 await loadAdminDeposits();
 
-
 }
 
 
@@ -2867,7 +2924,6 @@ document.getElementById(
 
 list.innerHTML = "";
 
-
 (data || []).forEach(
 item => {
 const tr =
@@ -2912,7 +2968,6 @@ ${Number(item.amount)},
 APPROVE
 </button>
 
-
 <button
 class="danger"
 onclick="
@@ -2925,6 +2980,7 @@ REJECT
 
 
 </td>
+
 `;
 
 
@@ -2958,7 +3014,6 @@ status:"approved"
 depositId
 );
 
-
 if(updateError){
 
 
@@ -2970,6 +3025,7 @@ updateError.message
 
 return;
 }
+
 
 const {
 data:profile,
@@ -3016,6 +3072,7 @@ balance:newBalance
 userId
 );
 
+
 if(balanceError){
 
 
@@ -3047,7 +3104,6 @@ if(
 return;
 }
 
-
 const {
 error
 }=
@@ -3060,6 +3116,7 @@ status:"rejected"
 "id",
 id
 );
+
 
 if(error){
 
@@ -3092,7 +3149,6 @@ const LUDO_COLORS = [
 "yellow",
 "blue"
 ];
-
 
 const LUDO_NAMES = [
 "Red",
@@ -3139,7 +3195,6 @@ function ludoNewGame(){
 ludoState = {
 turn:0,
 
-
 dice:null,
 
 
@@ -3185,7 +3240,6 @@ ludoState.winner
 return;
 }
 
-
 if(
 ludoState.rolled
 ){
@@ -3197,6 +3251,7 @@ show(
 "error"
 
 );
+
 
 return;
 }
@@ -3230,7 +3285,6 @@ n
 const movable =
 ludoMovable();
 
-
 if(!movable.length){
 
 ludoLog(
@@ -3241,6 +3295,7 @@ color +
 
 ludoState.rolled =
 false;
+
 
 if(n !== 6){
 
@@ -3274,7 +3329,6 @@ color +
 n+
 ". Choose a highlighted pawn."
 );
-
 
 ludoRender();
 
@@ -3596,7 +3650,6 @@ cell
 
 }
 
-
 }
 
 
@@ -3608,6 +3661,7 @@ const homes = [
 ["yellow",10,1],
 ["blue",10,10]
 ];
+
 
 homes.forEach(
 ([color,row,col],ci) => {
@@ -3687,7 +3741,6 @@ pawn.onclick =
 yard.appendChild(
 pawn
 );
-
 
 home.appendChild(
 yard
@@ -3793,6 +3846,7 @@ ludoState = null;
 SESSION CHECK
 ========================= */
 
+
 async function checkSession(){
 
 
@@ -3837,6 +3891,7 @@ startApp().catch(error => console.log("Startup error:", error));
 
 }else{
 
+
 setLoggedInUI(false);
 
 
@@ -3879,4 +3934,4 @@ checkSession().catch(error => console.log("Session startup error:", error));
 
 </body>
 </html>
-85 / 85
+87 / 87
