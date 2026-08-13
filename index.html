@@ -435,18 +435,18 @@ document.getElementById("loginBtn"); button.disabled = true; show("authMessage",
 = await withTimeout( supabaseClient.auth.signInWithPassword({ email, password }), 15000, "Login request timed
 out. Please check your internet connection and try again." ); const { data, error } = result; if(error){
 show("authMessage",error.message,"error"); return; } if(!data || !data.user){ show("authMessage","Login failed. No
-user session was returned.","error"); return; } currentUser = data.user; // Open the app immediately. Database loading
-must never keep the login screen stuck. setLoggedInUI(true); createNumbers(); show("authMessage","Login
-successful.","success"); // Load balance/deposits/admin data in the background. startApp().catch(error =>
+user session was returned.","error"); return; } currentUser = data.user; /* Open the app immediately. Database loading
+must never keep the login screen stuck. */ setLoggedInUI(true); createNumbers(); show("authMessage","Login
+successful.","success"); /* Load balance/deposits/admin data in the background. */ startApp().catch(error =>
 console.log("App startup error:", error)); }catch(error){ show("authMessage",error.message || "Unable to
 login.","error"); }finally{ button.disabled = false; }
 } /* ========================= START APP
-========================= */ async function startApp(){ setLoggedInUI(true); createNumbers(); // These
-requests are intentionally independent so a database/RLS problem // cannot prevent the main app from opening after
-login. try{ await withTimeout(loadBalance(),8000,"Balance request timed out"); }catch(error){ console.log("Balance
-error:",error); } try{ await withTimeout(loadDeposits(),8000,"Deposits request timed out"); }catch(error){
-console.log("Deposit error:",error); } try{ await withTimeout(checkAdmin(),8000,"Admin request timed out");
-}catch(error){ console.log("Admin error:",error); }
+========================= */ async function startApp(){ setLoggedInUI(true); createNumbers(); /* These
+requests are intentionally independent so a database/RLS problem cannot prevent the main app from opening after
+login. */ try{ await withTimeout(loadBalance(),8000,"Balance request timed out"); }catch(error){
+console.log("Balance error:",error); } try{ await withTimeout(loadDeposits(),8000,"Deposits request timed out");
+}catch(error){ console.log("Deposit error:",error); } try{ await withTimeout(checkAdmin(),8000,"Admin request
+timed out"); }catch(error){ console.log("Admin error:",error); }
 } /* ========================= LOGOUT
 ========================= */ async function logout(){ try{ await supabaseClient .auth .signOut();
 } c a t c h ( e r r o r ) { c o n s o l e . l o g ( e r r o r ) ; } c u r r e n t U s e r = n u l l ; s e t L o g g e d I n U I ( f a l s e ) ; d o c u m e n t
