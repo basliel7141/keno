@@ -2278,10 +2278,15 @@ document
 .scrollIntoView({
 behavior:"smooth"
 });
+
+// Show the KENO animation immediately when the KENO screen opens.
+// It is only a visual preview until a LIVE draw is played.
+showKenoPreview();
 return;
 }
 
 const names = {
+
 
 bingo:" BINGO",
 conquer:" CONQUER",
@@ -2369,7 +2374,6 @@ i <= 80;
 i++
 ){
 
-
 const button =
 document.createElement(
 "button"
@@ -2452,6 +2456,7 @@ KENO ANIMATION ENGINE
 let kenoAnimationRunning=false;
 let kenoAnimationTimer=null;
 let kenoAnimationInterval=null;
+let kenoPreviewTimer=null;
 
 
 function initKenoAnimation(){
@@ -2495,6 +2500,8 @@ glass.appendChild(b);
 
 function resetKenoAnimation(){
 clearTimeout(kenoAnimationTimer);
+clearInterval(kenoAnimationInterval);
+clearTimeout(kenoPreviewTimer);
 kenoAnimationRunning=false;
 const stage=document.getElementById("kenoAnimationStage");
 const intro=document.getElementById("kaIntro");
@@ -2515,6 +2522,39 @@ if(slots) Array.from(slots.children).forEach(s=>{s.textContent="";s.classList.re
 document.querySelectorAll(".ka-cell.hit").forEach(c=>c.classList.remove("hit"));
 }
 
+
+function showKenoPreview(){
+initKenoAnimation();
+clearTimeout(kenoPreviewTimer);
+clearInterval(kenoAnimationInterval);
+const stage=document.getElementById("kenoAnimationStage");
+const intro=document.getElementById("kaIntro");
+const mix=document.getElementById("kaMix");
+const draw=document.getElementById("kaDraw");
+if(!stage || !intro || !mix || !draw) return;
+stage.classList.remove("hidden");
+intro.classList.add("ka-hidden");
+mix.classList.remove("ka-hidden");
+draw.classList.add("ka-hidden");
+makeKenoMixBalls();
+let showIntro=false;
+const cycle=()=>{
+if(kenoAnimationRunning) return;
+showIntro=!showIntro;
+if(showIntro){
+mix.classList.add("ka-hidden");
+intro.classList.remove("ka-hidden");
+const timer=document.getElementById("kaTimer");
+if(timer) timer.textContent="NEXT DRAW";
+}else{
+intro.classList.add("ka-hidden");
+mix.classList.remove("ka-hidden");
+makeKenoMixBalls();
+}
+kenoPreviewTimer=setTimeout(cycle,3500);
+};
+kenoPreviewTimer=setTimeout(cycle,3500);
+}
 
 function runKenoAnimation(numbers){
 return new Promise(resolve=>{
@@ -2537,6 +2577,8 @@ const out=document.getElementById("kaOutball");
 const slots=document.getElementById("kaSlots");
 if(!stage){resolve();return;}
 kenoAnimationRunning=true;
+clearTimeout(kenoPreviewTimer);
+clearInterval(kenoAnimationInterval);
 stage.classList.remove("hidden");
 let sec=8;
 timer.textContent="00:08";
@@ -2546,7 +2588,7 @@ if(sec<0){clearInterval(kenoAnimationInterval);return;}
 timer.textContent="00:"+String(sec).padStart(2,"0");
 },1000);
 kenoAnimationTimer=setTimeout(()=>{
-clearInterval(countdown);
+clearInterval(kenoAnimationInterval);
 intro.classList.add("ka-hidden");
 mix.classList.remove("ka-hidden");
 makeKenoMixBalls();
@@ -2604,6 +2646,7 @@ ascending:false
 .limit(1)
 .maybeSingle();
 
+
 if(error){
 throw error;
 }
@@ -2648,6 +2691,7 @@ supabaseClient.from("profiles").select("balance").eq("id",currentUser.id).maybeS
 "Balance request timed out."
 );
 if(profileError) throw profileError;
+
 const balance=Number(profile?.balance || 0);
 if(balance < bet){
 show("gameMessage","Insufficient balance.","error");
@@ -2740,6 +2784,7 @@ if(!currentUser){
 return;
 }
 
+
 const {
 data,
 error
@@ -2783,6 +2828,7 @@ await loadAdminDeposits();
 
 
 async function loadAdminDeposits(){
+
 
 const {
 data,
@@ -2829,6 +2875,7 @@ document.createElement("tr");
 
 
 tr.innerHTML = `
+
 
 <td>
 ${item.user_id}
@@ -2878,7 +2925,6 @@ REJECT
 
 
 </td>
-
 `;
 
 
@@ -2921,9 +2967,9 @@ updateError.message
 
 );
 
+
 return;
 }
-
 
 const {
 data:profile,
@@ -2970,7 +3016,6 @@ balance:newBalance
 userId
 );
 
-
 if(balanceError){
 
 
@@ -3016,7 +3061,6 @@ status:"rejected"
 id
 );
 
-
 if(error){
 
 
@@ -3056,6 +3100,7 @@ const LUDO_NAMES = [
 "Yellow",
 "Blue"
 ];
+
 
 function ludoOpen(){
 
@@ -3102,6 +3147,7 @@ rolled:false,
 
 
 winner:null,
+
 
 pawns:
 LUDO_COLORS.map(
@@ -3152,7 +3198,6 @@ show(
 
 );
 
-
 return;
 }
 
@@ -3193,9 +3238,9 @@ color +
 " has no legal move."
 );
 
+
 ludoState.rolled =
 false;
-
 
 if(n !== 6){
 
@@ -3238,6 +3283,7 @@ ludoRender();
 
 
 function ludoMovable(){
+
 
 if(
 !ludoState ||
@@ -3328,6 +3374,7 @@ ludoState
 .pawns[
 colorIndex
 ][i];
+
 
 position =
 position === -1
@@ -3420,6 +3467,7 @@ ludoNextTurn();
 ludoRender();
 
 }
+
 
 function ludoNextTurn(){
 ludoState.turn =
@@ -3560,7 +3608,6 @@ const homes = [
 ["yellow",10,1],
 ["blue",10,10]
 ];
-
 
 homes.forEach(
 ([color,row,col],ci) => {
@@ -3741,10 +3788,10 @@ document
 ludoState = null;
 }
 
+
 /* =========================
 SESSION CHECK
 ========================= */
-
 
 async function checkSession(){
 
@@ -3787,8 +3834,8 @@ data.session.user;
 setLoggedInUI(true);
 startApp().catch(error => console.log("Startup error:", error));
 
-}else{
 
+}else{
 
 setLoggedInUI(false);
 
@@ -3832,4 +3879,4 @@ checkSession().catch(error => console.log("Session startup error:", error));
 
 </body>
 </html>
-84 / 85
+85 / 85
