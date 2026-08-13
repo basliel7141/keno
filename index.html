@@ -394,9 +394,24 @@ t r > < / t h e a d > < t b o d y i d = " a d m i n D e p o s i t s " > < / t b 
 ========================= SUPABASE
 ========================= */ const SUPABASE_URL =
 "https://eizpxgwkottliyvvhlar.supabase.co"; const SUPABASE_KEY =
-"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7"; const supabaseClient =
-supabase.createClient( SUPABASE_URL, SUPABASE_KEY
-); /* Safe timeout helper: prevents login/startup requests from hanging forever. */
+"sb_publishable_8ETbP5HwW3wZmWjlQQQu0Q_IMBPdfl7"; let supabaseClient = null;
+let supabaseReady = false;
+try {
+if (window.supabase && typeof window.supabase.createClient === "function") {
+supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+supabaseReady = true;
+}
+} catch (e) {
+console.error("Supabase initialization error:", e);
+}
+function requireSupabase(){
+if(!supabaseReady || !supabaseClient){
+show("authMessage", "Supabase connection is not available. Please check the Supabase URL/key or internet
+connection.", "error");
+return false;
+}
+return true;
+} /* Safe timeout helper: prevents login/startup requests from hanging forever. */
 function withTimeout(promise, ms, message){ let timer; const timeout = new Promise((_, reject)=>{ timer =
 s e t T i m e o u t ( ( ) = > r e j e c t ( n e w E r r o r ( m e s s a g e | | " R e q u e s t t i m e d o u t . " ) ) , m s ) ; } ) ; r e t u r n
 Promise.race([Promise.resolve(promise), timeout]) .finally(()=>clearTimeout(timer));
@@ -427,7 +442,7 @@ return;
 }
 show( "authMessage", "Registration successful. Please login.", "success" ); }catch(error){ show( "authMessage",
 error.message, "error" ); }finally{ button.disabled = false; } } /* ========================= LOGIN
-= = = = = = = = = = = = = = = = = = = = = = = = = * / a s y n c f u n c t i o n l o g i n ( ) { c o n s t e m a i l =
+========================= */ async function login(){ if(!requireSupabase()) return; const email =
 document.getElementById("email").value.trim(); const password = document.getElementById("password").value;
 i f ( ! e m a i l ) { s h o w ( " a u t h M e s s a g e " , " P l e a s e e n t e r y o u r e m a i l . " , " e r r o r " ) ; r e t u r n ; } i f ( ! p a s s w o r d ) {
 s h o w ( " a u t h M e s s a g e " , " P l e a s e e n t e r y o u r p a s s w o r d . " , " e r r o r " ) ; r e t u r n ; } c o n s t b u t t o n =
@@ -448,10 +463,11 @@ console.log("Balance error:",error); } try{ await withTimeout(loadDeposits(),800
 }catch(error){ console.log("Deposit error:",error); } try{ await withTimeout(checkAdmin(),8000,"Admin request
 timed out"); }catch(error){ console.log("Admin error:",error); }
 } /* ========================= LOGOUT
-========================= */ async function logout(){ try{ await supabaseClient .auth .signOut();
-} c a t c h ( e r r o r ) { c o n s o l e . l o g ( e r r o r ) ; } c u r r e n t U s e r = n u l l ; s e t L o g g e d I n U I ( f a l s e ) ; d o c u m e n t
-.getElementById("depositBox") .classList .add("hidden"); document .getElementById("email") .value = ""; document
-.getElementById("password") .value = ""; } /* ========================= BALANCE
+========================= */ async function logout(){ if(!supabaseClient){ currentUser=null;
+setLoggedInUI(false); return; } try{ await supabaseClient .auth .signOut(); }catch(error){ console.log(error); }
+currentUser = null; setLoggedInUI(false); document .getElementById("depositBox") .classList .add("hidden");
+document .getElementById("email") .value = ""; document .getElementById("password") .value = ""; } /*
+========================= BALANCE
 ========================= */ async function loadBalance(){ if(!currentUser){ return; } const { data, error }=
 await supabaseClient .from("profiles") .select("balance") .eq( "id", currentUser.id ) .maybeSingle(); if(error){
 console.log( "Balance database error:", error ); return; } const balance = Number( data?.balance || 0 ); document
@@ -703,12 +719,13 @@ home.appendChild( yard ); } board.appendChild( home ); }
 "ludoRollBtn" ) .disabled = !!ludoState.rolled || !!ludoState.winner; } function closeLudo(){ document
 .getElementById( "ludoGame" ) .classList .add("hidden"); ludoState = null;
 } /* ========================= SESSION CHECK
-========================= */ async function checkSession(){ try{ const { data, error }= await supabaseClient
-.auth .getSession(); if(error){ console.log( "Session error:", error ); return; } if( data && data.session &&
-data.session.user ){ currentUser = data.session.user; setLoggedInUI(true); startApp().catch(error =>
-console.log("Startup error:", error)); }else{ setLoggedInUI(false); } }catch(error){ console.log( "Session error:", error
-); setLoggedInUI(false); } } /* ========================= START
+========================= */ async function checkSession(){ if(!requireSupabase()) { setLoggedInUI(false);
+return; } try{ const { data, error }= await supabaseClient .auth .getSession(); if(error){ console.log( "Session error:",
+error ); return; } if( data && data.session && data.session.user ){ currentUser = data.session.user;
+setLoggedInUI(true); startApp().catch(error => console.log("Startup error:", error)); }else{ setLoggedInUI(false); }
+}catch(error){ console.log( "Session error:", error ); setLoggedInUI(false); } } /* =========================
+START
 = = = = = = = = = = = = = = = = = = = = = = = = = * / d o c u m e n t . a d d E v e n t L i s t e n e r ( " D O M C o n t e n t L o a d e d " , ( ) = > {
 initKenoAnimation(); checkSession().catch(error => console.log("Session startup error:", error)); }
 ); </script></body></html>
-1 / 16
+16 / 16
