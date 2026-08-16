@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KENO Admin Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#eef2ff;font-family:Arial,sans-serif}
+.hidden{display:none!important}
+.wrap{max-width:1200px;margin:auto;padding:18px}
+.card{background:#121a2e;border:1px solid #26314d;border-radius:16px;padding:18px;margin-bottom:16px}
+h1,h2,h3{margin-top:0}
+.login{max-width:420px;margin:8vh auto}
+input,select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #33415f;background:#0d1426;color:#fff}
+button{cursor:pointer;background:#2563eb;border:0;font-weight:700}
+button.danger{background:#dc2626}
+button.secondary{background:#334155}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stat{background:#0d1426;border:1px solid #26314d;border-radius:12px;padding:15px}
+.stat b{display:block;font-size:24px;margin-top:7px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+nav button{width:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:10px;border-bottom:1px solid #26314d;text-align:left}
+.table-wrap{overflow:auto}
+.msg{margin-top:10px;min-height:20px}
+.success{color:#4ade80} .error{color:#f87171}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.small{font-size:12px;color:#94a3b8}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="wrap login">
+  <div class="card">
+    <h1>🔐 KENO Admin</h1>
+    <p class="small">Admin accounts only</p>
+    <input id="email" type="email" placeholder="Admin email">
+    <br><br>
+    <input id="password" type="password" placeholder="Password">
+    <br><br>
+    <button onclick="adminLogin()">LOGIN</button>
+    <div id="loginMsg" class="msg"></div>
+  </div>
+</div>
+
+<div id="adminView" class="wrap hidden">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <h1>👑 Admin Dashboard</h1>
+        <div id="adminEmail" class="small"></div>
+      </div>
+      <button class="secondary" style="width:auto" onclick="adminLogout()">LOGOUT</button>
+    </div>
+  </div>
+
+  <nav>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('users')">Users</button>
+    <button onclick="showSection('deposits')">Deposits</button>
+    <button onclick="showSection('games')">Games</button>
+    <button onclick="showSection('keno')">KENO</button>
+    <button onclick="showSection('live')">Live KENO</button>
+    <button onclick="showSection('reports')">Reports</button>
+  </nav>
+
+  <section id="dashboard" class="section">
+    <div class="grid">
+      <div class="stat">Users<b id="statUsers">0</b></div>
+      <div class="stat">Pending Deposits<b id="statDeposits">0</b></div>
+      <div class="stat">KENO Status<b id="statKeno">-</b></div>
+      <div class="stat">LUDO Status<b id="statLudo">-</b></div>
+    </div>
+  </section>
+
+  <section id="users" class="section hidden">
+    <div class="card">
+      <h2>👥 Users</h2>
+      <button class="secondary" onclick="loadUsers()">REFRESH</button>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Email</th><th>Role</th></tr></thead>
+      <tbody id="usersTable"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="deposits" class="section hidden">
+    <div class="card">
+      <h2>💰 Deposits</h2>
+      <button class="secondary" onclick="loadDeposits()">REFRESH</button>
+      <div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="depositsTable"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="games" class="section hidden">
+    <div class="card">
+      <h2>🎮 Game Controls</h2>
+      <div class="row">
+        <label>KENO<select id="kenoStatus"><option value="on">ON</option><option value="off">OFF</option></select></label>
+        <label>LUDO<select id="ludoStatus"><option value="on">ON</option><option value="off">OFF</option></select></label>
+      </div>
+      <br>
+      <button onclick="saveGameSettings()">SAVE GAME SETTINGS</button>
+      <div id="gameMsg" class="msg"></div>
+    </div>
+  </section>
+
+  <section id="keno" class="section hidden">
+    <div class="card">
+      <h2>🎰 KENO Control</h2>
+      <div class="row">
+        <label>Round minutes<input id="roundMinutes" type="number" min="1" max="60" value="2"></label>
+        <label>Game status<select id="kenoGameStatus"><option value="on">ON</option><option value="off">OFF</option></select></label>
+      </div>
+      <br>
+      <button onclick="saveKenoSettings()">SAVE KENO SETTINGS</button>
+      <div id="kenoMsg" class="msg"></div>
+    </div>
+  </section>
+
+  <section id="live" class="section hidden">
+    <div class="card">
+      <h2>🎥 Live KENO</h2>
+      <p class="small">Live controls can be connected to the existing draw tables after their schema is confirmed.</p>
+      <button class="secondary" onclick="showMsg('liveMsg','Live KENO control area is ready.','success')">CHECK</button>
+      <div id="liveMsg" class="msg"></div>
+    </div>
+  </section>
+
+  <section id="reports" class="section hidden">
+    <div class="card">
+      <h2>📊 Reports</h2>
+      <p class="small">Basic admin reporting area. Detailed reports will use the existing project tables.</p>
+      <div id="reportMsg" class="msg"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://eizpxgwkottliyvvhlar.supabase.co';
+const SUPABASE_ANON_KEY = '';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+
+function showMsg(id,msg,type=""){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.textContent=msg;
+  el.className="msg "+type;
+}
+
+function showSection(id){
+  document.querySelectorAll(".section").forEach(x=>x.classList.add("hidden"));
+  document.getElementById(id)?.classList.remove("hidden");
+  if(id==="dashboard") loadDashboard();
+  if(id==="users") loadUsers();
+  if(id==="deposits") loadDeposits();
+  if(id==="games") loadGameSettings();
+}
+
+async function isAdmin(){
+  if(!currentUser)return false;
+  const {data,error}=await supabaseClient.from("profiles")
+    .select("role").eq("id",currentUser.id).maybeSingle();
+  return !error && data?.role==="admin";
+}
+
+async function adminLogin(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  if(!email||!password)return showMsg("loginMsg","Enter email and password.","error");
+
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error)return showMsg("loginMsg",error.message,"error");
+
+  currentUser=data.user;
+  if(!(await isAdmin())){
+    await supabaseClient.auth.signOut();
+    currentUser=null;
+    return showMsg("loginMsg","Access denied: this account is not an admin.","error");
+  }
+
+  document.getElementById("loginView").classList.add("hidden");
+  document.getElementById("adminView").classList.remove("hidden");
+  document.getElementById("adminEmail").textContent=currentUser.email||"";
+  await loadDashboard();
+}
+
+async function adminLogout(){
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+
+async function loadDashboard(){
+  if(!(await isAdmin()))return location.reload();
+
+  const {count:userCount}=await supabaseClient.from("profiles").select("*",{count:"exact",head:true});
+  const {data:deps}=await supabaseClient.from("deposits").select("status").eq("status","pending");
+  document.getElementById("statUsers").textContent=userCount??0;
+  document.getElementById("statDeposits").textContent=(deps||[]).length;
+
+  const {data:settings}=await supabaseClient.from("game_settings").select("game,enabled");
+  (settings||[]).forEach(s=>{
+    const v=s.enabled?"ON":"OFF";
+    if(s.game==="keno")document.getElementById("statKeno").textContent=v;
+    if(s.game==="ludo")document.getElementById("statLudo").textContent=v;
+  });
+}
+
+async function loadUsers(){
+  if(!(await isAdmin()))return;
+  const {data,error}=await supabaseClient.from("profiles").select("id,role").order("id");
+  const tbody=document.getElementById("usersTable");
+  tbody.innerHTML="";
+  if(error)return tbody.innerHTML='<tr><td colspan="3">Unable to load users.</td></tr>';
+  (data||[]).forEach(u=>{
+    tbody.insertAdjacentHTML("beforeend",
+      `<tr><td>${u.id}</td><td>-</td><td>${u.role||"user"}</td></tr>`);
+  });
+}
+
+async function loadDeposits(){
+  if(!(await isAdmin()))return;
+  const {data,error}=await supabaseClient.from("deposits")
+    .select("*").order("created_at",{ascending:false});
+  const tbody=document.getElementById("depositsTable");
+  tbody.innerHTML="";
+  if(error)return tbody.innerHTML='<tr><td colspan="6">Unable to load deposits.</td></tr>';
+
+  (data||[]).forEach(d=>{
+    const action=d.status==="pending"
+      ? `<button onclick="updateDeposit('${d.id}','approved')">APPROVE</button>
+         <button class="danger" onclick="updateDeposit('${d.id}','rejected')">REJECT</button>`
+      : "-";
+    tbody.insertAdjacentHTML("beforeend",
+      `<tr>
+        <td>${d.user_id||"-"}</td>
+        <td>${Number(d.amount||0).toFixed(2)} ETB</td>
+        <td>${d.method||"-"}</td>
+        <td>${d.reference||"-"}</td>
+        <td>${d.status||"-"}</td>
+        <td>${action}</td>
+      </tr>`);
+  });
+}
+
+async function updateDeposit(id,status){
+  if(!(await isAdmin()))return;
+  const {error}=await supabaseClient.from("deposits")
+    .update({status}).eq("id",id);
+  if(error)return alert(error.message);
+  await loadDeposits();
+  await loadDashboard();
+}
+
+async function loadGameSettings(){
+  if(!(await isAdmin()))return;
+  const {data,error}=await supabaseClient.from("game_settings").select("game,enabled");
+  if(error)return showMsg("gameMsg",error.message,"error");
+  (data||[]).forEach(s=>{
+    if(s.game==="keno")document.getElementById("kenoStatus").value=s.enabled?"on":"off";
+    if(s.game==="ludo")document.getElementById("ludoStatus").value=s.enabled?"on":"off";
+  });
+}
+
+async function saveGameSettings(){
+  if(!(await isAdmin()))return;
+  const rows=[
+    {game:"keno",enabled:document.getElementById("kenoStatus").value==="on"},
+    {game:"ludo",enabled:document.getElementById("ludoStatus").value==="on"}
+  ];
+  const {error}=await supabaseClient.from("game_settings")
+    .upsert(rows,{onConflict:"game"});
+  if(error)return showMsg("gameMsg",error.message,"error");
+  showMsg("gameMsg","Game settings saved successfully.","success");
+  await loadDashboard();
+}
+
+async function saveKenoSettings(){
+  if(!(await isAdmin()))return;
+  const minutes=Number(document.getElementById("roundMinutes").value);
+  if(!Number.isInteger(minutes)||minutes<1||minutes>60)
+    return showMsg("kenoMsg","Round minutes must be 1-60.","error");
+
+  // Store only the KENO availability in the existing table here.
+  // Round-duration persistence should be added after the project's KENO settings schema is confirmed.
+  const enabled=document.getElementById("kenoGameStatus").value==="on";
+  const {error}=await supabaseClient.from("game_settings")
+    .upsert({game:"keno",enabled},{onConflict:"game"});
+  if(error)return showMsg("kenoMsg",error.message,"error");
+  showMsg("kenoMsg","KENO status saved. Round duration: "+minutes+" minute(s).","success");
+  await loadDashboard();
+}
+
+function checkSession(){
+  supabaseClient.auth.getSession().then(async ({data})=>{
+    if(data.session){
+      currentUser=data.session.user;
+      if(await isAdmin()){
+        document.getElementById("loginView").classList.add("hidden");
+        document.getElementById("adminView").classList.remove("hidden");
+        document.getElementById("adminEmail").textContent=currentUser.email||"";
+        loadDashboard();
+      }
+    }
+  });
+}
+checkSession();
+</script>
+</body>
+</html>
